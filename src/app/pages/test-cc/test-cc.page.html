@@ -1,0 +1,40 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>  
+    <ion-title>testCC</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+    <ion-list lines="none">
+        <ion-list-header>
+          <ion-label>New File</ion-label>
+        </ion-list-header>
+        <ion-item href="https://ionicframework.com/docs/building/scaffolding">
+          <ion-icon slot="start" color="medium" name="build"></ion-icon>
+          <ion-label>Crea nuovo file</ion-label>
+        </ion-item>
+      </ion-list>
+      
+      <ion-buttons but>
+        <button ion-button (click)="file_chooser()">
+          <ion-icon size="large" name="search"></ion-icon>
+        </button>
+      </ion-buttons>
+
+      <ion-button (click)="file_chooser()">Cerca file</ion-button>
+      <br/>
+      <ion-button (click)="newkeys()">New Keys</ion-button>
+
+      <ion-list>
+        <ion-item *ngFor="let line of lines">
+          <ion-icon name="log-usd"></ion-icon>
+          {{line.str}}
+        </ion-item>
+      </ion-list>
+    
+
+</ion-content>
