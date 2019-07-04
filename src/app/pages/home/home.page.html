@@ -3,42 +3,106 @@
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
-    <ion-title>
-      Home
-    </ion-title>
+    <ion-title>Walcc</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-    <ion-card class="welcome-card">
-      <ion-img src="/assets/shapes.svg"></ion-img>
-      <ion-card-header>
-        <ion-card-subtitle>Get Started</ion-card-subtitle>
-        <ion-card-title>Welcome to Ionic</ion-card-title>
-      </ion-card-header>
-      <ion-card-content>
-        <p>Now that your app has been created, you'll want to start building out features and components. Check out some of the resources below for next steps.</p>
-      </ion-card-content>
-    </ion-card>
-    <ion-list lines="none">
+
+  <div *ngIf="wallet.mypuk; then puk else nopuk"></div>
+  <ng-template #nopuk>
+    <div class="ion-padding-top ion-text-center">
+      <ion-label>No Wallet</ion-label>
+    </div>
+
+    <form #walletForm="ngForm">
+      <ion-list>
+        <ion-item>
+          <ion-label position="stacked" color="primary">Inserisci nome Wallet da creare:</ion-label>
+          <ion-input class="form-control" [(ngModel)]="wallet.mywallet" name="mywallet" type="text" #mywallet="ngModel"
+            spellcheck="false" autocapitalize="off" required minlength=6 maxLength=50 pattern='^[a-zA-Z0-9_.-]*$'>
+          </ion-input>
+        </ion-item>
+
+        <div *ngIf="mywallet.invalid && (mywallet.dirty || mywallet.touched)" class="danger">
+          <div *ngIf="mywallet.errors.required">
+            <ion-text color="danger">
+              Inserire nome Wallet
+            </ion-text>
+          </div>
+          <div *ngIf="mywallet.errors.minlength">
+            <ion-text color="danger">
+              Nome Wallet di almeno 6 caratteri
+            </ion-text>
+          </div>
+          <div *ngIf="mywallet.errors.pattern">
+            <ion-text color="danger">
+              Nome Wallet può contenere solo lettere, numeri e i seguenti caratteri: _ . -
+            </ion-text>
+          </div>
+        </div>
+      </ion-list>
+
+      <ion-row>
+        <ion-col>
+          <ion-button (click)="newwallet(walletForm)" type="submit" [disabled]="!walletForm.valid" expand="block">Crea Wallet</ion-button>
+        </ion-col>
+      </ion-row>
+    </form>
+
+  </ng-template>
+  <ng-template #puk>
+    <div class="ion-padding-top ion-text-center">
+      <ion-label>Wallet - Indirizzo Pubblico</ion-label>
+    </div>
+    <div class="ion-padding-top ion-text-center">
+      <ion-text color="medium">Nome: {{wallet.mywallet}}</ion-text>
+    </div>
+    <div class="ion-padding-top ion-text-center">
+      <ion-text color="medium">{{wallet.mypuk}}</ion-text>
+    </div>
+    <div class="ion-padding-top ion-text-center">
+      <qrcode [qrdata]="wallet.mypuk" [size]="150" [level]="'M'"></qrcode>
+    </div>
+
+    <div>
+      <ion-card *ngIf="wallet.mypuk_barcode">
+        <ion-card-content>
+          <p>{{wallet.mypuk_barcode}}</p>
+        </ion-card-content>
+      </ion-card>
+    </div>
+    <div>
+      <ion-card *ngIf="wallet.myprk_barcode">
+        <ion-card-content>
+          <p>{{wallet.myprk_barcode}}</p>
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+    <ion-button (click)="showqrcode_puk()">Mostra Wallet pubblico - QR Code</ion-button>
+    <br />
+    <ion-button (click)="showqrcode_prk()">Mostra Wallet privato - QR Code</ion-button>
+    <br />
+    <ion-button (click)="rmkeys_confirm()">Delete Wallet</ion-button>
+
+    <!--
+    <ion-buttons but>
+      <button ion-button (click)="file_chooser()">
+        <ion-icon size="large" name="search"></ion-icon>
+      </button>
+    </ion-buttons>
+
+    <ion-list>
       <ion-list-header>
-        <ion-label>Resources</ion-label>
+        <ion-label>Nuova lista</ion-label>
       </ion-list-header>
-      <ion-item href="https://ionicframework.com/docs/">
-        <ion-icon slot="start" color="medium" name="book"></ion-icon>
-        <ion-label>Ionic Documentation</ion-label>
-      </ion-item>
-      <ion-item href="https://ionicframework.com/docs/building/scaffolding">
-        <ion-icon slot="start" color="medium" name="build"></ion-icon>
-        <ion-label>Scaffold Out Your App</ion-label>
-      </ion-item>
-      <ion-item href="https://ionicframework.com/docs/layout/structure">
-        <ion-icon slot="start" color="medium" name="grid"></ion-icon>
-        <ion-label>Change Your App Layout</ion-label>
-      </ion-item>
-      <ion-item href="https://ionicframework.com/docs/theming/basics">
-        <ion-icon slot="start" color="medium" name="color-fill"></ion-icon>
-        <ion-label>Theme Your App</ion-label>
+      <ion-item *ngFor="let line of lines">
+        <ion-icon name="log-usd"></ion-icon>
+        {{line.str}}
       </ion-item>
     </ion-list>
+-->
+  </ng-template>
+
 </ion-content>
