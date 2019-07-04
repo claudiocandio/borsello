@@ -7,6 +7,8 @@ import { IonicModule } from '@ionic/angular';
 
 import { TestCCPage } from './test-cc.page';
 
+import { QRCodeModule } from 'angularx-qrcode'; // https://www.npmjs.com/package/angularx-qrcode
+
 const routes: Routes = [
   {
     path: '',
@@ -19,7 +21,8 @@ const routes: Routes = [
     CommonModule,
     FormsModule,
     IonicModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
+    QRCodeModule
   ],
   declarations: [TestCCPage]
 })
