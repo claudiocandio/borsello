@@ -20,7 +20,7 @@
         <ion-item>
           <ion-label position="stacked" color="primary">Inserisci nome Wallet da creare:</ion-label>
           <ion-input class="form-control" [(ngModel)]="wallet.mywallet" name="mywallet" type="text" #mywallet="ngModel"
-            spellcheck="false" autocapitalize="off" required minlength=6 maxLength=50 pattern='^[a-zA-Z0-9_.-]*$'>
+            spellcheck="false" autocapitalize="off" required minlength=3 maxLength=50 pattern='^[a-zA-Z0-9_.-]*$'>
           </ion-input>
         </ion-item>
 
@@ -80,29 +80,14 @@
       </ion-card>
     </div>
 
-    <ion-button (click)="showqrcode_puk()">Mostra Wallet pubblico - QR Code</ion-button>
+    <ion-button (click)="showqrcode_puk()" expand="block">Mostra Wallet pubblico - QR Code</ion-button>
     <br />
-    <ion-button (click)="showqrcode_prk()">Mostra Wallet privato - QR Code</ion-button>
+    <ion-button (click)="showqrcode_prk()" expand="block">Mostra Wallet privato - QR Code</ion-button>
     <br />
-    <ion-button (click)="rmkeys_confirm()">Delete Wallet</ion-button>
+    <ion-button (click)="rmkeys_confirm()" expand="block">Delete Wallet</ion-button>
+    <br />
+    <ion-button (click)="login()" expand="block">Login</ion-button>
 
-    <!--
-    <ion-buttons but>
-      <button ion-button (click)="file_chooser()">
-        <ion-icon size="large" name="search"></ion-icon>
-      </button>
-    </ion-buttons>
-
-    <ion-list>
-      <ion-list-header>
-        <ion-label>Nuova lista</ion-label>
-      </ion-list-header>
-      <ion-item *ngFor="let line of lines">
-        <ion-icon name="log-usd"></ion-icon>
-        {{line.str}}
-      </ion-item>
-    </ion-list>
--->
   </ng-template>
 
 </ion-content>
