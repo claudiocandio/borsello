@@ -51,6 +51,8 @@
  *  (window as any).__Zone_enable_cross_context_check = true;
  *
  */
+// Add global to window, assigning the value of window itself.
+(window as any).global = window;
 
 import './zone-flags.ts';
 

@@ -15,7 +15,6 @@ const crypto = new iroha.ModelCrypto()
  * default timeout limit of queries
  */
 const DEFAULT_TIMEOUT_LIMIT = 5000
-const nodeIp = 'http://192.168.0.2:9081'
 
 /**
  * cached items available from start to end of the app
@@ -24,7 +23,17 @@ const nodeIp = 'http://192.168.0.2:9081'
 const cache = {
   username: null, // NOT persisted by localStorage
   keys: null, // NOT persisted by localStorage
- }
+  nodeIp: null // persisted by localStorage
+}
+
+/**
+ * mock localStorage for testing environment
+ */
+const localStorage = global.localStorage || {
+  setItem () {},
+  getItem () {},
+  removeItem () {}
+}
 
 /*
  * ===== functions =====
@@ -33,9 +42,9 @@ const cache = {
  * login
  * @param {String} username
  * @param {String} privateKey length is 64
+ * @param {String} nodeIp
  */
-  
-export function login(username, privateKey) {
+function login (username, privateKey, nodeIp) {
   debug('starting login...')
 
   if (privateKey.length !== 64) {
@@ -46,17 +55,20 @@ export function login(username, privateKey) {
     crypto.fromPrivateKey(privateKey).publicKey().hex(),
     privateKey
   )
-  
+
   cache.username = username
   cache.keys = keys
+  cache.nodeIp = nodeIp
+
+  localStorage.setItem('iroha-wallet:nodeIp', nodeIp)
 
   return getAccount(username)
     .then(account => {
-      alert('login succeeded!')
+      debug('login succeeded!')
       return account
     })
     .catch(err => {
-      alert('login failed')
+      debug('login failed')
       throw err
     })
 }
@@ -67,8 +79,23 @@ export function login(username, privateKey) {
 function logout () {
   cache.username = null
   cache.keys = null
+  cache.nodeIp = null
 
   return Promise.resolve()
+}
+
+/**
+ * return node IP which was used before
+ */
+function getStoredNodeIp () {
+  return localStorage.getItem('iroha-wallet:nodeIp') || ''
+}
+
+/**
+ * clear localStorage
+ */
+function clearStorage () {
+  localStorage.removeItem('iroha-wallet:nodeIp')
 }
 
 /**
@@ -105,14 +132,14 @@ function sendQuery (
 ) {
   return new Promise((resolve, reject) => {
     const queryClient = new endpointGrpc.QueryServiceClient(
-      nodeIp,
+      cache.nodeIp,
       grpc.credentials.createInsecure()
     )
     const query = buildQuery()
     const protoQuery = makeProtoQueryWithKeys(query, cache.keys)
 
     debug('submitting query...')
-    debug('peer ip:', nodeIp)
+    debug('peer ip:', cache.nodeIp)
     debug('parameters:', JSON.stringify(protoQuery.toObject().payload, null, '  '))
     debug('')
 
@@ -122,7 +149,7 @@ function sendQuery (
     const timer = setTimeout(() => {
       queryClient.$channel.close()
       const err = new Error('please check IP address OR your internet connection')
-//cc      err.code = grpc.status.CANCELLED
+      err.code = grpc.status.CANCELLED
       reject(err)
     }, timeoutLimit)
 
@@ -326,14 +353,13 @@ function command (
     const protoTx = makeProtoTxWithKeys(tx, cache.keys)
 
     txClient = new endpointGrpc.CommandServiceClient(
-      nodeIp,
+      cache.nodeIp,
       grpc.credentials.createInsecure()
     )
-//    txHash = blob2array(tx.hash().blob())
-    txHash = blob2array(tx)
+    txHash = blob2array(tx.hash().blob())
 
     debug('submitting transaction...')
-    debug('peer ip:', nodeIp)
+    debug('peer ip:', cache.nodeIp)
     debug('parameters:', JSON.stringify(protoTx.toObject().payload, null, '  '))
     debug('txhash:', Buffer.from(txHash).toString('hex'))
     debug('')
@@ -535,6 +561,8 @@ function makeProtoTxWithKeys (builtTx, keys) {
  *  ===== export ===
  */
 module.exports = {
+  getStoredNodeIp,
+  clearStorage,
   login,
   logout,
   isLoggedIn,

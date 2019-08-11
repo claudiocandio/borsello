@@ -4,24 +4,12 @@ import { NgForm } from '@angular/forms';
 import { AlertController } from '@ionic/angular'; // Per alert https://ionicframework.com/docs/api/alert
 import { NativeStorage } from '@ionic-native/native-storage/ngx';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
-//import { IrohautilService } from '../../services/irohautil.service'
 
-import * as grpc from 'grpc'
-
-import {
-  QueryService_v1Client,
-  CommandService_v1Client
-} from 'iroha-helpers/lib/proto/endpoint_grpc_pb'
-import { commands, queries } from 'iroha-helpers'
-
-const DEFAULT_TIMEOUT_LIMIT = 5000
-//const nodeIp = 'http://192.168.0.2:9081'
-const nodeIp = '192.168.0.2:50051'
-
-const queryService = new QueryService_v1Client(
-  nodeIp,
-  grpc.credentials.createInsecure()
-)
+import { IrohautilService } from '../../services/irohautil.service'
+import { getPluralCase } from '@angular/common/src/i18n/localization';
+//import * as jscc from '../../../util/iroha'
+//declare function loginjs(username, privateKey): any
+//declare function testjs(test: string): any;
 
 export interface WalletData {
   mywallet: string;
@@ -49,13 +37,13 @@ export class HomePage implements OnInit {
 
   constructor(private nativeStorage: NativeStorage,
     private barcodeScanner: BarcodeScanner,
-    public alertController: AlertController
-//    public irohautil: IrohautilService
+    public alertController: AlertController,
+    public irohautil: IrohautilService
   ) {
   }
 
   ngOnInit() {
-
+    
     this.nativeStorage.getItem('mypuk').then(
       mypuk => this.wallet.mypuk = mypuk,
       _ => this.wallet.myprk = null
@@ -179,11 +167,13 @@ export class HomePage implements OnInit {
   }
 
   login() {
+    /*
     if (this.wallet.myprk) {
-/*
       this.irohautil.login(this.wallet.mywallet, this.wallet.myprk).then(account => {
         alert('Login OK: '+account)
       }).catch(err => alert("Login failed: " + JSON.stringify(err)))
+
+
 
       queries.getAccountDetail({
         privateKey: this.wallet.myprk,
@@ -195,15 +185,20 @@ export class HomePage implements OnInit {
         }).then(account => {
           alert('Login OK: '+account)
         }).catch(err => alert("Login failed: " + JSON.stringify(err)))
+    }
 */
 
+    //alert("loginnnn")
+    this.irohautil.login_wallcc(this.wallet.mywallet, this.wallet.myprk)
 
+/*
+    if (this.wallet.myprk) {
+      this.irohautil.loginjs(this.wallet.mywallet, this.wallet.myprk).then(account => {
+        alert('Login OK: '+account)
+      }).catch(err => alert("Login failed: " + JSON.stringify(err)))
     }
-  }
-
-
-
+    */
+ }
 
 
 }
-
