@@ -15,6 +15,8 @@ import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
 import { QRCodeModule } from 'angularx-qrcode'; // https://www.npmjs.com/package/angularx-qrcode
 import { NativeStorage } from '@ionic-native/native-storage/ngx';
 
+import { IrohautilService } from './services/irohautil.service'
+
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
@@ -31,7 +33,8 @@ import { NativeStorage } from '@ionic-native/native-storage/ngx';
     BarcodeScanner,
     StatusBar,
     SplashScreen,
-    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+    IrohautilService
   ],
   bootstrap: [AppComponent]
 })

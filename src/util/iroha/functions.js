@@ -22,7 +22,7 @@ function login (username, privateKey, nodeIp) {
   cache.key = privateKey
   cache.nodeIp = nodeIp
 
-  setItem('iroha-wallet:nodeIp', nodeIp)
+  //setItem('iroha-wallet:nodeIp', nodeIp)
 
   return getAccount({
     accountId: username
@@ -33,7 +33,7 @@ function login (username, privateKey, nodeIp) {
     })
     .catch(err => {
       debug('login failed')
-      throw err
+      return Promise.reject(err)
     })
 }
 

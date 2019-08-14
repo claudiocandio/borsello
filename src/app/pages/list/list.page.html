@@ -11,6 +11,27 @@
 
 <ion-content>
   <ion-list>
+    <ion-item color="primary">
+      <ion-label><h2>From:</h2></ion-label>
+      <ion-label><h2>To:</h2></ion-label>
+      <ion-label><h2>Amount:</h2></ion-label>
+      <ion-label><h2>Date:</h2></ion-label>
+      <ion-label><h2>Currency:</h2></ion-label>
+      <ion-label><h2>Message:</h2></ion-label>
+    </ion-item>
+
+    <ion-item *ngFor="let tx of txs">
+        <ion-label>{{tx.from}}</ion-label>
+        <ion-label>{{tx.to}}</ion-label>
+        <ion-label>{{tx.amount}}</ion-label>
+        <ion-label>{{tx.date | date:'yyyy-MM-dd HH:mm.ss'}}</ion-label>
+        <ion-label>{{tx.currency}}</ion-label>
+        <ion-label text-wrap>{{tx.message}}</ion-label>
+    </ion-item>
+  </ion-list>
+
+  <!--
+  <ion-list>
     <ion-item *ngFor="let item of items">
       <ion-icon [name]="item.icon" slot="start"></ion-icon>
       {{item.title}}
@@ -19,7 +40,6 @@
       </div>
     </ion-item>
   </ion-list>
-  <!--
     <div *ngIf="selectedItem" padding>
       You navigated here from <b>{{selectedItem.title }}</b>
     </div>

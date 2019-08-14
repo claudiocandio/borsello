@@ -7,17 +7,17 @@ import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
 
 import { IrohautilService } from '../../services/irohautil.service'
 import { getPluralCase } from '@angular/common/src/i18n/localization';
-//import * as jscc from '../../../util/iroha'
-//declare function loginjs(username, privateKey): any
-//declare function testjs(test: string): any;
 
+/*
 export interface WalletData {
   mywallet: string;
   mypuk: string;
   myprk: string;
   mypuk_barcode: any;
   myprk_barcode: any;
+  assets: any;
 }
+*/
 
 @Component({
   selector: 'app-home',
@@ -27,37 +27,49 @@ export interface WalletData {
 
 export class HomePage implements OnInit {
 
+  /*
   public wallet: WalletData = {
     mywallet: '',
     mypuk: null,
     myprk: null,
     mypuk_barcode: null,
-    myprk_barcode: null
-  };
+    myprk_barcode: null,
+    assets: null
+  }
+*/
 
   constructor(private nativeStorage: NativeStorage,
     private barcodeScanner: BarcodeScanner,
-    public alertController: AlertController,
+    private alertController: AlertController,
     public irohautil: IrohautilService
   ) {
   }
 
   ngOnInit() {
-    
+
     this.nativeStorage.getItem('mypuk').then(
-      mypuk => this.wallet.mypuk = mypuk,
-      _ => this.wallet.myprk = null
-    );
-
+      mypuk => this.irohautil.wallet.mypuk = mypuk,
+      _ => this.irohautil.wallet.myprk = null
+    )
     this.nativeStorage.getItem('myprk').then(
-      myprk => this.wallet.myprk = myprk,
-      _ => this.wallet.myprk = null
-    );
-
-    this.nativeStorage.getItem('mywallet').then(
-      mywallet => this.wallet.mywallet = mywallet,
-      _ => this.wallet.mywallet = null
-    );
+      myprk => this.irohautil.wallet.myprk = myprk,
+      _ => this.irohautil.wallet.myprk = null
+    )
+    this.nativeStorage.getItem('mywallet')
+      .then(mywallet => {
+        this.irohautil.wallet.mywallet = mywallet
+        this.irohautil.login(this.irohautil.wallet.mywallet, this.irohautil.wallet.myprk)
+          .then(ok => {
+            this.irohautil.run_getAccountAssets(this.irohautil.wallet.mywallet)
+              .then(assets => {
+                this.irohautil.wallet.assets = assets
+              })
+              .catch(err => console.log(err))
+          })
+          .catch(err => console.log(err))
+      },
+        _ => this.irohautil.wallet.mywallet = null
+      )
 
   }
 
@@ -88,15 +100,15 @@ export class HomePage implements OnInit {
   rmkeys() {
 
     this.nativeStorage.remove('mywallet').then(
-      _ => this.wallet.mywallet = null,
+      _ => this.irohautil.wallet.mywallet = null,
       err => alert("Error: " + JSON.stringify(err))
     )
     this.nativeStorage.remove('myprk').then(
-      _ => this.wallet.mywallet = null,
+      _ => this.irohautil.wallet.mywallet = null,
       err => alert("Error: " + JSON.stringify(err))
     )
     this.nativeStorage.remove('mypuk').then(_ => {
-      _ => this.wallet.mywallet = null
+      _ => this.irohautil.wallet.mywallet = null
       window.location.reload()
     }).catch(err => alert("Error: " + JSON.stringify(err)))
 
@@ -111,8 +123,8 @@ export class HomePage implements OnInit {
       const publicKey = keypair.publicKey().hex()
       const privateKey = keypair.privateKey().hex()
 
-      //      return { publicKey, privateKey }
-      //    Force pub/priv keys
+      //    return { publicKey, privateKey }
+      //    Force pub/priv keys of alice@iroha
       return {
         publicKey: 'bcc4ab167ae7db371672170ed31e382f7c612fbfe918f99c276cd9dc199446a4',
         privateKey: '9c430dfe8c54b0a447e25f75121119ac3b649c1253bce8420f245e4c104dccd1'
@@ -121,18 +133,18 @@ export class HomePage implements OnInit {
 
     if (form.valid) {
 
-      this.nativeStorage.getItem('mypuk').then(_ => alert('Wallet already exists: ' + this.wallet.mypuk))
+      this.nativeStorage.getItem('mypuk').then(_ => alert('Wallet already exists: ' + this.irohautil.wallet.mypuk))
         .catch(() => { /* keys not created yet */
 
           const { publicKey, privateKey } = generateKeypair()
           //alert('New keys\npuk: ' + publicKey + '\nprk: ' + privateKey)
-          this.wallet.mypuk = publicKey
-          this.wallet.myprk = privateKey
+          this.irohautil.wallet.mypuk = publicKey
+          this.irohautil.wallet.myprk = privateKey
 
           // Add domain iroha
-          this.wallet.mywallet = this.wallet.mywallet + '@iroha'
+          this.irohautil.wallet.mywallet = this.irohautil.wallet.mywallet + '@iroha'
 
-          this.nativeStorage.setItem('mywallet', this.wallet.mywallet)
+          this.nativeStorage.setItem('mywallet', this.irohautil.wallet.mywallet)
             .catch(err => alert("Error storing mywallet: " + JSON.stringify(err)));
 
           this.nativeStorage.setItem('mypuk', publicKey)
@@ -148,57 +160,37 @@ export class HomePage implements OnInit {
   }
 
   showqrcode_puk() {
-    this.wallet.mypuk_barcode = null
+    this.irohautil.wallet.mypuk_barcode = null
 
-    if (this.wallet.mypuk) {
-      this.barcodeScanner.encode(this.barcodeScanner.Encode.TEXT_TYPE, this.wallet.mypuk).then((mypuk_barcode) => {
-        this.wallet.mypuk_barcode = mypuk_barcode
-      }).catch(err => alert("Error: " + JSON.stringify(err)))
+    if (this.irohautil.wallet.mypuk) {
+      this.barcodeScanner.encode(this.barcodeScanner.Encode.TEXT_TYPE, this.irohautil.wallet.mypuk)
+        .then((mypuk_barcode) => {
+          this.irohautil.wallet.mypuk_barcode = mypuk_barcode
+        })
+        .catch(err => alert("Error: " + JSON.stringify(err)))
     }
   }
   showqrcode_prk() {
-    this.wallet.myprk_barcode = null
+    this.irohautil.wallet.myprk_barcode = null
 
-    if (this.wallet.myprk) {
-      this.barcodeScanner.encode(this.barcodeScanner.Encode.TEXT_TYPE, this.wallet.myprk).then((myprk_barcode) => {
-        this.wallet.mypuk_barcode = myprk_barcode
-      }).catch(err => alert("Error: " + JSON.stringify(err)))
+    if (this.irohautil.wallet.myprk) {
+      this.barcodeScanner.encode(this.barcodeScanner.Encode.TEXT_TYPE, this.irohautil.wallet.myprk)
+        .then((myprk_barcode) => {
+          this.irohautil.wallet.mypuk_barcode = myprk_barcode
+        })
+        .catch(err => alert("Error: " + JSON.stringify(err)))
     }
   }
 
-  login() {
-    /*
-    if (this.wallet.myprk) {
-      this.irohautil.login(this.wallet.mywallet, this.wallet.myprk).then(account => {
-        alert('Login OK: '+account)
-      }).catch(err => alert("Login failed: " + JSON.stringify(err)))
+  login_check() {
+    this.irohautil.login(this.irohautil.wallet.mywallet, this.irohautil.wallet.myprk)
+      .then(ok => alert("Connessione Server OK" + ok))
+      .catch(err => alert("Connessione Server fallita: " + err))
 
 
 
-      queries.getAccountDetail({
-        privateKey: this.wallet.myprk,
-        creatorAccountId: this.wallet.mywallet,
-        queryService,
-        timeoutLimit: DEFAULT_TIMEOUT_LIMIT
-      }, {
-          accountId: this.wallet.mywallet
-        }).then(account => {
-          alert('Login OK: '+account)
-        }).catch(err => alert("Login failed: " + JSON.stringify(err)))
-    }
-*/
 
-    //alert("loginnnn")
-    this.irohautil.login_wallcc(this.wallet.mywallet, this.wallet.myprk)
-
-/*
-    if (this.wallet.myprk) {
-      this.irohautil.loginjs(this.wallet.mywallet, this.wallet.myprk).then(account => {
-        alert('Login OK: '+account)
-      }).catch(err => alert("Login failed: " + JSON.stringify(err)))
-    }
-    */
- }
+  }
 
 
 }

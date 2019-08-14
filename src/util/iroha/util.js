@@ -36,6 +36,11 @@ export function newCommandServiceOptions (privateKeys, quorum) {
 }
 
 export function newQueryServiceOptions () {
+  /*
+  console.log("cache.username: "+cache.username)
+  console.log("cache.key: "+cache.key)
+  console.log("cache.nodeIp: "+cache.nodeIp)
+  */
   return {
     privateKey: cache.key,
     creatorAccountId: cache.username,
