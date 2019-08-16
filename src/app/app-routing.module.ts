@@ -14,7 +14,10 @@ const routes: Routes = [
   {
     path: 'list',
     loadChildren: './pages/list/list.module#ListPageModule'
-  }
+  },
+  { 
+    path: 'transaction-show/:txFrom/:txTo/:txAmount/:txDate/:txCurrency/:txMessage',
+    loadChildren: './pages/transaction-show/transaction-show.module#TransactionShowPageModule' }
 ];
 
 @NgModule({

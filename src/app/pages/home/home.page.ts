@@ -8,17 +8,6 @@ import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
 import { IrohautilService } from '../../services/irohautil.service'
 import { getPluralCase } from '@angular/common/src/i18n/localization';
 
-/*
-export interface WalletData {
-  mywallet: string;
-  mypuk: string;
-  myprk: string;
-  mypuk_barcode: any;
-  myprk_barcode: any;
-  assets: any;
-}
-*/
-
 @Component({
   selector: 'app-home',
   templateUrl: './home.page.html',
@@ -26,17 +15,6 @@ export interface WalletData {
 })
 
 export class HomePage implements OnInit {
-
-  /*
-  public wallet: WalletData = {
-    mywallet: '',
-    mypuk: null,
-    myprk: null,
-    mypuk_barcode: null,
-    myprk_barcode: null,
-    assets: null
-  }
-*/
 
   constructor(private nativeStorage: NativeStorage,
     private barcodeScanner: BarcodeScanner,
@@ -186,10 +164,6 @@ export class HomePage implements OnInit {
     this.irohautil.login(this.irohautil.wallet.mywallet, this.irohautil.wallet.myprk)
       .then(ok => alert("Connessione Server OK" + ok))
       .catch(err => alert("Connessione Server fallita: " + err))
-
-
-
-
   }
 
 

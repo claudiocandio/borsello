@@ -20,13 +20,13 @@
       <ion-label><h2>Message:</h2></ion-label>
     </ion-item>
 
-    <ion-item *ngFor="let tx of txs">
-        <ion-label>{{tx.from}}</ion-label>
-        <ion-label>{{tx.to}}</ion-label>
-        <ion-label>{{tx.amount}}</ion-label>
-        <ion-label>{{tx.date | date:'yyyy-MM-dd HH:mm.ss'}}</ion-label>
-        <ion-label>{{tx.currency}}</ion-label>
-        <ion-label text-wrap>{{tx.message}}</ion-label>
+    <ion-item *ngFor="let tx of txs" [routerLink]="['/transaction-show/', tx.from, tx.to, tx.amount, tx.date, tx.currency, tx.message]">
+        <ion-label text-wrap>{{tx.from}}</ion-label>
+        <ion-label text-wrap>{{tx.to}}</ion-label>
+        <ion-label text-wrap>{{tx.amount}}</ion-label>
+        <ion-label text-wrap>{{tx.date | date:'yyyy-MM-dd HH:mm.ss'}}</ion-label>
+        <ion-label text-wrap>{{tx.currency}}</ion-label>
+        <ion-label>{{tx.message}}</ion-label>
     </ion-item>
   </ion-list>
 

@@ -25,7 +25,7 @@ export class IrohautilService {
     mypuk_barcode: null,
     myprk_barcode: null,
     assets: null
-  }
+  } 
   
   constructor() { }
 

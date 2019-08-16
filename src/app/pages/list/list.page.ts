@@ -9,7 +9,9 @@ var moment = require('moment');
   styleUrls: ['list.page.scss']
 })
 export class ListPage implements OnInit {
-  public txs: Array<{ from: string; to: string; amount: string; date: string; currency: string; message: string; }> = [];
+  public txs: Array<{
+    from: string; to: string; amount: string; date: string; currency: string; message: string;
+  }> = [];
 
   constructor(public irohautil: IrohautilService) {
 
@@ -18,6 +20,7 @@ export class ListPage implements OnInit {
         //console.log(JSON.stringify(transactions))
         if (transactions.isEmpty) return []
         //transactions.nextTxHash !!!!!!!!!!!!!!!!!!!
+        // menu tabs per scelta assets
 
         transactions.transactionsList.forEach(t => {
           const { commandsList, createdTime } = t.payload.reducedPayload

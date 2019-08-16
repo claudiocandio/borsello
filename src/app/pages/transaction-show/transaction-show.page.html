@@ -1,0 +1,35 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button [defaultHref]="defaultHref"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Transazione</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row><ion-col>Da:</ion-col><ion-col>{{txFrom}}</ion-col></ion-row>
+    <ion-row><ion-col>A:</ion-col><ion-col>{{txTo}}</ion-col></ion-row>
+    <ion-row><ion-col>Quantità:</ion-col><ion-col>{{txAmount}}</ion-col></ion-row>
+    <ion-row><ion-col>Data:</ion-col><ion-col>{{txDate | date:'yyyy-MM-dd HH:mm.ss'}}</ion-col></ion-row>
+    <ion-row><ion-col>Valuta:</ion-col><ion-col>{{txCurrency}}</ion-col></ion-row>
+    <ion-row><ion-col>Messaggio:</ion-col><ion-col>{{txMessage}}</ion-col></ion-row>
+  </ion-grid>
+
+  <!--
+<br>
+From: {{txFrom}}
+<br>
+To: {{txTo}}
+<br>
+Amount: {{txAmount}}
+<br>
+Date: {{txDate | date:'yyyy-MM-dd HH:mm.ss'}}
+<br>
+Currency: {{txCurrency}}
+<br>
+Message: {{txMessage}}
+  -->
+
+</ion-content>
