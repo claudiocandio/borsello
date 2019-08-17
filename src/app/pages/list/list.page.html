@@ -10,19 +10,32 @@
 </ion-header>
 
 <ion-content>
-  <ion-list>
-<!--
-    <ion-item color="primary">
-      <ion-label><h2>From:</h2></ion-label>
-      <ion-label><h2>To:</h2></ion-label>
-      <ion-label><h2>Amount:</h2></ion-label>
-      <ion-label><h2>Date:</h2></ion-label>
-      <ion-label><h2>Currency:</h2></ion-label>
-      <ion-label><h2>Message:</h2></ion-label>
-    </ion-item>
-  
--->
 
+  <ion-list>
+    <div *ngFor="let asset of irohautil.wallet.assets">
+      <div *ngIf="irohautil.wallet.cur_assetId == asset.assetId">
+        <ion-item color="secondary">
+          <ion-label><h2>Valuta</h2></ion-label>
+          <ion-label><h2>Totale</h2></ion-label>
+        </ion-item>
+        <ion-item>
+          <ion-label>{{asset.assetId}}</ion-label>
+          <ion-label>{{asset.balance}}</ion-label>
+        </ion-item>
+      </div>
+    </div>
+  </ion-list>
+
+  <ion-item>
+    <ion-select #selectAsset [hidden]=true (ionChange)="selectAsset_ionChange($event)" interface="action-sheet">
+    <ion-select-option *ngFor="let asset of irohautil.wallet.assets" [value]="asset.assetId">{{asset.assetId + ' - Totale: ' + asset.balance}}</ion-select-option>
+    </ion-select>
+    <ion-label class="select-asset" (click)="display_selectAsset()">Seleziona Valuta</ion-label> 
+  </ion-item>
+
+  <div *ngIf="irohautil.wallet.cur_assetId; then assetId else noassetId"></div>
+  <ng-template #assetId>
+    <ion-list>
     <ion-item-group *ngFor="let tx of txs" [routerLink]="['/transaction-show/', tx.from, tx.to, tx.amount, tx.date, tx.currency, tx.puk, tx.message]">
     <ion-item>
     <ion-grid>
@@ -35,32 +48,8 @@
     <ion-row><ion-col>Messaggio:</ion-col><ion-col>{{tx.message}}</ion-col></ion-row>
     </ion-grid>  
     </ion-item>
-<!--
-
-  <ion-item lines="none">
-          <ion-label>Da: {{tx.from}}</ion-label>
-        </ion-item>
-        <ion-item lines="none">
-          <ion-label>A: {{tx.to}}</ion-label>
-        </ion-item>
-        <ion-item lines="none">
-          <ion-label>Totale: {{tx.amount}}</ion-label>
-        </ion-item>
-        <ion-item lines="none">
-          <ion-label>Data: {{tx.date | date:'yyyy-MM-dd HH:mm.ss'}}</ion-label>
-        </ion-item>
-        <ion-item lines="none">
-          <ion-label>Valuta: {{tx.currency}}</ion-label>
-        </ion-item>
-        <ion-item lines="none">
-          <ion-label>Public Key: {{tx.puk}}</ion-label>
-        </ion-item>
-        <ion-item>
-          <ion-label>Messaggio: {{tx.message}}</ion-label>
-        </ion-item>
--->
-
-      </ion-item-group>
-  </ion-list>
+    </ion-item-group>
+    </ion-list>
+  </ng-template>
 
 </ion-content>

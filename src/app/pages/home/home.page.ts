@@ -1,7 +1,7 @@
 
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { AlertController, IonSelect } from '@ionic/angular'; // Per alert https://ionicframework.com/docs/api/alert
+import { AlertController, IonSelect, MenuController } from '@ionic/angular'; // Per alert https://ionicframework.com/docs/api/alert
 import { NativeStorage } from '@ionic-native/native-storage/ngx';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
 
@@ -18,7 +18,8 @@ export class HomePage implements OnInit {
   constructor(private nativeStorage: NativeStorage,
     private barcodeScanner: BarcodeScanner,
     private alertController: AlertController,
-    public irohautil: IrohautilService
+    public irohautil: IrohautilService,
+    public menuCtrl: MenuController
   ) {
   }
 
@@ -46,6 +47,12 @@ export class HomePage implements OnInit {
       )
 
   }
+
+  // if no wallet disable menu
+  ionViewWillEnter() {
+    if(this.irohautil.wallet.mypuk == null) this.menuCtrl.enable(false);
+   }
+
 
   // Start: For the select/change assets
   @ViewChild('selectAsset') selectAsset: IonSelect;
@@ -153,6 +160,9 @@ export class HomePage implements OnInit {
 
           this.login()
           .catch(err => console.log(err))
+
+          // enable other menu
+          this.menuCtrl.enable(true);
 
         });
 

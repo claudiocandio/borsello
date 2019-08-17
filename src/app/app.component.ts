@@ -19,6 +19,11 @@ export class AppComponent {
       title: 'Transazioni',
       url: '/list',
       icon: 'list'
+    },
+    {
+      title: 'Invia',
+      url: '/send',
+      icon: 'send'
     }
   ];
 

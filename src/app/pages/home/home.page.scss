@@ -5,5 +5,9 @@ ion-label.select-asset {
     border: 1px solid #ededed;
     border-radius: 5px;
     background: #fbfbfb;
-    text-align: left;
+    text-align: center;
+}
+// ion-button get uppercase
+ion-button {
+    text-transform: none;
 }

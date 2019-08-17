@@ -53,6 +53,7 @@
     </form>
 
   </ng-template>
+  
   <ng-template #puk>
     <div class="ion-padding-top ion-text-center">
       <ion-label>Wallet - Indirizzo Pubblico</ion-label>
@@ -83,7 +84,7 @@
      <ion-select #selectAsset [hidden]=true (ionChange)="selectAsset_ionChange($event)" interface="action-sheet">
         <ion-select-option *ngFor="let asset of irohautil.wallet.assets" [value]="asset.assetId">{{asset.assetId + ' - Totale: ' + asset.balance}}</ion-select-option>
      </ion-select>
-     <ion-label class="select-asset" (click)="display_selectAsset()">Cambia Valuta</ion-label> 
+     <ion-label class="select-asset" (click)="display_selectAsset()">Seleziona Valuta</ion-label> 
     </ion-item>
 
     <div class="ion-padding-top ion-text-center">

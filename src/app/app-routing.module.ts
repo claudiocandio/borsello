@@ -16,8 +16,13 @@ const routes: Routes = [
     loadChildren: './pages/list/list.module#ListPageModule'
   },
   { 
+    path: 'send',
+    loadChildren: './pages/send/send.module#SendPageModule' 
+  },
+  { 
     path: 'transaction-show/:txFrom/:txTo/:txAmount/:txDate/:txCurrency/:txPuk/:txMessage',
-    loadChildren: './pages/transaction-show/transaction-show.module#TransactionShowPageModule' }
+    loadChildren: './pages/transaction-show/transaction-show.module#TransactionShowPageModule' 
+  }
 ];
 
 @NgModule({
