@@ -1,12 +1,11 @@
 
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { AlertController } from '@ionic/angular'; // Per alert https://ionicframework.com/docs/api/alert
+import { AlertController, IonSelect } from '@ionic/angular'; // Per alert https://ionicframework.com/docs/api/alert
 import { NativeStorage } from '@ionic-native/native-storage/ngx';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
 
 import { IrohautilService } from '../../services/irohautil.service'
-import { getPluralCase } from '@angular/common/src/i18n/localization';
 
 @Component({
   selector: 'app-home',
@@ -33,23 +32,39 @@ export class HomePage implements OnInit {
       myprk => this.irohautil.wallet.myprk = myprk,
       _ => this.irohautil.wallet.myprk = null
     )
+    this.nativeStorage.getItem('cur_assetId').then(
+      cur_assetId => this.irohautil.wallet.cur_assetId = cur_assetId,
+      _ => this.irohautil.wallet.cur_assetId = null
+    )
     this.nativeStorage.getItem('mywallet')
       .then(mywallet => {
         this.irohautil.wallet.mywallet = mywallet
-        this.irohautil.login(this.irohautil.wallet.mywallet, this.irohautil.wallet.myprk)
-          .then(ok => {
-            this.irohautil.run_getAccountAssets(this.irohautil.wallet.mywallet)
-              .then(assets => {
-                this.irohautil.wallet.assets = assets
-              })
-              .catch(err => console.log(err))
-          })
-          .catch(err => console.log(err))
+        this.login()
+        .catch(err => console.log(err))
       },
         _ => this.irohautil.wallet.mywallet = null
       )
 
   }
+
+  // Start: For the select/change assets
+  @ViewChild('selectAsset') selectAsset: IonSelect;
+  display_selectAsset() {
+    // refresh assets and then open select assets
+    this.irohautil.run_getAccountAssets(this.irohautil.wallet.mywallet)
+      .then(assets => {
+        this.irohautil.wallet.assets = assets
+        this.selectAsset.open()
+      })
+      .catch(err => console.log(err))
+
+  }
+  selectAsset_ionChange($event) {
+    this.irohautil.wallet.cur_assetId = $event.detail.value
+    this.nativeStorage.setItem('cur_assetId', this.irohautil.wallet.cur_assetId)
+      .catch(err => alert("Error storing cur_assetId: " + JSON.stringify(err)));
+  }
+  // End: For the select/change assets
 
   async rmkeys_confirm() {
     const alert = await this.alertController.create({
@@ -73,22 +88,27 @@ export class HomePage implements OnInit {
 
     await alert.present();
   }
-
-
   rmkeys() {
 
     this.nativeStorage.remove('mywallet').then(
       _ => this.irohautil.wallet.mywallet = null,
-      err => alert("Error: " + JSON.stringify(err))
+      err => alert("Error rm mywallet: " + JSON.stringify(err))
     )
+
     this.nativeStorage.remove('myprk').then(
       _ => this.irohautil.wallet.mywallet = null,
-      err => alert("Error: " + JSON.stringify(err))
+      err => alert("Error rm myprk: " + JSON.stringify(err))
     )
+
     this.nativeStorage.remove('mypuk').then(_ => {
       _ => this.irohautil.wallet.mywallet = null
       window.location.reload()
-    }).catch(err => alert("Error: " + JSON.stringify(err)))
+    }).catch(err => alert("Error rm mywallet: " + JSON.stringify(err)))
+
+    this.nativeStorage.remove('cur_assetId').then(_ => {
+      _ => this.irohautil.wallet.cur_assetId = null
+      window.location.reload()
+    }).catch(err => alert("Error rm cur_assetId: " + JSON.stringify(err)))
 
   }
 
@@ -102,7 +122,7 @@ export class HomePage implements OnInit {
       const privateKey = keypair.privateKey().hex()
 
       //    return { publicKey, privateKey }
-      //    Force pub/priv keys of alice@iroha
+      //    Force pub/priv keys of alice@iroha !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
       return {
         publicKey: 'bcc4ab167ae7db371672170ed31e382f7c612fbfe918f99c276cd9dc199446a4',
         privateKey: '9c430dfe8c54b0a447e25f75121119ac3b649c1253bce8420f245e4c104dccd1'
@@ -130,6 +150,9 @@ export class HomePage implements OnInit {
 
           this.nativeStorage.setItem('myprk', privateKey)
             .catch(err => alert("Error storing myprk: " + JSON.stringify(err)));
+
+          this.login()
+          .catch(err => console.log(err))
 
         });
 
@@ -160,11 +183,25 @@ export class HomePage implements OnInit {
     }
   }
 
-  login_check() {
-    this.irohautil.login(this.irohautil.wallet.mywallet, this.irohautil.wallet.myprk)
-      .then(ok => alert("Connessione Server OK" + ok))
-      .catch(err => alert("Connessione Server fallita: " + err))
-  }
+  login() {
 
+    return this.irohautil.login(this.irohautil.wallet.mywallet, this.irohautil.wallet.myprk)
+      .then(ok => {
+      this.irohautil.run_getAccountAssets(this.irohautil.wallet.mywallet)
+        .then(assets => {
+          this.irohautil.wallet.assets = assets
+          return Promise.resolve()
+        })
+        .catch(err =>{
+          console.log(err)
+          return Promise.reject(err)
+        }) 
+      })
+      .catch(err =>{
+        console.log(err)
+        return Promise.reject(err)
+      }) 
+
+  }
 
 }

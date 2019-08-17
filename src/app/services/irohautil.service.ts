@@ -8,6 +8,7 @@ export interface WalletData {
   mypuk_barcode: any;
   myprk_barcode: any;
   assets: any;
+  cur_assetId: string;
 }
 
 const nodeIp = 'http://192.168.0.2:8081'
@@ -24,7 +25,8 @@ export class IrohautilService {
     myprk: null,
     mypuk_barcode: null,
     myprk_barcode: null,
-    assets: null
+    assets: null,
+    cur_assetId: ''
   } 
   
   constructor() { }
@@ -41,7 +43,7 @@ export class IrohautilService {
 
   }
 
-  run_getAccountAssetTransactions(username, assetId, firstTxHash = undefined, pageSize = 5) {
+  run_getAccountAssetTransactions(username, assetId, firstTxHash = undefined, pageSize = 500) {
     // irohaUtil.getAccountTransactions({ .. no good as it onluìy returns trx done my me, not those from other to me
 
     return irohaUtil.getAccountAssetTransactions({

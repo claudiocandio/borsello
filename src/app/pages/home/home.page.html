@@ -8,7 +8,7 @@
 </ion-header>
 
 <ion-content>
-  
+
   <div *ngIf="irohautil.wallet.mypuk; then puk else nopuk"></div>
   <ng-template #nopuk>
     <div class="ion-padding-top ion-text-center">
@@ -19,8 +19,9 @@
       <ion-list>
         <ion-item>
           <ion-label position="stacked" color="primary">Inserisci nome Wallet:</ion-label>
-          <ion-input class="form-control" [(ngModel)]="irohautil.wallet.mywallet" name="mywallet" type="text" #mywallet="ngModel"
-            spellcheck="false" autocapitalize="off" required minlength=3 maxLength=50 pattern='^[a-zA-Z0-9_.-]*$'>
+          <ion-input class="form-control" [(ngModel)]="irohautil.wallet.mywallet" name="mywallet" type="text"
+            #mywallet="ngModel" spellcheck="false" autocapitalize="off" required minlength=3 maxLength=50
+            pattern='^[a-zA-Z0-9_.-]*$'>
           </ion-input>
         </ion-item>
 
@@ -45,7 +46,8 @@
 
       <ion-row>
         <ion-col>
-          <ion-button (click)="newwallet(walletForm)" type="submit" [disabled]="!walletForm.valid" expand="block">Crea Wallet</ion-button>
+          <ion-button (click)="newwallet(walletForm)" type="submit" [disabled]="!walletForm.valid" expand="block">Crea
+            Wallet</ion-button>
         </ion-col>
       </ion-row>
     </form>
@@ -63,24 +65,33 @@
     </div>
 
     <ion-list>
-      <ion-item color="secondary">
-        <ion-label><h2>AssetId:</h2></ion-label>
-        <ion-label><h2>Balance:</h2></ion-label>
-      </ion-item>
-
-      <ion-item *ngFor="let asset of irohautil.wallet.assets">
-        <ion-label>{{asset.assetId}}</ion-label>
-        <ion-label>{{asset.balance}}</ion-label>
-      </ion-item>
+      <div *ngFor="let asset of irohautil.wallet.assets">
+        <div *ngIf="irohautil.wallet.cur_assetId == asset.assetId">
+          <ion-item color="secondary">
+            <ion-label><h2>Valuta</h2></ion-label>
+            <ion-label><h2>Totale</h2></ion-label>
+          </ion-item>
+          <ion-item>
+            <ion-label>{{asset.assetId}}</ion-label>
+            <ion-label>{{asset.balance}}</ion-label>
+          </ion-item>
+        </div>
+      </div>
     </ion-list>
 
+    <ion-item>
+     <ion-select #selectAsset [hidden]=true (ionChange)="selectAsset_ionChange($event)" interface="action-sheet">
+        <ion-select-option *ngFor="let asset of irohautil.wallet.assets" [value]="asset.assetId">{{asset.assetId + ' - Totale: ' + asset.balance}}</ion-select-option>
+     </ion-select>
+     <ion-label class="select-asset" (click)="display_selectAsset()">Cambia Valuta</ion-label> 
+    </ion-item>
 
     <div class="ion-padding-top ion-text-center">
       <ion-grid>
         <ion-row justify-content-center>
           <qrcode [qrdata]="irohautil.wallet.mypuk" [size]="150" [level]="'M'"></qrcode>
         </ion-row>
-      </ion-grid>      
+      </ion-grid>
     </div>
 
     <div>
@@ -103,9 +114,10 @@
     <ion-button (click)="showqrcode_prk()" expand="block">Mostra Wallet privato - QR Code</ion-button>
     <br />
     <ion-button (click)="rmkeys_confirm()" expand="block">Rimuovi Wallet</ion-button>
-  <!-- -->
+    <!--
     <br />
-    <ion-button (click)="login_check()" expand="block">Verifica connessione Server</ion-button>
+    <ion-button (click)="login()" expand="block">Verifica connessione Server</ion-button>
+    -->
 
   </ng-template>
 </ion-content>

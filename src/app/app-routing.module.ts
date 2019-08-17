@@ -16,7 +16,7 @@ const routes: Routes = [
     loadChildren: './pages/list/list.module#ListPageModule'
   },
   { 
-    path: 'transaction-show/:txFrom/:txTo/:txAmount/:txDate/:txCurrency/:txMessage',
+    path: 'transaction-show/:txFrom/:txTo/:txAmount/:txDate/:txCurrency/:txPuk/:txMessage',
     loadChildren: './pages/transaction-show/transaction-show.module#TransactionShowPageModule' }
 ];
 

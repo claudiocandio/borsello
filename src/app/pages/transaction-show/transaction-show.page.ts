@@ -13,6 +13,7 @@ export class TransactionShowPage implements OnInit {
   txAmount = null;
   txDate = null;
   txCurrency = null;
+  txPuk = null;
   txMessage = null;
 
   constructor(private activatedRoute: ActivatedRoute) { }
@@ -23,6 +24,7 @@ export class TransactionShowPage implements OnInit {
     this.txAmount = this.activatedRoute.snapshot.paramMap.get('txAmount');
     this.txDate = this.activatedRoute.snapshot.paramMap.get('txDate');
     this.txCurrency = this.activatedRoute.snapshot.paramMap.get('txCurrency');
+    this.txPuk = this.activatedRoute.snapshot.paramMap.get('txPuk');
     this.txMessage = this.activatedRoute.snapshot.paramMap.get('txMessage');
 
   }
