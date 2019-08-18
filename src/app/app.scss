@@ -4,3 +4,18 @@
 // styles are for the entire app and not just one component. Additionally, this 
 // file can hold Sass mixins, functions, and placeholder classes to be imported 
 // and used throughout the application.
+
+// otherwise ion-button gets uppercase
+ion-button {
+    text-transform: none;
+}
+
+ion-label.select-asset {
+    max-width: 100%;
+    width: 100%;
+    height: 100%;
+    border: 1px solid #ededed;
+    border-radius: 5px;
+    background: #fbfbfb;
+    text-align: center;
+}

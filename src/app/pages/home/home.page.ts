@@ -53,7 +53,6 @@ export class HomePage implements OnInit {
     if(this.irohautil.wallet.mypuk == null) this.menuCtrl.enable(false);
    }
 
-
   // Start: For the select/change assets
   @ViewChild('selectAsset') selectAsset: IonSelect;
   display_selectAsset() {
@@ -61,13 +60,14 @@ export class HomePage implements OnInit {
     this.irohautil.run_getAccountAssets(this.irohautil.wallet.mywallet)
       .then(assets => {
         this.irohautil.wallet.assets = assets
-        this.selectAsset.open()
+        this.selectAsset.open() // open up the html currency selecttion
       })
       .catch(err => console.log(err))
 
   }
   selectAsset_ionChange($event) {
-    this.irohautil.wallet.cur_assetId = $event.detail.value
+    this.irohautil.wallet.cur_assetId = $event.detail.value.assetId
+    this.irohautil.wallet.cur_assetId_decimal = ($event.detail.value.balance.length -1) - $event.detail.value.balance.indexOf('.')
     this.nativeStorage.setItem('cur_assetId', this.irohautil.wallet.cur_assetId)
       .catch(err => alert("Error storing cur_assetId: " + JSON.stringify(err)));
   }
@@ -200,6 +200,9 @@ export class HomePage implements OnInit {
       this.irohautil.run_getAccountAssets(this.irohautil.wallet.mywallet)
         .then(assets => {
           this.irohautil.wallet.assets = assets
+          let balance = this.irohautil.wallet.assets.find(a=>a.assetId == this.irohautil.wallet.cur_assetId).balance
+          this.irohautil.wallet.cur_assetId_decimal = (balance.length -1) - balance.indexOf('.')
+ 
           return Promise.resolve()
         })
         .catch(err =>{

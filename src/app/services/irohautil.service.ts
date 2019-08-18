@@ -9,6 +9,13 @@ export interface WalletData {
   myprk_barcode: any;
   assets: any;
   cur_assetId: string;
+  cur_assetId_decimal: any;
+}
+
+export interface WalletDataTo {
+  wallet: string;
+  amount: string;
+  message: string;
 }
 
 const nodeIp = 'http://192.168.0.2:8081'
@@ -26,9 +33,10 @@ export class IrohautilService {
     mypuk_barcode: null,
     myprk_barcode: null,
     assets: null,
-    cur_assetId: ''
-  } 
-  
+    cur_assetId: '',
+    cur_assetId_decimal: null
+  }
+
   constructor() { }
 
   login(username, privateKey) {
@@ -73,7 +81,25 @@ export class IrohautilService {
       })
   }
 
+  run_transferAsset(walletTo, amountTo, messageTo) {
 
+    return irohaUtil.transferAsset(
+     [this.wallet.myprk], 1,
+      {
+      srcAccountId: this.wallet.mywallet,
+      destAccountId: walletTo,
+      assetId: this.wallet.cur_assetId,
+      description: messageTo,
+      amount: amountTo
+    })
+      .then(ok => {
+        return ok
+      })
+      .catch(err => {
+        return Promise.reject("Error transferAsset: " + err)
+      })
+
+  }
 
 
 }

@@ -33,7 +33,7 @@
           </div>
           <div *ngIf="mywallet.errors.minlength">
             <ion-text color="danger">
-              Nome Wallet di almeno 6 caratteri
+              Nome Wallet di almeno 3 caratteri
             </ion-text>
           </div>
           <div *ngIf="mywallet.errors.pattern">
@@ -46,8 +46,7 @@
 
       <ion-row>
         <ion-col>
-          <ion-button (click)="newwallet(walletForm)" type="submit" [disabled]="!walletForm.valid" expand="block">Crea
-            Wallet</ion-button>
+          <ion-button (click)="newwallet(walletForm)" type="submit" [disabled]="!walletForm.valid" expand="block">Crea Wallet</ion-button>
         </ion-col>
       </ion-row>
     </form>
@@ -65,6 +64,7 @@
       <ion-text color="medium">{{irohautil.wallet.mypuk}}</ion-text>
     </div>
 
+    <!-- Start select/change asset-->
     <ion-list>
       <div *ngFor="let asset of irohautil.wallet.assets">
         <div *ngIf="irohautil.wallet.cur_assetId == asset.assetId">
@@ -82,10 +82,11 @@
 
     <ion-item>
      <ion-select #selectAsset [hidden]=true (ionChange)="selectAsset_ionChange($event)" interface="action-sheet">
-        <ion-select-option *ngFor="let asset of irohautil.wallet.assets" [value]="asset.assetId">{{asset.assetId + ' - Totale: ' + asset.balance}}</ion-select-option>
+        <ion-select-option *ngFor="let asset of irohautil.wallet.assets" [value]="asset">{{asset.assetId + ' - Totale: ' + asset.balance}}</ion-select-option>
      </ion-select>
      <ion-label class="select-asset" (click)="display_selectAsset()">Seleziona Valuta</ion-label> 
     </ion-item>
+    <!-- End select/change asset-->
 
     <div class="ion-padding-top ion-text-center">
       <ion-grid>

@@ -11,6 +11,7 @@
 
 <ion-content>
 
+  <!-- Start select/change asset-->
   <ion-list>
     <div *ngFor="let asset of irohautil.wallet.assets">
       <div *ngIf="irohautil.wallet.cur_assetId == asset.assetId">
@@ -28,10 +29,11 @@
 
   <ion-item>
     <ion-select #selectAsset [hidden]=true (ionChange)="selectAsset_ionChange($event)" interface="action-sheet">
-    <ion-select-option *ngFor="let asset of irohautil.wallet.assets" [value]="asset.assetId">{{asset.assetId + ' - Totale: ' + asset.balance}}</ion-select-option>
+    <ion-select-option *ngFor="let asset of irohautil.wallet.assets" [value]="asset">{{asset.assetId + ' - Totale: ' + asset.balance}}</ion-select-option>
     </ion-select>
     <ion-label class="select-asset" (click)="display_selectAsset()">Seleziona Valuta</ion-label> 
   </ion-item>
+  <!-- End select/change asset-->
 
   <div *ngIf="irohautil.wallet.cur_assetId; then assetId else noassetId"></div>
   <ng-template #assetId>
@@ -43,9 +45,11 @@
     <ion-row><ion-col>A:</ion-col><ion-col>{{tx.to}}</ion-col></ion-row>
     <ion-row><ion-col>Quantità:</ion-col><ion-col>{{tx.amount}}</ion-col></ion-row>
     <ion-row><ion-col>Data:</ion-col><ion-col>{{tx.date | date:'yyyy-MM-dd HH:mm.ss'}}</ion-col></ion-row>
+<!-- Show this additional info in the transaction-show
     <ion-row><ion-col>Valuta:</ion-col><ion-col>{{tx.currency}}</ion-col></ion-row>
     <ion-row><ion-col>Public Key:</ion-col><ion-col>{{tx.puk}}</ion-col></ion-row>
     <ion-row><ion-col>Messaggio:</ion-col><ion-col>{{tx.message}}</ion-col></ion-row>
+--> 
     </ion-grid>  
     </ion-item>
     </ion-item-group>

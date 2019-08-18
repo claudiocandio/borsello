@@ -41,17 +41,23 @@ export class ListPage implements OnInit {
     this.irohautil.run_getAccountAssets(this.irohautil.wallet.mywallet)
       .then(assets => {
         this.irohautil.wallet.assets = assets
-        this.selectAsset.open()
+        this.selectAsset.open() // open up the html currency selecttion
       })
       .catch(err => console.log(err))
 
   }
+
   selectAsset_ionChange($event) {
-    this.irohautil.wallet.cur_assetId = $event.detail.value
+    this.irohautil.wallet.cur_assetId = $event.detail.value.assetId
+    this.irohautil.wallet.cur_assetId_decimal = ($event.detail.value.balance.length -1) - $event.detail.value.balance.indexOf('.')
     this.nativeStorage.setItem('cur_assetId', this.irohautil.wallet.cur_assetId)
       .catch(err => alert("Error storing cur_assetId: " + JSON.stringify(err)));
-    this.get_transactions_list()
-  }
+
+      this.get_transactions_list()
+    }
+
+
+
   // End: For the select/change assets
 
   get_transactions_list(){
