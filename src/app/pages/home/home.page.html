@@ -84,7 +84,7 @@
      <ion-select #selectAsset [hidden]=true (ionChange)="selectAsset_ionChange($event)" interface="action-sheet">
         <ion-select-option *ngFor="let asset of irohautil.wallet.assets" [value]="asset">{{asset.assetId + ' - Totale: ' + asset.balance}}</ion-select-option>
      </ion-select>
-     <ion-label class="select-asset" (click)="display_selectAsset()">Seleziona Valuta</ion-label> 
+     <ion-label class="select-asset" (click)="display_selectAsset()" color="primary">Seleziona Valuta</ion-label> 
     </ion-item>
     <!-- End select/change asset-->
 

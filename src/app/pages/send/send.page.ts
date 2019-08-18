@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { IonSelect } from '@ionic/angular';
+import { IonSelect, AlertController, LoadingController } from '@ionic/angular';
 import { NativeStorage } from '@ionic-native/native-storage/ngx';
 import { NgForm } from '@angular/forms';
 
@@ -21,7 +21,9 @@ export class SendPage implements OnInit {
 
   constructor(
     public irohautil: IrohautilService,
-    private nativeStorage: NativeStorage
+    private nativeStorage: NativeStorage,
+    private alertController: AlertController,
+    public loadingController: LoadingController
   ) { }
 
   ngOnInit() {
@@ -47,21 +49,54 @@ export class SendPage implements OnInit {
   }
   // End: For the select/change assets
 
-
-
+  
+  async walletSendTo_confirm(form: NgForm) {
+    const alert = await this.alertController.create({
+      header: 'Conferma Invio',
+      //message: '',
+      buttons: [
+        {
+          text: 'Annulla',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: () => {
+          }
+        }, {
+          text: 'Invio',
+          handler: () => {
+            this.walletSendTo(form)
+          }
+        }
+      ]
+    });
+    await alert.present();
+  }
   walletSendTo(form: NgForm) {
 
     if (form.valid) {
+      const loading = this.loadingController.create({
+        message: 'Invio in corso...',
+        spinner: 'lines'   // "bubbles" | "circles" | "crescent" | "dots" | "lines" | "lines-small" | null | undefined
+      })
+      .then((lc) => {
+        lc.present()
+        lc.onDidDismiss().then((dis) => {
+          console.log('Loading dismissed!');
+        });
+      }) 
 
       //this.isSending = true
       this.irohautil.run_transferAsset(this.walletTo.wallet+'@iroha', this.walletTo.amount, this.walletTo.message)
-        .then(ok => {
-          console.log("OK: "+ok)
+        .then(() => {
+          this.loadingController.dismiss()
+          alert("Invio completato con successo")
         })
-        .catch(err => console.log(err))
+        .catch(err => {
+          this.loadingController.dismiss()
+          alert("Errore: Invio fallito")
+          console.log(err)
+        })
       //.finally(() => { this.isSending = false })
-
-
 
     }
   }

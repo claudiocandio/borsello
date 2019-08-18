@@ -31,7 +31,7 @@
         <ion-select #selectAsset [hidden]=true (ionChange)="selectAsset_ionChange($event)" interface="action-sheet">
         <ion-select-option *ngFor="let asset of irohautil.wallet.assets" [value]="asset">{{asset.assetId + ' - Totale: ' + asset.balance}}</ion-select-option>
         </ion-select>
-        <ion-label class="select-asset" (click)="display_selectAsset()">Seleziona Valuta</ion-label> 
+        <ion-label class="select-asset" (click)="display_selectAsset()" color="primary">Seleziona Valuta</ion-label> 
       </ion-item>
       <!-- End select/change asset-->
     
@@ -42,7 +42,6 @@
         <ion-list lines="full" class="ion-no-margin ion-no-padding">
           <ion-item>
               <ion-label position="stacked">Inserire indirizzo Wallet destinatario<ion-text color="danger">*</ion-text></ion-label>
-
               <ion-input required class="form-control" [(ngModel)]="walletTo.wallet" name="wallet" type="text"
                          #wallet="ngModel" spellcheck="false" autocapitalize="off" required minlength=3 maxLength=50
                          pattern='^[a-zA-Z0-9_.-]*$'>
@@ -64,7 +63,7 @@
                       Nome Wallet può contenere solo lettere, numeri e i seguenti caratteri: _ . -
                     </ion-text>
                   </div>
-                </div>
+              </div>
           </ion-item>
 
           <ion-item>
@@ -97,12 +96,11 @@
             <ion-input class="form-control" [(ngModel)]="walletTo.message" name="walletMessage" type="text"
                        spellcheck="false" autocapitalize="off" maxLength=50>
             </ion-input>
-            <ion-textarea></ion-textarea>
           </ion-item>
          
         </ion-list>
         <div class="ion-padding">
-            <ion-button (click)="walletSendTo(walletForm)" [disabled]="!walletForm.valid" expand="block" type="submit" class="ion-no-margin">Invia</ion-button>
+            <ion-button (click)="walletSendTo_confirm(walletForm)" [disabled]="!walletForm.valid" expand="block" type="submit" class="ion-no-margin">Invia</ion-button>
         </div>
       </form>
       </ng-template>

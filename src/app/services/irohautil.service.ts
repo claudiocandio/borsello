@@ -92,8 +92,8 @@ export class IrohautilService {
       description: messageTo,
       amount: amountTo
     })
-      .then(ok => {
-        return ok
+      .then(() => {
+        return Promise.resolve()
       })
       .catch(err => {
         return Promise.reject("Error transferAsset: " + err)

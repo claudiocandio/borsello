@@ -95,6 +95,7 @@ export class HomePage implements OnInit {
 
     await alert.present();
   }
+  
   rmkeys() {
 
     this.nativeStorage.remove('mywallet').then(
