@@ -77,6 +77,7 @@ export class SendPage implements OnInit {
       const loading = this.loadingController.create({
         message: 'Invio in corso...',
         spinner: 'lines'   // "bubbles" | "circles" | "crescent" | "dots" | "lines" | "lines-small" | null | undefined
+        //duration: 5000   (autodismiss after 5 secs)
       })
       .then((lc) => {
         lc.present()

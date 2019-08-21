@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { AlertController, IonSelect, MenuController } from '@ionic/angular'; // Per alert https://ionicframework.com/docs/api/alert
+import { AlertController, IonSelect, MenuController, LoadingController } from '@ionic/angular'; // Per alert https://ionicframework.com/docs/api/alert
 import { NativeStorage } from '@ionic-native/native-storage/ngx';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
 
@@ -18,7 +18,8 @@ export class HomePage implements OnInit {
     private barcodeScanner: BarcodeScanner,
     private alertController: AlertController,
     public irohautil: IrohautilService,
-    public menuCtrl: MenuController
+    public menuCtrl: MenuController,
+    public loadingController: LoadingController
   ) {
   }
 
@@ -120,55 +121,85 @@ export class HomePage implements OnInit {
   }
 
   newwallet(form: NgForm) {
+
     if (form.valid) {
 
       this.nativeStorage.getItem('mypuk').then(_ => alert('Wallet already exists: ' + this.irohautil.wallet.mypuk))
         .catch(async () => { /* keys not created yet */
 
+          // const { publicKey, privateKey } = await this.irohautil.generateKeypair()
+
           this.irohautil.login(this.irohautil.na, this.irohautil.naprk)
-            .catch(err => {
-              console.log(err)
-              return Promise.reject(err)
-            })
-
-          const { publicKey, privateKey } = await this.irohautil.generateKeypair()
-
-          this.irohautil.run_createAccount(this.irohautil.wallet.mywallet, publicKey)
             .then(() => {
 
-              this.irohautil.wallet.mypuk = publicKey
-              this.irohautil.wallet.myprk = privateKey
-              // Add domain iroha
-              this.irohautil.wallet.mywallet = this.irohautil.wallet.mywallet + '@' + this.irohautil.domainId
+              const loading = this.loadingController.create({
+                message: 'Creazione Wallet in corso...',
+                spinner: 'lines'   // "bubbles" | "circles" | "crescent" | "dots" | "lines" | "lines-small" | null | undefined
+                //duration: 5000   (autodismiss after 5 secs)
+              })
+                .then((lc) => {
+                  lc.present()
+                  lc.onDidDismiss().then((dis) => {
+                    // here when loading is dismissed
+                    //console.log('Loading dismissed!');
+                  });
+                })
 
-              this.nativeStorage.setItem('mywallet', this.irohautil.wallet.mywallet)
-                .catch(err => alert("Error storing mywallet: " + JSON.stringify(err)));
+              this.irohautil.generateKeypair()
+                .then(({ publicKey, privateKey }) => {
 
-              this.nativeStorage.setItem('mypuk', publicKey)
-                .catch(err => alert("Error storing mypuk: " + JSON.stringify(err)));
+                  this.irohautil.run_createAccount(this.irohautil.wallet.mywallet, publicKey)
+                    .then(() => {
 
-              this.nativeStorage.setItem('myprk', privateKey)
-                .catch(err => alert("Error storing myprk: " + JSON.stringify(err)));
+                      this.irohautil.wallet.mypuk = publicKey
+                      this.irohautil.wallet.myprk = privateKey
+                      this.irohautil.wallet.mywallet = this.irohautil.wallet.mywallet + '@' + this.irohautil.domainId
 
-              this.login()
-                .catch(err => console.log(err))
+                      this.nativeStorage.setItem('mywallet', this.irohautil.wallet.mywallet)
+                        .catch(err => alert("Error storing mywallet: " + JSON.stringify(err)));
 
-              // enable other menu
-              this.menuCtrl.enable(true);
+                      this.nativeStorage.setItem('mypuk', publicKey)
+                        .catch(err => alert("Error storing mypuk: " + JSON.stringify(err)));
 
-              alert("Wallet creato con successo")
+                      this.nativeStorage.setItem('myprk', privateKey)
+                        .catch(err => alert("Error storing myprk: " + JSON.stringify(err)));
+
+                      this.login()
+                        .catch(err => console.log(err))
+
+                      // enable other menu
+                      this.menuCtrl.enable(true);
+
+                      alert("Wallet creato con successo")
+                      this.loadingController.dismiss()
+                    })
+                    .catch(err => {
+                      console.log(err)
+
+                      if (err.includes("expected=COMMITTED, actual=STATEFUL_VALIDATION_FAILED")) alert("Nome Wallet già presente!\n")
+                      else alert("Creazione Wallet fallita!")
+                      this.loadingController.dismiss()
+                    })
+                })
+                .catch(err => {
+                  console.log(err)
+                  alert("Creazione Wallet fallita!")
+                  this.loadingController.dismiss()
+                })
+
             })
             .catch(err => {
               console.log(err)
-              alert("Crea Wallet fallito")
+              alert("Creazione Wallet fallita!\nPossibili problemi al Server.")
+              this.loadingController.dismiss()
             })
-        });
-
+        })
     }
-
   }
 
   showqrcode_puk() {
+    console.log(this.irohautil.wallet.mypuk)
+
     this.irohautil.wallet.mypuk_barcode = null
 
     if (this.irohautil.wallet.mypuk) {
@@ -180,6 +211,8 @@ export class HomePage implements OnInit {
     }
   }
   showqrcode_prk() {
+    //console.log(this.irohautil.wallet.myprk)
+
     this.irohautil.wallet.myprk_barcode = null
 
     if (this.irohautil.wallet.myprk) {
