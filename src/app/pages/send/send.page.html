@@ -44,7 +44,7 @@
               <ion-label position="stacked">Inserire indirizzo Wallet destinatario<ion-text color="danger">*</ion-text></ion-label>
               <ion-input required class="form-control" [(ngModel)]="walletTo.wallet" name="wallet" type="text"
                          #wallet="ngModel" spellcheck="false" autocapitalize="off" required minlength=3 maxLength=50
-                         pattern='^[a-zA-Z0-9_.-]*$'>
+                         pattern='^[a-zA-Z0-9@_.-]*$'>
               </ion-input>
 
               <div *ngIf="wallet.invalid && (wallet.dirty || wallet.touched)" class="danger">
@@ -60,7 +60,7 @@
                   </div>
                   <div *ngIf="wallet.errors.pattern">
                     <ion-text color="danger">
-                      Nome Wallet può contenere solo lettere, numeri e i seguenti caratteri: _ . -
+                      Nome Wallet può contenere lettere, numeri e i caratteri:@ _ . -
                     </ion-text>
                   </div>
               </div>

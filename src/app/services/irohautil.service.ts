@@ -1,3 +1,6 @@
+import * as iroha from 'iroha-lib'   // this has to be on top, otherwise it gives error TypeError: message.getMainPubkey_asU8 is not a function
+const crypto = new iroha.ModelCrypto() // npm i iroha-lib
+
 import { Injectable } from '@angular/core';
 import irohaUtil from '../../util/iroha/'
 
@@ -26,6 +29,7 @@ const nodeIp = 'http://192.168.0.2:8081'
 
 export class IrohautilService {
 
+  public domainId = 'mini'
   public wallet: WalletData = {
     mywallet: '',
     mypuk: null,
@@ -36,6 +40,9 @@ export class IrohautilService {
     cur_assetId: '',
     cur_assetId_decimal: null
   }
+  // to run createAccount
+  public naprk = '439c82fcb5f6ab7397c5f62cf7f9bd8b4284070514b6026725d160e873deb0d6'
+  public na = 'na@'+this.domainId
 
   constructor() { }
 
@@ -84,14 +91,14 @@ export class IrohautilService {
   run_transferAsset(walletTo, amountTo, messageTo) {
 
     return irohaUtil.transferAsset(
-     [this.wallet.myprk], 1,
+      [this.wallet.myprk], 1,
       {
-      srcAccountId: this.wallet.mywallet,
-      destAccountId: walletTo,
-      assetId: this.wallet.cur_assetId,
-      description: messageTo,
-      amount: amountTo
-    })
+        srcAccountId: this.wallet.mywallet,
+        destAccountId: walletTo,
+        assetId: this.wallet.cur_assetId,
+        description: messageTo,
+        amount: amountTo
+      })
       .then(() => {
         return Promise.resolve()
       })
@@ -101,5 +108,30 @@ export class IrohautilService {
 
   }
 
+  run_createAccount(accountName, publicKey) {
+
+    return irohaUtil.createAccount(
+      [this.naprk], 1,
+      {
+        accountName: accountName,
+        domainId: this.domainId,
+        publicKey: publicKey
+      })
+      .then(() => {
+        return Promise.resolve()
+      })
+      .catch(err => {
+        return Promise.reject("Error createAccount: " + err)
+      })
+
+  }
+  
+  async generateKeypair() {
+    const keypair = crypto.generateKeypair()
+    const publicKey = keypair.publicKey().hex()
+    const privateKey = keypair.privateKey().hex()
+
+    return { publicKey, privateKey }
+  }
 
 }

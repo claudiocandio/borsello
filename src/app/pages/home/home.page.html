@@ -12,7 +12,7 @@
   <div *ngIf="irohautil.wallet.mypuk; then puk else nopuk"></div>
   <ng-template #nopuk>
     <div class="ion-padding-top ion-text-center">
-      <ion-label>No Wallet</ion-label>
+      <ion-label>Wallet</ion-label>
     </div>
 
     <form #walletForm="ngForm">
@@ -38,7 +38,7 @@
           </div>
           <div *ngIf="mywallet.errors.pattern">
             <ion-text color="danger">
-              Nome Wallet può contenere solo lettere, numeri e i seguenti caratteri: _ . -
+              Nome Wallet può contenere lettere, numeri e i caratteri: _ . -
             </ion-text>
           </div>
         </div>

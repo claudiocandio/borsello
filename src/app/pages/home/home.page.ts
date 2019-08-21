@@ -1,4 +1,3 @@
-
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { AlertController, IonSelect, MenuController } from '@ionic/angular'; // Per alert https://ionicframework.com/docs/api/alert
@@ -41,7 +40,7 @@ export class HomePage implements OnInit {
       .then(mywallet => {
         this.irohautil.wallet.mywallet = mywallet
         this.login()
-        .catch(err => console.log(err))
+          .catch(err => console.log(err))
       },
         _ => this.irohautil.wallet.mywallet = null
       )
@@ -50,8 +49,8 @@ export class HomePage implements OnInit {
 
   // if no wallet disable menu
   ionViewWillEnter() {
-    if(this.irohautil.wallet.mypuk == null) this.menuCtrl.enable(false);
-   }
+    if (this.irohautil.wallet.mypuk == null) this.menuCtrl.enable(false);
+  }
 
   // Start: For the select/change assets
   @ViewChild('selectAsset') selectAsset: IonSelect;
@@ -67,7 +66,7 @@ export class HomePage implements OnInit {
   }
   selectAsset_ionChange($event) {
     this.irohautil.wallet.cur_assetId = $event.detail.value.assetId
-    this.irohautil.wallet.cur_assetId_decimal = ($event.detail.value.balance.length -1) - $event.detail.value.balance.indexOf('.')
+    this.irohautil.wallet.cur_assetId_decimal = ($event.detail.value.balance.length - 1) - $event.detail.value.balance.indexOf('.')
     this.nativeStorage.setItem('cur_assetId', this.irohautil.wallet.cur_assetId)
       .catch(err => alert("Error storing cur_assetId: " + JSON.stringify(err)));
   }
@@ -95,7 +94,7 @@ export class HomePage implements OnInit {
 
     await alert.present();
   }
-  
+
   rmkeys() {
 
     this.nativeStorage.remove('mywallet').then(
@@ -121,50 +120,48 @@ export class HomePage implements OnInit {
   }
 
   newwallet(form: NgForm) {
-
-    function generateKeypair() {
-      const iroha = require('iroha-lib') // npm install iroha-lib
-      const crypto = new iroha.ModelCrypto()
-      const keypair = crypto.generateKeypair()
-      const publicKey = keypair.publicKey().hex()
-      const privateKey = keypair.privateKey().hex()
-
-      //    return { publicKey, privateKey }
-      //    Force pub/priv keys of alice@iroha !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-      return {
-        publicKey: 'bcc4ab167ae7db371672170ed31e382f7c612fbfe918f99c276cd9dc199446a4',
-        privateKey: '9c430dfe8c54b0a447e25f75121119ac3b649c1253bce8420f245e4c104dccd1'
-      }
-    }
-
     if (form.valid) {
 
       this.nativeStorage.getItem('mypuk').then(_ => alert('Wallet already exists: ' + this.irohautil.wallet.mypuk))
-        .catch(() => { /* keys not created yet */
+        .catch(async () => { /* keys not created yet */
 
-          const { publicKey, privateKey } = generateKeypair()
-          //alert('New keys\npuk: ' + publicKey + '\nprk: ' + privateKey)
-          this.irohautil.wallet.mypuk = publicKey
-          this.irohautil.wallet.myprk = privateKey
+          this.irohautil.login(this.irohautil.na, this.irohautil.naprk)
+            .catch(err => {
+              console.log(err)
+              return Promise.reject(err)
+            })
 
-          // Add domain iroha
-          this.irohautil.wallet.mywallet = this.irohautil.wallet.mywallet + '@iroha'
+          const { publicKey, privateKey } = await this.irohautil.generateKeypair()
 
-          this.nativeStorage.setItem('mywallet', this.irohautil.wallet.mywallet)
-            .catch(err => alert("Error storing mywallet: " + JSON.stringify(err)));
+          this.irohautil.run_createAccount(this.irohautil.wallet.mywallet, publicKey)
+            .then(() => {
 
-          this.nativeStorage.setItem('mypuk', publicKey)
-            .catch(err => alert("Error storing mypuk: " + JSON.stringify(err)));
+              this.irohautil.wallet.mypuk = publicKey
+              this.irohautil.wallet.myprk = privateKey
+              // Add domain iroha
+              this.irohautil.wallet.mywallet = this.irohautil.wallet.mywallet + '@' + this.irohautil.domainId
 
-          this.nativeStorage.setItem('myprk', privateKey)
-            .catch(err => alert("Error storing myprk: " + JSON.stringify(err)));
+              this.nativeStorage.setItem('mywallet', this.irohautil.wallet.mywallet)
+                .catch(err => alert("Error storing mywallet: " + JSON.stringify(err)));
 
-          this.login()
-          .catch(err => console.log(err))
+              this.nativeStorage.setItem('mypuk', publicKey)
+                .catch(err => alert("Error storing mypuk: " + JSON.stringify(err)));
 
-          // enable other menu
-          this.menuCtrl.enable(true);
+              this.nativeStorage.setItem('myprk', privateKey)
+                .catch(err => alert("Error storing myprk: " + JSON.stringify(err)));
 
+              this.login()
+                .catch(err => console.log(err))
+
+              // enable other menu
+              this.menuCtrl.enable(true);
+
+              alert("Wallet creato con successo")
+            })
+            .catch(err => {
+              console.log(err)
+              alert("Crea Wallet fallito")
+            })
         });
 
     }
@@ -198,23 +195,23 @@ export class HomePage implements OnInit {
 
     return this.irohautil.login(this.irohautil.wallet.mywallet, this.irohautil.wallet.myprk)
       .then(ok => {
-      this.irohautil.run_getAccountAssets(this.irohautil.wallet.mywallet)
-        .then(assets => {
-          this.irohautil.wallet.assets = assets
-          let balance = this.irohautil.wallet.assets.find(a=>a.assetId == this.irohautil.wallet.cur_assetId).balance
-          this.irohautil.wallet.cur_assetId_decimal = (balance.length -1) - balance.indexOf('.')
- 
-          return Promise.resolve()
-        })
-        .catch(err =>{
-          console.log(err)
-          return Promise.reject(err)
-        }) 
+        this.irohautil.run_getAccountAssets(this.irohautil.wallet.mywallet)
+          .then(assets => {
+            this.irohautil.wallet.assets = assets
+            let balance = this.irohautil.wallet.assets.find(a => a.assetId == this.irohautil.wallet.cur_assetId).balance
+            this.irohautil.wallet.cur_assetId_decimal = (balance.length - 1) - balance.indexOf('.')
+
+            return Promise.resolve()
+          })
+          .catch(err => {
+            console.log(err)
+            return Promise.reject(err)
+          })
       })
-      .catch(err =>{
+      .catch(err => {
         console.log(err)
         return Promise.reject(err)
-      }) 
+      })
 
   }
 

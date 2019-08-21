@@ -85,8 +85,7 @@ export class SendPage implements OnInit {
         });
       }) 
 
-      //this.isSending = true
-      this.irohautil.run_transferAsset(this.walletTo.wallet+'@iroha', this.walletTo.amount, this.walletTo.message)
+      this.irohautil.run_transferAsset(this.walletTo.wallet, this.walletTo.amount, this.walletTo.message)
         .then(() => {
           this.loadingController.dismiss()
           alert("Invio completato con successo")
@@ -96,7 +95,6 @@ export class SendPage implements OnInit {
           alert("Errore: Invio fallito")
           console.log(err)
         })
-      //.finally(() => { this.isSending = false })
 
     }
   }
