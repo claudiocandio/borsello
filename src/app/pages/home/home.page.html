@@ -16,12 +16,11 @@
     </div>
 
     <form #walletForm="ngForm">
-      <ion-list>
         <ion-item>
           <ion-label position="stacked" color="primary">Inserisci nome Wallet:</ion-label>
           <ion-input class="form-control" [(ngModel)]="irohautil.wallet.mywallet" name="mywallet" type="text"
             #mywallet="ngModel" spellcheck="false" autocapitalize="off" required minlength=3 maxLength=50
-            pattern='^[a-zA-Z0-9_.-]*$'>
+            pattern='^[a-zA-Z0-9_.-]*$' (ionChange)="mywallet_restore_change()">
           </ion-input>
         </ion-item>
 
@@ -42,11 +41,19 @@
             </ion-text>
           </div>
         </div>
-      </ion-list>
+
+        <ion-item>
+          <ion-label position="stacked" color="primary">(Restore) Inserisci chiave Wallet privata</ion-label>
+          <ion-input class="form-control" [(ngModel)]="myprk_restore" name="myprkrestore" type="text"
+                    spellcheck="false" autocapitalize="off" maxLength=64 minlength="{{myprk_restore_min}}" pattern='[a-f0-9]*$'
+                    placeholder="Inserire solo nel caso di restore Wallet" (ionChange)="mywallet_restore_change()">
+          </ion-input>
+        </ion-item>
 
       <ion-row>
         <ion-col>
-          <ion-button (click)="newwallet(walletForm)" type="submit" [disabled]="!walletForm.valid" expand="block">Crea Wallet</ion-button>
+          <ion-button (click)="newwallet(walletForm)" type="submit" [disabled]="!walletForm.valid"
+              expand="block">{{mywallet_restore_button}}</ion-button>
         </ion-col>
       </ion-row>
     </form>
@@ -55,14 +62,24 @@
   
   <ng-template #puk>
     <div class="ion-padding-top ion-text-center">
-      <ion-label>Wallet - Indirizzo Pubblico</ion-label>
+      <ion-label>Wallet Pubblico</ion-label>
     </div>
     <div class="ion-padding-top ion-text-center">
-      <ion-text color="medium">Nome: {{irohautil.wallet.mywallet}}</ion-text>
+      <ion-text color="medium">{{irohautil.wallet.mywallet}}</ion-text>
     </div>
+    <!--
     <div class="ion-padding-top ion-text-center">
       <ion-text color="medium">{{irohautil.wallet.mypuk}}</ion-text>
     </div>
+    -->
+    <div class="ion-padding-top ion-text-center">
+      <ion-grid>
+        <ion-row justify-content-center>
+          <qrcode [qrdata]="irohautil.wallet.mywallet" [size]="150" [level]="'M'"></qrcode>
+        </ion-row>
+      </ion-grid>
+    </div>
+
 
     <!-- Start select/change asset-->
     <ion-list>
@@ -88,14 +105,6 @@
     </ion-item>
     <!-- End select/change asset-->
 
-    <div class="ion-padding-top ion-text-center">
-      <ion-grid>
-        <ion-row justify-content-center>
-          <qrcode [qrdata]="irohautil.wallet.mypuk" [size]="150" [level]="'M'"></qrcode>
-        </ion-row>
-      </ion-grid>
-    </div>
-
     <div>
       <ion-card *ngIf="irohautil.wallet.mypuk_barcode">
         <ion-card-content>
@@ -111,9 +120,9 @@
       </ion-card>
     </div>
 
-    <ion-button (click)="showqrcode_puk()" expand="block">Mostra Wallet pubblico - QR Code</ion-button>
+    <ion-button (click)="showqrcode_puk()" expand="block">Mostra chiave Wallet pubblico - QR Code</ion-button>
     <br />
-    <ion-button (click)="showqrcode_prk()" expand="block">Mostra Wallet privato - QR Code</ion-button>
+    <ion-button (click)="showqrcode_prk()" expand="block">Mostra chiave Wallet privato - QR Code</ion-button>
     <br />
     <ion-button (click)="rmkeys_confirm()" expand="block">Rimuovi Wallet</ion-button>
     <!--

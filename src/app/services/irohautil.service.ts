@@ -125,6 +125,19 @@ export class IrohautilService {
       })
 
   }
+
+  run_getAssetInfo(assetId) {
+
+    return irohaUtil.getAssetInfo({
+      assetId
+    })
+      .then(assetId => {
+        return assetId
+      })
+      .catch(err => {
+        return Promise.reject("Error getAssetInfo: " + err)
+      })
+  }
   
   async generateKeypair() {
     const keypair = crypto.generateKeypair()
@@ -133,5 +146,6 @@ export class IrohautilService {
 
     return { publicKey, privateKey }
   }
+
 
 }

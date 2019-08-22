@@ -49,7 +49,13 @@ export class ListPage implements OnInit {
 
   selectAsset_ionChange($event) {
     this.irohautil.wallet.cur_assetId = $event.detail.value.assetId
-    this.irohautil.wallet.cur_assetId_decimal = ($event.detail.value.balance.length -1) - $event.detail.value.balance.indexOf('.')
+    //this.irohautil.wallet.cur_assetId_decimal = ($event.detail.value.balance.length -1) - $event.detail.value.balance.indexOf('.')
+    this.irohautil.run_getAssetInfo($event.detail.value.assetId)
+    .then((assetId) => {
+      this.irohautil.wallet.cur_assetId_decimal = assetId.precision
+      })
+    .catch(err => console.log(err))
+   
     this.nativeStorage.setItem('cur_assetId', this.irohautil.wallet.cur_assetId)
       .catch(err => alert("Error storing cur_assetId: " + JSON.stringify(err)));
 
