@@ -17,11 +17,12 @@
 
     <form #walletForm="ngForm">
         <ion-item>
-          <ion-label position="stacked" color="primary">Inserisci nome Wallet:</ion-label>
+          <!--<ion-label position="stacked" color="primary">Inserisci nome Wallet:</ion-label>-->
           <ion-input class="form-control" [(ngModel)]="irohautil.wallet.mywallet" name="mywallet" type="text"
             #mywallet="ngModel" spellcheck="false" autocapitalize="off" required minlength=3 maxLength=50
-            pattern='^[a-zA-Z0-9_.-]*$' (ionChange)="mywallet_restore_change()">
+            placeholder="Inserire nome Wallet" pattern='^[a-zA-Z0-9_.-]*$' (ionChange)="mywallet_restore_change()">
           </ion-input>
+          <ion-button (click)="scanCode_mywallet()">Scan Code</ion-button>
         </ion-item>
 
         <div *ngIf="mywallet.invalid && (mywallet.dirty || mywallet.touched)" class="danger">
@@ -43,11 +44,12 @@
         </div>
 
         <ion-item>
-          <ion-label position="stacked" color="primary">(Restore) Inserisci chiave Wallet privata</ion-label>
+          <!--<ion-label position="stacked" color="primary">(Restore) Inserisci chiave Wallet privata</ion-label>-->
           <ion-input class="form-control" [(ngModel)]="myprk_restore" name="myprkrestore" type="text"
                     spellcheck="false" autocapitalize="off" maxLength=64 minlength="{{myprk_restore_min}}" pattern='[a-f0-9]*$'
-                    placeholder="Inserire solo nel caso di restore Wallet" (ionChange)="mywallet_restore_change()">
+                    placeholder="Inserire chiave privata per recupero Wallet" (ionChange)="mywallet_restore_change()">
           </ion-input>
+          <ion-button (click)="scanCode_myprk()">Scan Code</ion-button>
         </ion-item>
 
       <ion-row>

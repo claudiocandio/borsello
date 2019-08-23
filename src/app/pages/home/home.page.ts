@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { AlertController, IonSelect, MenuController, LoadingController } from '@ionic/angular'; // Per alert https://ionicframework.com/docs/api/alert
 import { NativeStorage } from '@ionic-native/native-storage/ngx';
-import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
+import { BarcodeScanner, BarcodeScannerOptions} from '@ionic-native/barcode-scanner/ngx';
 
 import { IrohautilService } from '../../services/irohautil.service'
 import { derivePublicKey } from 'ed25519.js'
@@ -22,10 +22,17 @@ export class HomePage implements OnInit {
     public menuCtrl: MenuController,
     public loadingController: LoadingController
   ) {
+    this.barcodeScannerOptions = {
+      showTorchButton: true,
+      showFlipCameraButton: true
+    };
+
   }
   private myprk_restore = ''
   public myprk_restore_min = 0
   public mywallet_restore_button = 'Crea Wallet'
+  
+  barcodeScannerOptions: BarcodeScannerOptions;
 
   ngOnInit() {
 
@@ -59,6 +66,7 @@ export class HomePage implements OnInit {
 
   // Start: For the select/change assets
   @ViewChild('selectAsset') selectAsset: IonSelect;
+
   display_selectAsset() {
     // refresh assets and then open select assets
     this.irohautil.run_getAccountAssets(this.irohautil.wallet.mywallet)
@@ -69,6 +77,7 @@ export class HomePage implements OnInit {
       .catch(err => console.log(err))
 
   }
+
   selectAsset_ionChange($event) {
     this.irohautil.wallet.cur_assetId = $event.detail.value.assetId
     //this.irohautil.wallet.cur_assetId_decimal = ($event.detail.value.balance.length - 1) - $event.detail.value.balance.indexOf('.')
@@ -256,6 +265,46 @@ export class HomePage implements OnInit {
     }
   }
 
+  scanCode_mywallet() {
+    this.barcodeScanner
+      .scan()
+      .then(barcodeData => {
+        //console.log("Barcode data " + JSON.stringify(barcodeData));
+
+        if (barcodeData.text.includes('@'+this.irohautil.domainId)) // remove domainId when creating new wallet
+          this.irohautil.wallet.mywallet = barcodeData.text.substring(0,barcodeData.text.indexOf('@'+this.irohautil.domainId))
+        else if(barcodeData.text.includes('@')){
+          this.irohautil.wallet.mywallet = ''
+          alert("Code invalido")
+        }else this.irohautil.wallet.mywallet = barcodeData.text
+
+      })
+      .catch(err => {
+        console.log("Error scanCode_mywallet: ", err);
+      });
+  }
+
+  scanCode_myprk() {
+    this.barcodeScanner
+      .scan()
+      .then(barcodeData => {
+        //console.log("Barcode data " + JSON.stringify(barcodeData));
+
+        if (barcodeData.text.length == 64)
+          this.myprk_restore = barcodeData.text
+        else{
+          this.myprk_restore = ''
+          alert("Code invalido")
+        }
+
+      })
+      .catch(err => {
+        console.log("Error scanCode_mywallet: ", err);
+      })
+  }
+
+
+
   showqrcode_puk() {
     console.log(this.irohautil.wallet.mypuk)
 
@@ -290,14 +339,15 @@ export class HomePage implements OnInit {
         this.irohautil.run_getAccountAssets(this.irohautil.wallet.mywallet)
           .then(assets => {
             this.irohautil.wallet.assets = assets
-            let balance = this.irohautil.wallet.assets.find(a => a.assetId == this.irohautil.wallet.cur_assetId).balance
-            //this.irohautil.wallet.cur_assetId_decimal = (balance.length - 1) - balance.indexOf('.')
+            //console.log(assets)
+            //console.log(assets.lenght)
+            if(assets.length == 1) this.irohautil.wallet.cur_assetId = assets[0].assetId
+
             this.irohautil.run_getAssetInfo(this.irohautil.wallet.cur_assetId)
             .then((assetId) => {
               this.irohautil.wallet.cur_assetId_decimal = assetId.precision
               })
             .catch(err => console.log(err))
-        
 
             return Promise.resolve()
           })
@@ -313,4 +363,6 @@ export class HomePage implements OnInit {
 
   }
 
+
+  
 }

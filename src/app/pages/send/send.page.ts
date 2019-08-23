@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { IonSelect, AlertController, LoadingController } from '@ionic/angular';
 import { NativeStorage } from '@ionic-native/native-storage/ngx';
 import { NgForm } from '@angular/forms';
+import { BarcodeScanner, BarcodeScannerOptions} from '@ionic-native/barcode-scanner/ngx';
 
 import { IrohautilService, WalletDataTo } from '../../services/irohautil.service'
 
@@ -20,11 +21,21 @@ export class SendPage implements OnInit {
   }
 
   constructor(
+    private barcodeScanner: BarcodeScanner,
     public irohautil: IrohautilService,
     private nativeStorage: NativeStorage,
     private alertController: AlertController,
     public loadingController: LoadingController
-  ) { }
+  ) {
+  
+    this.barcodeScannerOptions = {
+      showTorchButton: true,
+      showFlipCameraButton: true
+    }
+
+  }
+  
+  barcodeScannerOptions: BarcodeScannerOptions;
 
   ngOnInit() {
   }
@@ -140,5 +151,17 @@ export class SendPage implements OnInit {
     }
   }
 
+  scanCode_wallet() {
+    this.barcodeScanner
+      .scan()
+      .then(barcodeData => {
+        //console.log("Barcode data " + JSON.stringify(barcodeData));
+        this.walletTo.wallet = barcodeData.text
+
+      })
+      .catch(err => {
+        console.log("Error scanCode_mywallet: ", err);
+      })
+    }
 
 }
