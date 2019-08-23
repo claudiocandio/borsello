@@ -326,7 +326,7 @@ export class HomePage implements OnInit {
     if (this.irohautil.wallet.myprk) {
       this.barcodeScanner.encode(this.barcodeScanner.Encode.TEXT_TYPE, this.irohautil.wallet.myprk)
         .then((myprk_barcode) => {
-          this.irohautil.wallet.mypuk_barcode = myprk_barcode
+          this.irohautil.wallet.myprk_barcode = myprk_barcode
         })
         .catch(err => alert("Error: " + JSON.stringify(err)))
     }
