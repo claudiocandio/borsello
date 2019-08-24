@@ -35,7 +35,7 @@
   </ion-item>
   <!-- End select/change asset-->
 
-  <div *ngIf="irohautil.wallet.cur_assetId; then assetId else noassetId"></div>
+  <div *ngIf="irohautil.wallet.cur_assetId; then assetId"></div>
   <ng-template #assetId>
     <ion-list>
     <ion-item-group *ngFor="let tx of txs" [routerLink]="['/transaction-show/', tx.from, tx.to, tx.amount, tx.date, tx.currency, tx.puk, tx.message]">

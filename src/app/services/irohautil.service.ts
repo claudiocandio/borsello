@@ -48,6 +48,8 @@ export class IrohautilService {
   public na = 'na@' + this.domainId
   public qrcode_size = 200
 
+  public mywallet_show_html = false
+  
   constructor(private nativeStorage: NativeStorage) {
   }
 

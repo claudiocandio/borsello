@@ -119,7 +119,6 @@ export class OptionsPage implements OnInit {
     })
     loading.present().then(async () => {
 
-
       await this.nativeStorage.remove('nodeIp').then(
         _ => this.irohautil.wallet.mywallet = null,
         err => alert("Error rm nativeStorage: nodeIp " + JSON.stringify(err))
@@ -145,7 +144,7 @@ export class OptionsPage implements OnInit {
         //      window.location.reload()
       }).catch(err => alert("Error rm nativeStorage: cur_assetId " + JSON.stringify(err)))
 
-
+      this.irohautil.mywallet_show_html = false
       loading.dismiss()
     })
 

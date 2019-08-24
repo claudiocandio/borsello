@@ -9,87 +9,92 @@
 
 <ion-content>
 
-  <div *ngIf="irohautil.wallet.mypuk; then puk else nopuk"></div>
-  <ng-template #nopuk>
+  <div *ngIf="irohautil.mywallet_show_html; then mywalletok else walletno"></div>
+  <ng-template #walletno>
     <div class="ion-padding-top ion-text-center">
       <ion-label>Wallet</ion-label>
     </div>
 
     <form #walletForm="ngForm">
-        <ion-item>
-          <!--<ion-label position="stacked" color="primary">Inserisci nome Wallet:</ion-label>-->
-          <ion-input class="form-control" [(ngModel)]="irohautil.wallet.mywallet" name="mywallet" type="text"
-            #mywallet="ngModel" spellcheck="false" autocapitalize="off" required minlength=3 maxLength=50
-            placeholder="Inserire nome Wallet" pattern='^[a-zA-Z0-9_.-]*$' (ionChange)="mywallet_restore_change()">
-          </ion-input>
-          <ion-button (click)="scanCode_mywallet()">Scan Code</ion-button>
-        </ion-item>
+      <ion-item>
+        <!--<ion-label position="stacked" color="primary">Inserisci nome Wallet:</ion-label>-->
+        <ion-input class="form-control" [(ngModel)]="irohautil.wallet.mywallet" name="mywallet" type="text"
+          #mywallet="ngModel" spellcheck="false" autocapitalize="off" required minlength=3 maxLength=50
+          placeholder="Inserire nome Wallet" pattern='^[a-zA-Z0-9_.-]*$' (ionChange)="mywallet_restore_change()">
+        </ion-input>
+        <ion-button (click)="scanCode_mywallet()">Scan Code</ion-button>
+      </ion-item>
 
-        <div *ngIf="mywallet.invalid && (mywallet.dirty || mywallet.touched)" class="danger">
-          <div *ngIf="mywallet.errors.required">
-            <ion-text color="danger">
-              Inserire nome Wallet
-            </ion-text>
-          </div>
-          <div *ngIf="mywallet.errors.minlength">
-            <ion-text color="danger">
-              Nome Wallet di almeno 3 caratteri
-            </ion-text>
-          </div>
-          <div *ngIf="mywallet.errors.pattern">
-            <ion-text color="danger">
-              Nome Wallet può contenere lettere, numeri e i caratteri: _ . -
-            </ion-text>
-          </div>
+      <div *ngIf="mywallet.invalid && (mywallet.dirty || mywallet.touched)" class="danger">
+        <div *ngIf="mywallet.errors.required">
+          <ion-text color="danger">
+            Inserire nome Wallet
+          </ion-text>
         </div>
+        <div *ngIf="mywallet.errors.minlength">
+          <ion-text color="danger">
+            Nome Wallet di almeno 3 caratteri
+          </ion-text>
+        </div>
+        <div *ngIf="mywallet.errors.pattern">
+          <ion-text color="danger">
+            Nome Wallet può contenere lettere, numeri e i caratteri: _ . -
+          </ion-text>
+        </div>
+      </div>
 
-        <ion-item>
-          <!--<ion-label position="stacked" color="primary">(Restore) Inserisci chiave Wallet privata</ion-label>-->
-          <ion-input class="form-control" [(ngModel)]="myprk_restore" name="myprkrestore" type="text"
-                    spellcheck="false" autocapitalize="off" maxLength=64 minlength="{{myprk_restore_min}}" pattern='[a-f0-9]*$'
-                    placeholder="Inserire chiave privata per recupero Wallet" (ionChange)="mywallet_restore_change()">
-          </ion-input>
-          <ion-button (click)="scanCode_myprk()">Scan Code</ion-button>
-        </ion-item>
+      <ion-item>
+        <!--<ion-label position="stacked" color="primary">(Restore) Inserisci chiave Wallet privata</ion-label>-->
+        <ion-input class="form-control" [(ngModel)]="myprk_restore" name="myprkrestore" type="text" spellcheck="false"
+          autocapitalize="off" maxLength=64 minlength="{{myprk_restore_min}}" pattern='[a-f0-9]*$'
+          placeholder="Inserire chiave privata per recupero Wallet" (ionChange)="mywallet_restore_change()">
+        </ion-input>
+        <ion-button (click)="scanCode_myprk()">Scan Code</ion-button>
+      </ion-item>
 
       <ion-row>
         <ion-col>
-          <ion-button (click)="newwallet(walletForm)" type="submit" [disabled]="!walletForm.valid"
-              expand="block">{{mywallet_restore_button}}</ion-button>
+          <ion-button (click)="newwallet(walletForm)" type="submit" [disabled]="!walletForm.valid" expand="block">
+            {{mywallet_restore_button}}</ion-button>
         </ion-col>
       </ion-row>
     </form>
 
   </ng-template>
-  
-  <ng-template #puk>
+
+  <ng-template #mywalletok>
     <div class="ion-padding-top ion-text-center">
-      <ion-label>Wallet Pubblico</ion-label>
+      <ion-label>Wallet</ion-label>
     </div>
     <div class="ion-padding-top ion-text-center">
-      <ion-text color="medium">{{irohautil.wallet.mywallet}}</ion-text>
+      <ion-text color="dark">{{irohautil.wallet.mywallet}}</ion-text>
     </div>
     <!--
     <div class="ion-padding-top ion-text-center">
       <ion-text color="medium">{{irohautil.wallet.mypuk}}</ion-text>
     </div>
     -->
-    <div class="ion-padding-top ion-text-center">
-      <ion-grid>
-        <ion-row justify-content-center>
-          <qrcode [qrdata]="irohautil.wallet.mywallet" [size]="irohautil.qrcode_size" [level]="'M'"></qrcode>
-        </ion-row>
-      </ion-grid>
-    </div>
-
+    <ion-card>
+      <div class="ion-padding-top ion-text-center">
+        <ion-grid>
+          <ion-row justify-content-center>
+            <qrcode [qrdata]="irohautil.wallet.mywallet" [size]="irohautil.qrcode_size" [level]="'M'"></qrcode>
+          </ion-row>
+        </ion-grid>
+      </div>
+    </ion-card>
 
     <!-- Start select/change asset-->
     <ion-list>
       <div *ngFor="let asset of irohautil.wallet.assets">
         <div *ngIf="irohautil.wallet.cur_assetId == asset.assetId">
           <ion-item color="secondary">
-            <ion-label><h2>Valuta</h2></ion-label>
-            <ion-label><h2>Totale</h2></ion-label>
+            <ion-label>
+              <h2>Valuta</h2>
+            </ion-label>
+            <ion-label>
+              <h2>Totale</h2>
+            </ion-label>
           </ion-item>
           <ion-item>
             <ion-label>{{asset.assetId}}</ion-label>
@@ -100,10 +105,11 @@
     </ion-list>
 
     <ion-item>
-     <ion-select #selectAsset [hidden]=true (ionChange)="selectAsset_ionChange($event)" interface="action-sheet">
-        <ion-select-option *ngFor="let asset of irohautil.wallet.assets" [value]="asset">{{asset.assetId + ' - Totale: ' + asset.balance}}</ion-select-option>
-     </ion-select>
-     <ion-label class="select-asset" (click)="display_selectAsset()" color="primary">Seleziona Valuta</ion-label> 
+      <ion-select #selectAsset [hidden]=true (ionChange)="selectAsset_ionChange($event)" interface="action-sheet">
+        <ion-select-option *ngFor="let asset of irohautil.wallet.assets" [value]="asset">
+          {{asset.assetId + ' - Totale: ' + asset.balance}}</ion-select-option>
+      </ion-select>
+      <ion-label class="select-asset" (click)="display_selectAsset()" color="primary">Seleziona Valuta</ion-label>
     </ion-item>
     <!-- End select/change asset-->
 

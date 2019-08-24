@@ -36,7 +36,7 @@
       </ion-item>
       <!-- End select/change asset-->
     
-      <div *ngIf="irohautil.wallet.cur_assetId; then assetId else noassetId"></div>
+      <div *ngIf="irohautil.wallet.cur_assetId; then assetId"></div>
       <ng-template #assetId>
 
         <form #walletForm="ngForm">
