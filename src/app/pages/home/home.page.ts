@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { AlertController, IonSelect, MenuController, LoadingController } from '@ionic/angular'; // Per alert https://ionicframework.com/docs/api/alert
+import { IonSelect, MenuController, LoadingController } from '@ionic/angular'; // Per alert https://ionicframework.com/docs/api/alert
 import { NativeStorage } from '@ionic-native/native-storage/ngx';
-import { BarcodeScanner, BarcodeScannerOptions} from '@ionic-native/barcode-scanner/ngx';
+import { BarcodeScanner, BarcodeScannerOptions } from '@ionic-native/barcode-scanner/ngx';
 
 import { IrohautilService } from '../../services/irohautil.service'
 import { derivePublicKey } from 'ed25519.js'
@@ -17,7 +17,6 @@ export class HomePage implements OnInit {
 
   constructor(private nativeStorage: NativeStorage,
     private barcodeScanner: BarcodeScanner,
-    private alertController: AlertController,
     public irohautil: IrohautilService,
     public menuCtrl: MenuController,
     public loadingController: LoadingController
@@ -31,10 +30,20 @@ export class HomePage implements OnInit {
   private myprk_restore = ''
   public myprk_restore_min = 0
   public mywallet_restore_button = 'Crea Wallet'
-  
+
   barcodeScannerOptions: BarcodeScannerOptions;
 
   ngOnInit() {
+    /*
+    this.menuCtrl.getMenus().then(res => {
+      console.log(res);
+      })
+      this.menuCtrl.enable(false, 'listMenu');
+    */  
+      this.nativeStorage.getItem('nodeIp').then(
+        nodeIp => this.irohautil.nodeIp = nodeIp,
+        _ => this.irohautil.nodeIp = this.irohautil.nodeIp_default
+      )
 
     this.nativeStorage.getItem('mypuk').then(
       mypuk => this.irohautil.wallet.mypuk = mypuk,
@@ -51,6 +60,7 @@ export class HomePage implements OnInit {
     this.nativeStorage.getItem('mywallet')
       .then(mywallet => {
         this.irohautil.wallet.mywallet = mywallet
+
         this.login()
           .catch(err => console.log(err))
       },
@@ -61,7 +71,7 @@ export class HomePage implements OnInit {
 
   // if no wallet disable menu
   ionViewWillEnter() {
-    if (this.irohautil.wallet.mypuk == null) this.menuCtrl.enable(false);
+//    if (this.irohautil.wallet.mypuk == null) this.menuCtrl.enable(false);
   }
 
   // Start: For the select/change assets
@@ -74,7 +84,7 @@ export class HomePage implements OnInit {
         this.irohautil.wallet.assets = assets
         this.selectAsset.open() // open up the html currency selecttion
       })
-      .catch(err => console.log(err))
+      .catch(err => console.log("Error run_getAccountAssets: "+err))
 
   }
 
@@ -82,62 +92,15 @@ export class HomePage implements OnInit {
     this.irohautil.wallet.cur_assetId = $event.detail.value.assetId
     //this.irohautil.wallet.cur_assetId_decimal = ($event.detail.value.balance.length - 1) - $event.detail.value.balance.indexOf('.')
     this.irohautil.run_getAssetInfo($event.detail.value.assetId)
-    .then((assetId) => {
-      this.irohautil.wallet.cur_assetId_decimal = assetId.precision
+      .then((assetId) => {
+        this.irohautil.wallet.cur_assetId_decimal = assetId.precision
       })
-    .catch(err => console.log(err))
+      .catch(err => console.log(err))
 
     this.nativeStorage.setItem('cur_assetId', this.irohautil.wallet.cur_assetId)
       .catch(err => alert("Error storing cur_assetId: " + JSON.stringify(err)));
   }
   // End: For the select/change assets
-
-  async rmkeys_confirm() {
-    const alert = await this.alertController.create({
-      header: 'Conferma cancellazione!',
-      message: '<strong>Il Wallet verrà cancellato! Sei sicuro?</strong>',
-      buttons: [
-        {
-          text: 'Annulla',
-          role: 'cancel',
-          cssClass: 'secondary',
-          handler: () => {
-          }
-        }, {
-          text: 'OK',
-          handler: () => {
-            this.rmkeys()
-          }
-        }
-      ]
-    });
-
-    await alert.present();
-  }
-
-  rmkeys() {
-
-    this.nativeStorage.remove('mywallet').then(
-      _ => this.irohautil.wallet.mywallet = null,
-      err => alert("Error rm mywallet: " + JSON.stringify(err))
-    )
-
-    this.nativeStorage.remove('myprk').then(
-      _ => this.irohautil.wallet.mywallet = null,
-      err => alert("Error rm myprk: " + JSON.stringify(err))
-    )
-
-    this.nativeStorage.remove('mypuk').then(_ => {
-      _ => this.irohautil.wallet.mywallet = null
-      window.location.reload()
-    }).catch(err => alert("Error rm mywallet: " + JSON.stringify(err)))
-
-    this.nativeStorage.remove('cur_assetId').then(_ => {
-      _ => this.irohautil.wallet.cur_assetId = null
-      window.location.reload()
-    }).catch(err => alert("Error rm cur_assetId: " + JSON.stringify(err)))
-
-  }
 
   newwallet(form: NgForm) {
 
@@ -185,7 +148,7 @@ export class HomePage implements OnInit {
 
           } else { // new wallet
 
-            this.irohautil.login(this.irohautil.na, this.irohautil.naprk)
+            this.irohautil.login_na() // login with na to create account
               .then(() => {
 
                 const loading = this.loadingController.create({
@@ -271,12 +234,12 @@ export class HomePage implements OnInit {
       .then(barcodeData => {
         //console.log("Barcode data " + JSON.stringify(barcodeData));
 
-        if (barcodeData.text.includes('@'+this.irohautil.domainId)) // remove domainId when creating new wallet
-          this.irohautil.wallet.mywallet = barcodeData.text.substring(0,barcodeData.text.indexOf('@'+this.irohautil.domainId))
-        else if(barcodeData.text.includes('@')){
+        if (barcodeData.text.includes('@' + this.irohautil.domainId)) // remove domainId when creating new wallet
+          this.irohautil.wallet.mywallet = barcodeData.text.substring(0, barcodeData.text.indexOf('@' + this.irohautil.domainId))
+        else if (barcodeData.text.includes('@')) {
           this.irohautil.wallet.mywallet = ''
           alert("Code invalido")
-        }else this.irohautil.wallet.mywallet = barcodeData.text
+        } else this.irohautil.wallet.mywallet = barcodeData.text
 
       })
       .catch(err => {
@@ -292,7 +255,7 @@ export class HomePage implements OnInit {
 
         if (barcodeData.text.length == 64)
           this.myprk_restore = barcodeData.text
-        else{
+        else {
           this.myprk_restore = ''
           alert("Code invalido")
         }
@@ -303,66 +266,15 @@ export class HomePage implements OnInit {
       })
   }
 
-
-
-  showqrcode_puk() {
-    console.log(this.irohautil.wallet.mypuk)
-
-    this.irohautil.wallet.mypuk_barcode = null
-
-    if (this.irohautil.wallet.mypuk) {
-      this.barcodeScanner.encode(this.barcodeScanner.Encode.TEXT_TYPE, this.irohautil.wallet.mypuk)
-        .then((mypuk_barcode) => {
-          this.irohautil.wallet.mypuk_barcode = mypuk_barcode
-        })
-        .catch(err => alert("Error: " + JSON.stringify(err)))
-    }
-  }
-  showqrcode_prk() {
-    //console.log(this.irohautil.wallet.myprk)
-
-    this.irohautil.wallet.myprk_barcode = null
-
-    if (this.irohautil.wallet.myprk) {
-      this.barcodeScanner.encode(this.barcodeScanner.Encode.TEXT_TYPE, this.irohautil.wallet.myprk)
-        .then((myprk_barcode) => {
-          this.irohautil.wallet.myprk_barcode = myprk_barcode
-        })
-        .catch(err => alert("Error: " + JSON.stringify(err)))
-    }
-  }
-
   login() {
 
     return this.irohautil.login(this.irohautil.wallet.mywallet, this.irohautil.wallet.myprk)
-      .then(ok => {
-        this.irohautil.run_getAccountAssets(this.irohautil.wallet.mywallet)
-          .then(assets => {
-            this.irohautil.wallet.assets = assets
-            //console.log(assets)
-            //console.log(assets.lenght)
-            if(assets.length == 1) this.irohautil.wallet.cur_assetId = assets[0].assetId
-
-            this.irohautil.run_getAssetInfo(this.irohautil.wallet.cur_assetId)
-            .then((assetId) => {
-              this.irohautil.wallet.cur_assetId_decimal = assetId.precision
-              })
-            .catch(err => console.log(err))
-
-            return Promise.resolve()
-          })
-          .catch(err => {
-            console.log(err)
-            return Promise.reject(err)
-          })
-      })
       .catch(err => {
-        console.log(err)
+        console.log("Error Home login: "+err)
         return Promise.reject(err)
       })
 
   }
 
 
-  
 }

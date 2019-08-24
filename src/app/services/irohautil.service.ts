@@ -1,15 +1,14 @@
 import * as iroha from 'iroha-lib'   // this has to be on top, otherwise it gives error TypeError: message.getMainPubkey_asU8 is not a function
 const crypto = new iroha.ModelCrypto() // npm i iroha-lib
 
-import { Injectable } from '@angular/core';
+import { NativeStorage } from '@ionic-native/native-storage/ngx';
+import { Injectable, OnInit } from '@angular/core';
 import irohaUtil from '../../util/iroha/'
 
 export interface WalletData {
   mywallet: string;
   mypuk: string;
   myprk: string;
-  mypuk_barcode: any;
-  myprk_barcode: any;
   assets: any;
   cur_assetId: string;
   cur_assetId_decimal: any;
@@ -21,11 +20,11 @@ export interface WalletDataTo {
   message: string;
 }
 
-const nodeIp = 'http://192.168.0.2:8081'
-
 @Injectable({
   providedIn: 'root'
 })
+
+//const nodeIp = 'http://192.168.0.2:8081'
 
 export class IrohautilService {
 
@@ -34,25 +33,64 @@ export class IrohautilService {
     mywallet: '',
     mypuk: null,
     myprk: null,
-    mypuk_barcode: null,
-    myprk_barcode: null,
     assets: null,
     cur_assetId: '',
     cur_assetId_decimal: null
   }
+  public nodeIp_default = 'http://192.168.0.2:8081'
+  public nodeIp = ''
+
   // to run createAccount
   public naprk = '439c82fcb5f6ab7397c5f62cf7f9bd8b4284070514b6026725d160e873deb0d6'
-  public na = 'na@'+this.domainId
+  public na = 'na@' + this.domainId
+  public qrcode_size = 200
 
-  constructor() { }
+  constructor(private nativeStorage: NativeStorage) {
+  }
+
+  login_na() {
+
+    return irohaUtil.login(this.na, this.naprk, this.nodeIp)
+      .then(() => {
+        return Promise.resolve()
+      })
+      .catch(err => {
+        console.log("Error login_na: " + JSON.stringify(err))
+        alert("Problemi di connessione al Server")
+        return Promise.reject(err)
+      })
+  }
 
   login(username, privateKey) {
 
-    return irohaUtil.login(username, privateKey, nodeIp)
+    return irohaUtil.login(username, privateKey, this.nodeIp)
       .then(account => {
-        return (JSON.stringify(account))
+
+        this.run_getAccountAssets(this.wallet.mywallet)
+          .then(assets => {
+            this.wallet.assets = assets
+            if (assets.length == 1) this.wallet.cur_assetId = assets[0].assetId
+
+            this.run_getAssetInfo(this.wallet.cur_assetId)
+              .then((assetId) => {
+                this.wallet.cur_assetId_decimal = assetId.precision
+              })
+              .catch(err => {
+                console.log("Error login run_getAssetInfo: " + err)
+                //return Promise.reject(err)
+              })
+          })
+          .catch(err => {
+            console.log("Error login run_getAccountAssets: " + err)
+            //return Promise.reject(err)
+          })
+
+        return Promise.resolve(account)
       })
       .catch(err => {
+        //console.log("Error login: "+err)
+        console.log("Error login: " + JSON.stringify(err))
+        alert("Problemi di connessione al Server")
         return Promise.reject(err)
       })
 
@@ -71,21 +109,25 @@ export class IrohautilService {
         return transactions
       })
       .catch(err => {
-        return Promise.reject("Error getAccountAssetTransactions: " + err)
+        console.log("Error run_getAccountAssetTransactions: " + err)
+        console.log(JSON.stringify(err))
+        return Promise.reject(err)
       })
   }
 
   run_getAccountAssets(username) {
 
-    return irohaUtil.getAccountAssets({
-      accountId: username
-    })
-      .then(transactions => {
-        return transactions
+    if (username)
+      return irohaUtil.getAccountAssets({
+        accountId: username
       })
-      .catch(err => {
-        return Promise.reject("Error getAccountAssets: " + err)
-      })
+        .then(transactions => {
+          return transactions
+        })
+        .catch(err => {
+          console.log("Error getAccountAssets: " + JSON.stringify(err))
+          return Promise.reject(err)
+        })
   }
 
   run_transferAsset(walletTo, amountTo, messageTo) {
@@ -138,7 +180,7 @@ export class IrohautilService {
         return Promise.reject("Error getAssetInfo: " + err)
       })
   }
-  
+
   async generateKeypair() {
     const keypair = crypto.generateKeypair()
     const publicKey = keypair.publicKey().hex()

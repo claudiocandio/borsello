@@ -77,7 +77,7 @@
     <div class="ion-padding-top ion-text-center">
       <ion-grid>
         <ion-row justify-content-center>
-          <qrcode [qrdata]="irohautil.wallet.mywallet" [size]="150" [level]="'M'"></qrcode>
+          <qrcode [qrdata]="irohautil.wallet.mywallet" [size]="irohautil.qrcode_size" [level]="'M'"></qrcode>
         </ion-row>
       </ion-grid>
     </div>
@@ -122,11 +122,6 @@
       </ion-card>
     </div>
 
-    <ion-button (click)="showqrcode_puk()" expand="block">Mostra chiave Wallet pubblico - QR Code</ion-button>
-    <br />
-    <ion-button (click)="showqrcode_prk()" expand="block">Mostra chiave Wallet privato - QR Code</ion-button>
-    <br />
-    <ion-button (click)="rmkeys_confirm()" expand="block">Rimuovi Wallet</ion-button>
     <!--
     <br />
     <ion-button (click)="login()" expand="block">Verifica connessione Server</ion-button>

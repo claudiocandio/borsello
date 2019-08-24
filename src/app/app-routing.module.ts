@@ -22,6 +22,10 @@ const routes: Routes = [
   { 
     path: 'transaction-show/:txFrom/:txTo/:txAmount/:txDate/:txCurrency/:txPuk/:txMessage',
     loadChildren: './pages/transaction-show/transaction-show.module#TransactionShowPageModule' 
+  },
+  { 
+    path: 'options',
+    loadChildren: './pages/options/options.module#OptionsPageModule' 
   }
 ];
 

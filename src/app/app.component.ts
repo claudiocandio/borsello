@@ -24,6 +24,11 @@ export class AppComponent {
       title: 'Invia',
       url: '/send',
       icon: 'send'
+    },
+    {
+      title: 'Opzioni',
+      url: '/options',
+      icon: 'options'
     }
   ];
 

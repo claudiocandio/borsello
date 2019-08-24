@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { IonSelect, AlertController, LoadingController } from '@ionic/angular';
 import { NativeStorage } from '@ionic-native/native-storage/ngx';
 import { NgForm } from '@angular/forms';
-import { BarcodeScanner, BarcodeScannerOptions} from '@ionic-native/barcode-scanner/ngx';
+import { BarcodeScanner, BarcodeScannerOptions } from '@ionic-native/barcode-scanner/ngx';
 
 import { IrohautilService, WalletDataTo } from '../../services/irohautil.service'
 
@@ -27,14 +27,14 @@ export class SendPage implements OnInit {
     private alertController: AlertController,
     public loadingController: LoadingController
   ) {
-  
+
     this.barcodeScannerOptions = {
       showTorchButton: true,
       showFlipCameraButton: true
     }
 
   }
-  
+
   barcodeScannerOptions: BarcodeScannerOptions;
 
   ngOnInit() {
@@ -45,12 +45,16 @@ export class SendPage implements OnInit {
 
   display_selectAsset() {
     // refresh assets and then open select assets
-    this.irohautil.run_getAccountAssets(this.irohautil.wallet.mywallet)
-      .then(assets => {
-        this.irohautil.wallet.assets = assets
-        this.selectAsset.open() // open up the html currency selecttion
-      })
-      .catch(err => console.log(err))
+    if (this.irohautil.wallet.mywallet)
+      this.irohautil.run_getAccountAssets(this.irohautil.wallet.mywallet)
+        .then(assets => {
+          this.irohautil.wallet.assets = assets
+          this.selectAsset.open() // open up the html currency selecttion
+        })
+        .catch((err) => {
+          if (err.code == 2) alert("Problemi di connessione al Server")
+          console.log("Error display_selectAsset run_getAccountAssets: " + JSON.stringify(err))
+        })
 
   }
   selectAsset_ionChange($event) {
@@ -99,10 +103,10 @@ export class SendPage implements OnInit {
         .then(assets => {
           this.irohautil.wallet.assets = assets
           let cur_balance = this.irohautil.wallet.assets.find(a => a.assetId == this.irohautil.wallet.cur_assetId).balance
-          
+
           if (this.walletTo.amount > cur_balance) { // NOT enough balance
             alert("Invio fallito!\nErrore: Valuta totale non sufficente")
-          }else{ // ok there is enough balance
+          } else { // ok there is enough balance
 
             if (!this.walletTo.wallet.includes("@")) // if no domainId add it
               this.walletTo.wallet = this.walletTo.wallet + '@' + this.irohautil.domainId
@@ -144,8 +148,9 @@ export class SendPage implements OnInit {
 
           }
         })
-        .catch(err => { // error geting cur_balance
-          console.log(err)
+        .catch((err) => { // error geting cur_balance
+          if (err.code == 2) alert("Problemi di connessione al Server")
+          console.log("Error run_getAccountAssets: " + JSON.stringify(err))
         })
 
     }
@@ -162,6 +167,6 @@ export class SendPage implements OnInit {
       .catch(err => {
         console.log("Error scanCode_mywallet: ", err);
       })
-    }
+  }
 
 }

@@ -1,0 +1,75 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>
+        Opzioni
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-list>
+
+    <ion-card>
+        <ion-label>Mostra Chiave Pubblica</ion-label>
+        <ion-toggle slot="start" name="mypuk_barcode" checked=false (ionChange)="mypuk_barcode_toggle_change()"></ion-toggle>
+  
+        <ion-card-content *ngIf="show_mypuk_barcode">
+          <ion-grid>
+            <ion-row justify-content-center>
+              <qrcode [qrdata]="irohautil.wallet.mypuk" [size]="irohautil.qrcode_size" [level]="'M'"></qrcode>
+            </ion-row>
+          </ion-grid>
+          <ion-text>{{irohautil.wallet.mypuk}}</ion-text>
+        </ion-card-content>
+    </ion-card>
+
+    <ion-card>
+        <ion-label>Mostra Chiave Privata</ion-label>
+        <ion-toggle slot="start" name="myprk_barcode" checked=false (ionChange)="myprk_barcode_toggle_change()"></ion-toggle>
+  
+        <ion-card-content *ngIf="show_myprk_barcode">
+          <ion-grid>
+            <ion-row justify-content-center>
+              <qrcode [qrdata]="irohautil.wallet.myprk" [size]="irohautil.qrcode_size" [level]="'M'"></qrcode>
+            </ion-row>
+          </ion-grid>
+          <ion-text>{{irohautil.wallet.myprk}}</ion-text>
+          <ion-item color="danger">Chiave privata da non condividere con nessuno.</ion-item>
+        </ion-card-content>
+    </ion-card>
+  
+    <ion-card>
+    <ion-button (click)="rmkeys_confirm()" [disabled]="!irohautil.wallet.mywallet" expand="block">Rimuovi Wallet</ion-button>    
+    </ion-card>
+
+    <ion-card>
+        <ion-item>
+            <ion-label position="stacked">Indirizzo Server (es.: 127.0.0.1:8081)</ion-label>
+            <ion-input class="form-control" [(ngModel)]="nodeIp" #nodeip="ngModel" type="text"
+                       spellcheck="false" autocapitalize="off" maxLength=50 (ionChange)="nodeIp_change()"
+                       inputmode="url" type="url"
+                       pattern="^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$">
+            </ion-input>
+            <div *ngIf="nodeip.invalid" class="danger"></div>
+            <div *ngIf="nodeip.invalid">
+                <ion-text color="danger">
+                  Indirizzo server invalido
+                </ion-text>
+              </div>
+          </ion-item>
+         
+        <div class="ion-padding">
+            <ion-button (click)="nodeIp_save()" [disabled]="!nodeIp_changed" expand="block"
+            type="submit">Salva</ion-button>
+        </div>
+
+    </ion-card>
+
+  </ion-list>
+
+
+</ion-content>
