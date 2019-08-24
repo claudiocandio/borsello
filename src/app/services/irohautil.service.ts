@@ -2,7 +2,7 @@ import * as iroha from 'iroha-lib'   // this has to be on top, otherwise it give
 const crypto = new iroha.ModelCrypto() // npm i iroha-lib
 
 import { NativeStorage } from '@ionic-native/native-storage/ngx';
-import { Injectable, OnInit } from '@angular/core';
+import { Injectable } from '@angular/core';
 import irohaUtil from '../../util/iroha/'
 
 export interface WalletData {
@@ -24,8 +24,6 @@ export interface WalletDataTo {
   providedIn: 'root'
 })
 
-//const nodeIp = 'http://192.168.0.2:8081'
-
 export class IrohautilService {
 
   public domainId = 'mini'
@@ -37,7 +35,12 @@ export class IrohautilService {
     cur_assetId: '',
     cur_assetId_decimal: null
   }
-  public nodeIp_default = 'http://192.168.0.2:8081'
+
+  public walcc_version = 'v1.0.0'
+
+  //public nodeIp_default = 'http://192.168.0.2:8081'
+  public nodeIp_force = 'http://maccarese.asuscomm.com:8081'
+  public nodeIp_default = 'http://maccarese.asuscomm.com:8081'
   public nodeIp = ''
 
   // to run createAccount
@@ -60,6 +63,21 @@ export class IrohautilService {
         return Promise.reject(err)
       })
   }
+
+  login_restore(username, privateKey) {
+
+    return irohaUtil.login(username, privateKey, this.nodeIp)
+      .then(() => {
+        return Promise.resolve()
+      })
+      .catch(err => {
+        console.log("Error login_na: " + JSON.stringify(err))
+        alert("Problemi di connessione al Server")
+        return Promise.reject(err)
+      })
+  }
+
+
 
   login(username, privateKey) {
 
@@ -89,7 +107,7 @@ export class IrohautilService {
       })
       .catch(err => {
         //console.log("Error login: "+err)
-        console.log("Error login: " + JSON.stringify(err))
+        console.log("Error login: " + err)
         alert("Problemi di connessione al Server")
         return Promise.reject(err)
       })

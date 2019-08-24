@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NativeStorage } from '@ionic-native/native-storage/ngx';
-import { AlertController } from '@ionic/angular'; // Per alert https://ionicframework.com/docs/api/alert
+import { AlertController, LoadingController } from '@ionic/angular'; // Per alert https://ionicframework.com/docs/api/alert
 
 import { IrohautilService } from '../../services/irohautil.service'
 
@@ -19,7 +19,8 @@ export class OptionsPage implements OnInit {
 
   constructor(private nativeStorage: NativeStorage,
     public irohautil: IrohautilService,
-    private alertController: AlertController
+    private alertController: AlertController,
+    public loadingController: LoadingController
   ) {
 
     this.show_mypuk_barcode = false
@@ -108,31 +109,46 @@ export class OptionsPage implements OnInit {
     await alert.present();
   }
 
-  rmkeys() {
+  async rmkeys() {
 
-    this.nativeStorage.remove('mywallet').then(
-      _ => this.irohautil.wallet.mywallet = null,
-      err => alert("Error rm mywallet: " + JSON.stringify(err))
-    )
+    const loading = await this.loadingController.create({
+      message: 'Rimozione Wallet in corso...',
+      translucent: true,
+      spinner: 'lines'   // "bubbles" | "circles" | "crescent" | "dots" | "lines" | "lines-small" | null | undefined
+      //duration: 5000   (autodismiss after 5 secs)
+    })
+    loading.present().then(async () => {
 
-    this.nativeStorage.remove('myprk').then(
-      _ => this.irohautil.wallet.mywallet = null,
-      err => alert("Error rm myprk: " + JSON.stringify(err))
-    )
 
-    this.nativeStorage.remove('mypuk').then(_ => {
-      _ => this.irohautil.wallet.mywallet = null
-      window.location.reload()
-    }).catch(err => alert("Error rm mywallet: " + JSON.stringify(err)))
+      await this.nativeStorage.remove('nodeIp').then(
+        _ => this.irohautil.wallet.mywallet = null,
+        err => alert("Error rm nativeStorage: nodeIp " + JSON.stringify(err))
+      )
 
-    this.nativeStorage.remove('cur_assetId').then(_ => {
-      _ => this.irohautil.wallet.cur_assetId = null
-      window.location.reload()
-    }).catch(err => alert("Error rm cur_assetId: " + JSON.stringify(err)))
+      await this.nativeStorage.remove('mywallet').then(
+        _ => this.irohautil.wallet.mywallet = null,
+        err => alert("Error rm nativeStorage: mywallet " + JSON.stringify(err))
+      )
+
+      await this.nativeStorage.remove('myprk').then(
+        _ => this.irohautil.wallet.mywallet = null,
+        err => alert("Error rm nativeStorage: myprk " + JSON.stringify(err))
+      )
+
+      await this.nativeStorage.remove('mypuk').then(_ => {
+        _ => this.irohautil.wallet.mywallet = null
+        window.location.reload()
+      }).catch(err => alert("Error rm nativeStorage: mywallet " + JSON.stringify(err)))
+
+      await this.nativeStorage.remove('cur_assetId').then(_ => {
+        _ => this.irohautil.wallet.cur_assetId = null
+        //      window.location.reload()
+      }).catch(err => alert("Error rm nativeStorage: cur_assetId " + JSON.stringify(err)))
+
+
+      loading.dismiss()
+    })
 
   }
-
-
-
 
 }

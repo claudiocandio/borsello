@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { IonSelect } from '@ionic/angular';
+import { IonSelect, LoadingController } from '@ionic/angular';
 import { NativeStorage } from '@ionic-native/native-storage/ngx';
 
 import { IrohautilService } from '../../services/irohautil.service'
@@ -20,7 +20,8 @@ export class ListPage implements OnInit {
 
   constructor(
     public irohautil: IrohautilService,
-    private nativeStorage: NativeStorage
+    private nativeStorage: NativeStorage,
+    public loadingController: LoadingController
   ) {
 
     if (this.irohautil.wallet.cur_assetId !== null) this.get_transactions_list()
@@ -36,21 +37,24 @@ export class ListPage implements OnInit {
 
   // Start: For the select/change assets
   @ViewChild('selectAsset') selectAsset: IonSelect;
-  display_selectAsset() {
+
+  async display_selectAsset() {
     // refresh assets and then open select assets
-    if (this.irohautil.wallet.mywallet)
-      this.irohautil.run_getAccountAssets(this.irohautil.wallet.mywallet)
-        .then(assets => {
-          this.irohautil.wallet.assets = assets
-          this.selectAsset.open() // open up the html currency selecttion
-        })
-        .catch(err => console.log(err))
+    await this.irohautil.run_getAccountAssets(this.irohautil.wallet.mywallet)
+      .then(assets => {
+        this.irohautil.wallet.assets = assets
+        this.selectAsset.open() // open up the html currency selecttion
+      })
+      .catch((err) => {
+        console.log("Error run_getAccountAssets: " + err)
+        if (err.code == 2) alert("Problemi di connessione al Server")
+      })
 
   }
 
   selectAsset_ionChange($event) {
     this.irohautil.wallet.cur_assetId = $event.detail.value.assetId
-    //this.irohautil.wallet.cur_assetId_decimal = ($event.detail.value.balance.length -1) - $event.detail.value.balance.indexOf('.')
+    //this.irohautil.wallet.cur_assetId_decimal = ($event.detail.value.balance.length - 1) - $event.detail.value.balance.indexOf('.')
     this.irohautil.run_getAssetInfo($event.detail.value.assetId)
       .then((assetId) => {
         this.irohautil.wallet.cur_assetId_decimal = assetId.precision
@@ -59,63 +63,75 @@ export class ListPage implements OnInit {
 
     this.nativeStorage.setItem('cur_assetId', this.irohautil.wallet.cur_assetId)
       .catch(err => alert("Error storing cur_assetId: " + JSON.stringify(err)));
-
-    this.get_transactions_list()
   }
-
-
-
   // End: For the select/change assets
 
-  get_transactions_list() {
+  async get_transactions_list() {
 
-    this.txs = []  // empty any previous transaction
+    const loading = await this.loadingController.create({
+      message: 'Lettura transazioni in corso...',
+      translucent: true,
+      spinner: 'lines'   // "bubbles" | "circles" | "crescent" | "dots" | "lines" | "lines-small" | null | undefined
+      //duration: 5000   (autodismiss after 5 secs)
+    })
+    loading.present().then(() => {
 
-    this.irohautil.run_getAccountAssetTransactions(this.irohautil.wallet.mywallet, this.irohautil.wallet.cur_assetId)
-      .then(transactions => {
-        //console.log(JSON.stringify(transactions))
-        if (transactions.isEmpty) return []
-        //transactions.nextTxHash !!!!!!!!!!!!!!!!!!!
+      this.irohautil.login(this.irohautil.wallet.mywallet, this.irohautil.wallet.myprk)
+        .then(() => {
 
-        transactions.transactionsList.forEach(t => {
-          const { commandsList, createdTime } = t.payload.reducedPayload
+          this.txs = []  // empty any previous transaction
 
-          commandsList.forEach(c => {
-            if (!c.transferAsset) return
-            const {
-              amount,
-              assetId,
-              destAccountId,
-              srcAccountId,
-              description
-            } = c.transferAsset
+          this.irohautil.run_getAccountAssetTransactions(this.irohautil.wallet.mywallet, this.irohautil.wallet.cur_assetId)
+            .then(transactions => {
+              //console.log(JSON.stringify(transactions))
+              if (transactions.isEmpty) return []
+              //transactions.nextTxHash !!!!!!!!!!!!!!!!!!!
 
-            const tx = {
-              /*
-              from: srcAccountId === this.irohautil.wallet.mywallet ? 'you' : srcAccountId,
-              to: destAccountId === this.irohautil.wallet.mywallet ? 'you' : destAccountId,
-              */
-              from: srcAccountId,
-              to: destAccountId,
-              amount: amount,
-              date: createdTime,
-              currency: assetId,
-              puk: t.signaturesList[0].publicKey,
-              message: description
-            }
-            this.txs.push(tx)
+              transactions.transactionsList.forEach(t => {
+                const { commandsList, createdTime } = t.payload.reducedPayload
 
-          })
+                commandsList.forEach(c => {
+                  if (!c.transferAsset) return
+                  const {
+                    amount,
+                    assetId,
+                    destAccountId,
+                    srcAccountId,
+                    description
+                  } = c.transferAsset
 
-        });
-        this.txs = _.orderBy(this.txs, [object => new moment(object.date)], ['desc']);
-      })
-      .catch(err => {
-        if (err.code == 2) alert("Problemi di connessione al Server")
-        console.log(JSON.stringify(err))
-      })
+                  const tx = {
+                    /*
+                    from: srcAccountId === this.irohautil.wallet.mywallet ? 'you' : srcAccountId,
+                    to: destAccountId === this.irohautil.wallet.mywallet ? 'you' : destAccountId,
+                    */
+                    from: srcAccountId,
+                    to: destAccountId,
+                    amount: amount,
+                    date: createdTime,
+                    currency: assetId,
+                    puk: t.signaturesList[0].publicKey,
+                    message: description
+                  }
+                  this.txs.push(tx)
+
+                })
+
+              });
+              this.txs = _.orderBy(this.txs, [object => new moment(object.date)], ['desc']);
+            })
+            .catch(err => {
+              if (err.code == 2) alert("Problemi di connessione al Server")
+              console.log(JSON.stringify(err))
+            })
+        })
+        .catch((err) => {
+          console.log("Error get_transactions_list login: " + err)
+        })
+      
+        loading.dismiss();
+    })
 
   }
-
 
 }

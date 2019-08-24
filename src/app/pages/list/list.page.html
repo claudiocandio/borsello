@@ -41,10 +41,10 @@
     <ion-item-group *ngFor="let tx of txs" [routerLink]="['/transaction-show/', tx.from, tx.to, tx.amount, tx.date, tx.currency, tx.puk, tx.message]">
     <ion-item>
     <ion-grid>
+    <ion-row><ion-col>Data:</ion-col><ion-col>{{tx.date | date:'yyyy-MM-dd HH:mm.ss'}}</ion-col></ion-row>
     <ion-row><ion-col>Da:</ion-col><ion-col>{{tx.from}}</ion-col></ion-row>
     <ion-row><ion-col>A:</ion-col><ion-col>{{tx.to}}</ion-col></ion-row>
     <ion-row><ion-col>Quantità:</ion-col><ion-col>{{tx.amount}}</ion-col></ion-row>
-    <ion-row><ion-col>Data:</ion-col><ion-col>{{tx.date | date:'yyyy-MM-dd HH:mm.ss'}}</ion-col></ion-row>
 <!-- Show this additional info in the transaction-show
     <ion-row><ion-col>Valuta:</ion-col><ion-col>{{tx.currency}}</ion-col></ion-row>
     <ion-row><ion-col>Public Key:</ion-col><ion-col>{{tx.puk}}</ion-col></ion-row>

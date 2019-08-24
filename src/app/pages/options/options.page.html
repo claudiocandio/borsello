@@ -48,7 +48,7 @@
 
     <ion-card>
         <ion-item>
-            <ion-label position="stacked">Indirizzo Server (es.: 127.0.0.1:8081)</ion-label>
+            <ion-label position="stacked">Indirizzo Server (es.: http://127.0.0.1:8081)</ion-label>
             <ion-input class="form-control" [(ngModel)]="nodeIp" #nodeip="ngModel" type="text"
                        spellcheck="false" autocapitalize="off" maxLength=50 (ionChange)="nodeIp_change()"
                        inputmode="url" type="url"
@@ -66,10 +66,12 @@
             <ion-button (click)="nodeIp_save()" [disabled]="!nodeIp_changed" expand="block"
             type="submit">Salva</ion-button>
         </div>
-
     </ion-card>
 
+    <ion-card>
+        <ion-text color="dark">Version: {{irohautil.walcc_version}}</ion-text>    
+    </ion-card>
+  
   </ion-list>
-
 
 </ion-content>

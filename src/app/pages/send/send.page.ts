@@ -43,23 +43,21 @@ export class SendPage implements OnInit {
   // Start: For the select/change assets
   @ViewChild('selectAsset') selectAsset: IonSelect;
 
-  display_selectAsset() {
+  async display_selectAsset() {
     // refresh assets and then open select assets
-    if (this.irohautil.wallet.mywallet)
-      this.irohautil.run_getAccountAssets(this.irohautil.wallet.mywallet)
-        .then(assets => {
-          this.irohautil.wallet.assets = assets
-          this.selectAsset.open() // open up the html currency selecttion
-        })
-        .catch((err) => {
-          if (err.code == 2) alert("Problemi di connessione al Server")
-          console.log("Error display_selectAsset run_getAccountAssets: " + JSON.stringify(err))
-        })
-
+    await this.irohautil.run_getAccountAssets(this.irohautil.wallet.mywallet)
+      .then(assets => {
+        this.irohautil.wallet.assets = assets
+        this.selectAsset.open() // open up the html currency selecttion
+      })
+      .catch((err) => {
+        console.log("Error run_getAccountAssets: " + err)
+        if (err.code == 2) alert("Problemi di connessione al Server")
+      })
   }
+
   selectAsset_ionChange($event) {
     this.irohautil.wallet.cur_assetId = $event.detail.value.assetId
-
     //this.irohautil.wallet.cur_assetId_decimal = ($event.detail.value.balance.length - 1) - $event.detail.value.balance.indexOf('.')
     this.irohautil.run_getAssetInfo($event.detail.value.assetId)
       .then((assetId) => {
@@ -94,36 +92,33 @@ export class SendPage implements OnInit {
     });
     await alert.present();
   }
-  walletSendTo(form: NgForm) {
+  async walletSendTo(form: NgForm) {
 
     if (form.valid) {
 
-      // check if enough balance
-      this.irohautil.run_getAccountAssets(this.irohautil.wallet.mywallet)
-        .then(assets => {
+      const loading = await this.loadingController.create({
+        message: 'Invio in corso...',
+        translucent: true,
+        spinner: 'lines'   // "bubbles" | "circles" | "crescent" | "dots" | "lines" | "lines-small" | null | undefined
+        //duration: 5000   (autodismiss after 5 secs)
+      })
+      loading.present().then(async () => {
+
+      await this.irohautil.run_getAccountAssets(this.irohautil.wallet.mywallet) // check if enough balance
+        .then(async assets => {
           this.irohautil.wallet.assets = assets
           let cur_balance = this.irohautil.wallet.assets.find(a => a.assetId == this.irohautil.wallet.cur_assetId).balance
 
-          if (this.walletTo.amount > cur_balance) { // NOT enough balance
+          if (Number(this.walletTo.amount) > Number(cur_balance)) { // NOT enough balance
+            console.log("this.walletTo.amount: "+this.walletTo.amount)
+            console.log("cur_balance: "+cur_balance)
             alert("Invio fallito!\nErrore: Valuta totale non sufficente")
           } else { // ok there is enough balance
 
             if (!this.walletTo.wallet.includes("@")) // if no domainId add it
               this.walletTo.wallet = this.walletTo.wallet + '@' + this.irohautil.domainId
 
-            const loading = this.loadingController.create({
-              message: 'Invio in corso...',
-              spinner: 'lines'   // "bubbles" | "circles" | "crescent" | "dots" | "lines" | "lines-small" | null | undefined
-              //duration: 5000   (autodismiss after 5 secs)
-            })
-              .then((lc) => {
-                lc.present()
-                lc.onDidDismiss().then((dis) => {
-                  //console.log('Loading dismissed!');
-                });
-              })
-
-            this.irohautil.run_transferAsset(this.walletTo.wallet, this.walletTo.amount, this.walletTo.message)
+            await this.irohautil.run_transferAsset(this.walletTo.wallet, this.walletTo.amount, this.walletTo.message)
               .then(() => {
                 this.irohautil.run_getAccountAssets(this.irohautil.wallet.mywallet)
                   .then(assets => {
@@ -132,18 +127,14 @@ export class SendPage implements OnInit {
                   })
                   .catch(err => console.log(err))
 
-                this.loadingController.dismiss()
-
                 alert("Invio completato con successo")
               })
               .catch(err => {
-                this.loadingController.dismiss()
-
 
                 if (err.includes("expected=COMMITTED, actual=STATEFUL_VALIDATION_FAILED"))
                   alert("Invio fallito!\nErrore: Indirizzo Wallet non esistente.")
-                else alert("Invio fallito!\nPossibili problemi con il Server")
-                console.log(err)
+                else alert("Invio fallito!\nProblemi di connessione al Server")
+                console.log("Error run_transferAsset: " + JSON.stringify(err))
               })
 
           }
@@ -153,7 +144,14 @@ export class SendPage implements OnInit {
           console.log("Error run_getAccountAssets: " + JSON.stringify(err))
         })
 
+        loading.dismiss();
+      })
+
+
     }
+
+
+
   }
 
   scanCode_wallet() {

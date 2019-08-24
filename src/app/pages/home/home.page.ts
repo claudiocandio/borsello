@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { IonSelect, MenuController, LoadingController } from '@ionic/angular'; // Per alert https://ionicframework.com/docs/api/alert
+import { IonSelect, LoadingController } from '@ionic/angular'; // Per alert https://ionicframework.com/docs/api/alert
 import { NativeStorage } from '@ionic-native/native-storage/ngx';
 import { BarcodeScanner, BarcodeScannerOptions } from '@ionic-native/barcode-scanner/ngx';
 
@@ -18,7 +18,6 @@ export class HomePage implements OnInit {
   constructor(private nativeStorage: NativeStorage,
     private barcodeScanner: BarcodeScanner,
     public irohautil: IrohautilService,
-    public menuCtrl: MenuController,
     public loadingController: LoadingController
   ) {
     this.barcodeScannerOptions = {
@@ -34,16 +33,21 @@ export class HomePage implements OnInit {
   barcodeScannerOptions: BarcodeScannerOptions;
 
   ngOnInit() {
-    /*
-    this.menuCtrl.getMenus().then(res => {
-      console.log(res);
+
+    if(this.irohautil.nodeIp_force){
+      this.irohautil.nodeIp = this.irohautil.nodeIp_force
+
+      this.nativeStorage.setItem('nodeIp', this.irohautil.nodeIp_force)
+      .catch((err) => {
+        console.log(JSON.stringify(err))
+        alert("Error storing nodeIp: " + JSON.stringify(err));
       })
-      this.menuCtrl.enable(false, 'listMenu');
-    */  
-      this.nativeStorage.getItem('nodeIp').then(
-        nodeIp => this.irohautil.nodeIp = nodeIp,
-        _ => this.irohautil.nodeIp = this.irohautil.nodeIp_default
-      )
+
+    }else
+    this.nativeStorage.getItem('nodeIp').then(
+      nodeIp => this.irohautil.nodeIp = nodeIp,
+      _ => this.irohautil.nodeIp = this.irohautil.nodeIp_default
+    )
 
     this.nativeStorage.getItem('mypuk').then(
       mypuk => this.irohautil.wallet.mypuk = mypuk,
@@ -58,10 +62,10 @@ export class HomePage implements OnInit {
       _ => this.irohautil.wallet.cur_assetId = null
     )
     this.nativeStorage.getItem('mywallet')
-      .then(mywallet => {
+      .then(async mywallet => {
         this.irohautil.wallet.mywallet = mywallet
 
-        this.login()
+        await this.login()
           .catch(err => console.log(err))
       },
         _ => this.irohautil.wallet.mywallet = null
@@ -69,22 +73,20 @@ export class HomePage implements OnInit {
 
   }
 
-  // if no wallet disable menu
-  ionViewWillEnter() {
-//    if (this.irohautil.wallet.mypuk == null) this.menuCtrl.enable(false);
-  }
-
   // Start: For the select/change assets
   @ViewChild('selectAsset') selectAsset: IonSelect;
 
-  display_selectAsset() {
+  async display_selectAsset() {
     // refresh assets and then open select assets
-    this.irohautil.run_getAccountAssets(this.irohautil.wallet.mywallet)
+    await this.irohautil.run_getAccountAssets(this.irohautil.wallet.mywallet)
       .then(assets => {
         this.irohautil.wallet.assets = assets
         this.selectAsset.open() // open up the html currency selecttion
       })
-      .catch(err => console.log("Error run_getAccountAssets: "+err))
+      .catch((err) => {
+        console.log("Error run_getAccountAssets: " + err)
+        if (err.code == 2) alert("Problemi di connessione al Server")
+      })
 
   }
 
@@ -102,7 +104,8 @@ export class HomePage implements OnInit {
   }
   // End: For the select/change assets
 
-  newwallet(form: NgForm) {
+  async newwallet(form: NgForm) {
+
 
     if (form.valid) {
 
@@ -111,63 +114,65 @@ export class HomePage implements OnInit {
 
           if (this.myprk_restore.length > 0) {  // restore wallet
 
-            this.irohautil.login(this.irohautil.wallet.mywallet + '@' + this.irohautil.domainId, this.myprk_restore)
-              .then(() => {
+            const loading = await this.loadingController.create({
+              message: 'Restore Wallet in corso...',
+              translucent: true,
+              spinner: 'lines'   // "bubbles" | "circles" | "crescent" | "dots" | "lines" | "lines-small" | null | undefined
+              //duration: 5000   (autodismiss after 5 secs)
+            })
+            loading.present().then(async () => {
 
-                this.irohautil.wallet.mypuk = derivePublicKey(Buffer.from(this.myprk_restore, 'hex')).toString('hex')
-                this.irohautil.wallet.myprk = this.myprk_restore
-                this.irohautil.wallet.mywallet = this.irohautil.wallet.mywallet + '@' + this.irohautil.domainId
+              await this.irohautil.login_restore(this.irohautil.wallet.mywallet + '@' + this.irohautil.domainId, this.myprk_restore)
+                .then(() => {
 
-                this.nativeStorage.setItem('mywallet', this.irohautil.wallet.mywallet)
-                  .catch(err => alert("Error storing mywallet: " + JSON.stringify(err)));
+                  this.irohautil.wallet.mypuk = derivePublicKey(Buffer.from(this.myprk_restore, 'hex')).toString('hex')
+                  this.irohautil.wallet.myprk = this.myprk_restore
+                  this.irohautil.wallet.mywallet = this.irohautil.wallet.mywallet + '@' + this.irohautil.domainId
 
-                this.nativeStorage.setItem('mypuk', this.irohautil.wallet.mypuk)
-                  .catch(err => alert("Error storing mypuk: " + JSON.stringify(err)));
+                  this.nativeStorage.setItem('mywallet', this.irohautil.wallet.mywallet)
+                    .catch(err => alert("Error storing mywallet: " + JSON.stringify(err)));
 
-                this.nativeStorage.setItem('myprk', this.myprk_restore)
-                  .catch(err => alert("Error storing myprk: " + JSON.stringify(err)));
+                  this.nativeStorage.setItem('mypuk', this.irohautil.wallet.mypuk)
+                    .catch(err => alert("Error storing mypuk: " + JSON.stringify(err)));
 
-                this.login() // to reload data
-                  .catch(err => console.log(err))
+                  this.nativeStorage.setItem('myprk', this.myprk_restore)
+                    .catch(err => alert("Error storing myprk: " + JSON.stringify(err)));
 
+                  this.login() // to reload data
+                    .catch(err => console.log(err))
 
-                // enable other menu
-                this.menuCtrl.enable(true);
+                  alert("Restore Wallet completato con successo")
 
-                alert("Restore Wallet completato con successo")
+                  // clean for next remove wallet
+                  this.myprk_restore = ''
+                  this.myprk_restore_min = 0
+                  this.mywallet_restore_button = 'Crea Wallet'
+                })
+                .catch(err => {
+                  console.log(err)
+                  alert("Restore Wallet fallito!")
+                })
 
-                // clean for next remove wallet
-                this.myprk_restore = ''
-                this.myprk_restore_min = 0
-                this.mywallet_restore_button = 'Crea Wallet'
-              })
-              .catch(err => {
-                console.log(err)
-                alert("Restore Wallet fallito!")
-              })
+              loading.dismiss();
+            })
 
           } else { // new wallet
 
-            this.irohautil.login_na() // login with na to create account
-              .then(() => {
+            const loading = await this.loadingController.create({
+              message: 'Creazione Wallet in corso...',
+              translucent: true,
+              spinner: 'lines'   // "bubbles" | "circles" | "crescent" | "dots" | "lines" | "lines-small" | null | undefined
+              //duration: 5000   (autodismiss after 5 secs)
+            })
+            loading.present().then(async () => {
 
-                const loading = this.loadingController.create({
-                  message: 'Creazione Wallet in corso...',
-                  spinner: 'lines'   // "bubbles" | "circles" | "crescent" | "dots" | "lines" | "lines-small" | null | undefined
-                  //duration: 5000   (autodismiss after 5 secs)
-                })
-                  .then((lc) => {
-                    lc.present()
-                    lc.onDidDismiss().then((dis) => {
-                      // here when loading is dismissed
-                      //console.log('Loading dismissed!');
-                    });
-                  })
+            await this.irohautil.login_na() // login with na to create account
+              .then(async () => {
 
-                this.irohautil.generateKeypair()
-                  .then(({ publicKey, privateKey }) => {
+                await this.irohautil.generateKeypair()
+                  .then(async ({ publicKey, privateKey }) => {
 
-                    this.irohautil.run_createAccount(this.irohautil.wallet.mywallet, publicKey)
+                    await this.irohautil.run_createAccount(this.irohautil.wallet.mywallet, publicKey)
                       .then(() => {
 
                         this.irohautil.wallet.mypuk = publicKey
@@ -186,35 +191,32 @@ export class HomePage implements OnInit {
                         this.login() // to reload data
                           .catch(err => console.log(err))
 
-                        // enable other menu
-                        this.menuCtrl.enable(true);
-
                         alert("Wallet creato con successo")
-                        this.loadingController.dismiss()
                       })
                       .catch(err => {
                         console.log(err)
 
                         if (err.includes("expected=COMMITTED, actual=STATEFUL_VALIDATION_FAILED")) alert("Nome Wallet già presente!\n")
                         else alert("Creazione Wallet fallita!")
-                        this.loadingController.dismiss()
                       })
                   })
                   .catch(err => {
                     console.log(err)
                     alert("Creazione Wallet fallita!")
-                    this.loadingController.dismiss()
                   })
 
               })
               .catch(err => {
                 console.log(err)
-                alert("Creazione Wallet fallita!\nPossibili problemi al Server.")
-                this.loadingController.dismiss()
+                alert("Creazione Wallet fallita!\nProblemi di connessione al Server.")
               })
+
+              loading.dismiss()
+            })
           }
         })
     }
+
   }
 
   mywallet_restore_change() {
@@ -243,7 +245,7 @@ export class HomePage implements OnInit {
 
       })
       .catch(err => {
-        console.log("Error scanCode_mywallet: ", err);
+        console.log("Error scanCode_mywallet: ", err)
       });
   }
 
@@ -266,11 +268,11 @@ export class HomePage implements OnInit {
       })
   }
 
-  login() {
+  async login() {
 
     return this.irohautil.login(this.irohautil.wallet.mywallet, this.irohautil.wallet.myprk)
-      .catch(err => {
-        console.log("Error Home login: "+err)
+      .catch((err) => {
+        console.log("Error Home login: " + err)
         return Promise.reject(err)
       })
 
