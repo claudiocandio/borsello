@@ -18,8 +18,8 @@ export class OptionsPage implements OnInit {
   public nodeIp = this.irohautil.nodeIp
   public nodeIp_changed: boolean
 
-  private mypw_set = this.irohautil.wallet.mypw
-  private mypw_toggle = this.irohautil.wallet.mypw
+  public mypw_set = this.irohautil.wallet.mypw
+  public mypw_toggle = this.irohautil.wallet.mypw
   private mypw_old = ''
   private mypw_new1 = ''
   private mypw_new2 = ''

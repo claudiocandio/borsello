@@ -148,19 +148,39 @@ export class HomePage implements OnInit {
         loading.present().then(async () => {
 
           await this.irohautil.login_restore(this.irohautil.wallet.mywallet + '@' + this.irohautil.domainId, this.myprk_restore)
-            .then(() => {
+            .then(async () => {
+              let wal; let prk; let puk
 
               this.irohautil.wallet.mypuk = derivePublicKey(Buffer.from(this.myprk_restore, 'hex')).toString('hex')
               this.irohautil.wallet.myprk = this.myprk_restore
               this.irohautil.wallet.mywallet = this.irohautil.wallet.mywallet + '@' + this.irohautil.domainId
 
-              this.nativeStorage.setItem('mywallet', this.irohautil.wallet.mywallet)
+
+              if (this.mypw.length > 0) {
+                this.irohautil.wallet.mypw = true // new encrypted wallet with password
+
+                wal = await this.irohautil.encrypt_mypw(this.irohautil.wallet.mywallet, this.mypw)
+                puk = await this.irohautil.encrypt_mypw(this.irohautil.wallet.mypuk, this.mypw)
+                prk = await this.irohautil.encrypt_mypw(this.irohautil.wallet.myprk, this.mypw)
+
+              } else { // do not encrypt
+                this.irohautil.wallet.mypw = false // wallet with NO encryption
+
+                wal = this.irohautil.wallet.mywallet
+                puk = this.irohautil.wallet.mypuk
+                prk = this.irohautil.wallet.myprk
+              }
+
+              this.nativeStorage.setItem('mypw', this.irohautil.wallet.mypw)
+                .catch(err => alert("Error storing mypw: " + JSON.stringify(err)));
+
+              this.nativeStorage.setItem('mywallet', wal)
                 .catch(err => alert("Error storing mywallet: " + JSON.stringify(err)));
 
-              this.nativeStorage.setItem('mypuk', this.irohautil.wallet.mypuk)
+              this.nativeStorage.setItem('mypuk', puk)
                 .catch(err => alert("Error storing mypuk: " + JSON.stringify(err)));
 
-              this.nativeStorage.setItem('myprk', this.myprk_restore)
+              this.nativeStorage.setItem('myprk', prk)
                 .catch(err => alert("Error storing myprk: " + JSON.stringify(err)));
 
               this.login() // to reload data
