@@ -4,6 +4,7 @@ import { IonSelect, LoadingController } from '@ionic/angular'; // Per alert http
 import { NativeStorage } from '@ionic-native/native-storage/ngx';
 import { BarcodeScanner, BarcodeScannerOptions } from '@ionic-native/barcode-scanner/ngx';
 
+
 import { IrohautilService } from '../../services/irohautil.service'
 import { derivePublicKey } from 'ed25519.js'
 
@@ -32,6 +33,7 @@ export class HomePage implements OnInit {
   public myprk_restore_min = 0
   public mywallet_restore_button = 'Crea Wallet'
 
+  private mypw = ''
 
   barcodeScannerOptions: BarcodeScannerOptions;
 
@@ -45,42 +47,56 @@ export class HomePage implements OnInit {
     })
     loading.present().then(async () => {
 
-      if (this.irohautil.nodeIp_force) {
-        this.irohautil.nodeIp = this.irohautil.nodeIp_force
+      if (!this.irohautil.mywalletIsopen) {
 
-        await this.nativeStorage.setItem('nodeIp', this.irohautil.nodeIp_force)
-          .catch((err) => {
-            console.log(JSON.stringify(err))
-            alert("Error storing nodeIp: " + JSON.stringify(err));
-          })
+        if (this.irohautil.nodeIp_force) {
+          this.irohautil.nodeIp = this.irohautil.nodeIp_force
 
-      } else
-        await this.nativeStorage.getItem('nodeIp').then(
+          await this.nativeStorage.setItem('nodeIp', this.irohautil.nodeIp_force)
+            .catch((err) => {
+              console.log(JSON.stringify(err))
+              alert("Error storing nodeIp: " + JSON.stringify(err));
+            })
+
+        } else await this.nativeStorage.getItem('nodeIp').then(
           nodeIp => this.irohautil.nodeIp = nodeIp,
           _ => this.irohautil.nodeIp = this.irohautil.nodeIp_default
         )
-      await this.nativeStorage.getItem('mypuk').then(
-        mypuk => this.irohautil.wallet.mypuk = mypuk,
-        _ => this.irohautil.wallet.myprk = null
-      )
-      await this.nativeStorage.getItem('myprk').then(
-        myprk => this.irohautil.wallet.myprk = myprk,
-        _ => this.irohautil.wallet.myprk = null
-      )
-      await this.nativeStorage.getItem('cur_assetId').then(
-        cur_assetId => this.irohautil.wallet.cur_assetId = cur_assetId,
-        _ => this.irohautil.wallet.cur_assetId = null
-      )
-      await this.nativeStorage.getItem('mywallet')
-        .then(async mywallet => {
-          this.irohautil.wallet.mywallet = mywallet
 
-          await this.login()
-            .then(() => this.irohautil.mywallet_show_html = true)
-            .catch(err => console.log(err))
-        },
-          _ => this.irohautil.wallet.mywallet = null
+        await this.nativeStorage.getItem('mypw').then( // checke wheter wallet is encrypted
+          mypw => this.irohautil.wallet.mypw = mypw,
+          _ => this.irohautil.wallet.mypw = false
         )
+
+        await this.nativeStorage.getItem('mypuk').then(
+          mypuk => this.irohautil.wallet.mypuk = mypuk,
+          _ => this.irohautil.wallet.mypuk = null
+        )
+
+        await this.nativeStorage.getItem('myprk').then(
+          myprk => this.irohautil.wallet.myprk = myprk,
+          _ => this.irohautil.wallet.myprk = null
+        )
+
+        await this.nativeStorage.getItem('cur_assetId').then(
+          cur_assetId => this.irohautil.wallet.cur_assetId = cur_assetId,
+          _ => this.irohautil.wallet.cur_assetId = null
+        )
+
+        await this.nativeStorage.getItem('mywallet')
+          .then(async mywallet => {
+            this.irohautil.wallet.mywallet = mywallet
+
+            if (!this.irohautil.wallet.mypw) { // if wallet not encrypted then login
+              await this.login()
+                .then(() => this.irohautil.mywalletIsopen = true)
+                .catch(err => console.log(err))
+            }
+          },
+            _ => this.irohautil.wallet.mywallet = null
+          )
+      }
+
       loading.dismiss()
     })
 
@@ -149,8 +165,8 @@ export class HomePage implements OnInit {
 
               this.login() // to reload data
                 .catch(err => console.log(err))
-                
-              this.irohautil.mywallet_show_html = true
+
+              this.irohautil.mywalletIsopen = true
               alert("Restore Wallet completato con successo")
 
               // clean for next remove wallet
@@ -183,29 +199,49 @@ export class HomePage implements OnInit {
                 .then(async ({ publicKey, privateKey }) => {
 
                   await this.irohautil.run_createAccount(this.irohautil.wallet.mywallet, publicKey)
-                    .then(() => {
+                    .then(async () => {
+                      let wal; let prk; let puk
 
                       this.irohautil.wallet.mypuk = publicKey
                       this.irohautil.wallet.myprk = privateKey
                       this.irohautil.wallet.mywallet = this.irohautil.wallet.mywallet + '@' + this.irohautil.domainId
 
-                      this.nativeStorage.setItem('mywallet', this.irohautil.wallet.mywallet)
+                      if (this.mypw.length > 0) {
+                        this.irohautil.wallet.mypw = true // new encrypted wallet with password
+
+                        wal = await this.irohautil.encrypt_mypw(this.irohautil.wallet.mywallet, this.mypw)
+                        puk = await this.irohautil.encrypt_mypw(publicKey, this.mypw)
+                        prk = await this.irohautil.encrypt_mypw(privateKey, this.mypw)
+
+                      } else { // do not encrypt
+                        this.irohautil.wallet.mypw = false // wallet with NO encryption
+
+                        wal = this.irohautil.wallet.mywallet
+                        puk = publicKey
+                        prk = privateKey
+                      }
+
+                      this.nativeStorage.setItem('mypw', this.irohautil.wallet.mypw)
+                        .catch(err => alert("Error storing mypw: " + JSON.stringify(err)));
+
+                      this.nativeStorage.setItem('mywallet', wal)
                         .catch(err => alert("Error storing mywallet: " + JSON.stringify(err)));
 
-                      this.nativeStorage.setItem('mypuk', publicKey)
+                      this.nativeStorage.setItem('mypuk', puk)
                         .catch(err => alert("Error storing mypuk: " + JSON.stringify(err)));
 
-                      this.nativeStorage.setItem('myprk', privateKey)
+                      this.nativeStorage.setItem('myprk', prk)
                         .catch(err => alert("Error storing myprk: " + JSON.stringify(err)));
 
-                      this.login() // to reload data
+                      await this.login() // to reload data
                         .catch(err => console.log(err))
 
-                      this.irohautil.mywallet_show_html = true
+                      this.irohautil.mywalletIsopen = true
+
                       alert("Wallet creato con successo")
                     })
                     .catch(err => {
-                      console.log(err)
+                      console.log(JSON.stringify(err))
 
                       if (err.includes("expected=COMMITTED, actual=STATEFUL_VALIDATION_FAILED")) alert("Nome Wallet già presente!\n")
                       else alert("Creazione Wallet fallita!")
@@ -288,5 +324,33 @@ export class HomePage implements OnInit {
 
   }
 
+  async mypw_submit() {
+
+    let wal; let prk; let puk
+
+    wal = await this.irohautil.decrypt_mypw(this.irohautil.wallet.mywallet, this.mypw)
+    if (wal.length > 0) { // password is ok
+      puk = await this.irohautil.decrypt_mypw(this.irohautil.wallet.mypuk, this.mypw)
+      prk = await this.irohautil.decrypt_mypw(this.irohautil.wallet.myprk, this.mypw)
+
+      await this.irohautil.login_restore(wal, prk)
+        .then(async () => {
+          this.irohautil.wallet.mywallet = wal
+          this.irohautil.wallet.mypuk = puk
+          this.irohautil.wallet.myprk = prk
+          this.mypw = '' // clear password
+          await this.login()
+            .then(() => {
+              this.irohautil.mywalletIsopen = true
+            })
+            .catch(err => console.log(err))
+        })
+        .catch(err => {
+          console.log("Password errata", err);
+          alert("Password errata")
+        })
+
+    } else alert("Password errata")
+  }
 
 }

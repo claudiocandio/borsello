@@ -9,10 +9,37 @@
 
 <ion-content>
 
-  <div *ngIf="irohautil.mywallet_show_html; then mywalletok else walletno"></div>
-  <ng-template #walletno>
+  <!-- Insert password to open Wallet (if wallet exists and it is encrypyed) -->
+  <div *ngIf="!irohautil.mywalletIsopen && irohautil.wallet.mypw; then walletpw"></div>
+  <ng-template #walletpw>
+
     <div class="ion-padding-top ion-text-center">
-      <ion-label>Wallet</ion-label>
+      <ion-label>Wallet password</ion-label>
+    </div>
+    <form #walletpwForm="ngForm">
+
+      <ion-card>
+      <ion-item>
+        <ion-input class="form-control" [(ngModel)]="mypw" name="mypw" type="text" spellcheck="false"
+          autocapitalize="off" maxLength=64 placeholder="Password Wallet" type="password">
+        </ion-input>
+      </ion-item>
+
+      <ion-row>
+        <ion-col>
+          <ion-button (click)="mypw_submit(walletpwForm)" type="submit" expand="block">
+            Apri Wallet</ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-card>
+    </form>
+  </ng-template>
+
+  <!-- Create or Restore Wallet if wallet is not open and does not exist -->
+  <div *ngIf="!irohautil.mywalletIsopen && !irohautil.wallet.mypuk; then walletcreaterestore"></div>
+  <ng-template #walletcreaterestore>
+    <div class="ion-padding-top ion-text-center">
+      <ion-label>Crea Wallet</ion-label>
     </div>
 
     <form #walletForm="ngForm">
@@ -44,24 +71,30 @@
       </div>
 
       <ion-item>
-        <!--<ion-label position="stacked" color="primary">(Restore) Inserisci chiave Wallet privata</ion-label>-->
+        <ion-input class="form-control" [(ngModel)]="mypw" name="mypw" type="text" spellcheck="false"
+          autocapitalize="off" maxLength=64 placeholder="Password Wallet (Opzionale)" type="password">
+        </ion-input>
+      </ion-item>
+
+      <ion-item>
         <ion-input class="form-control" [(ngModel)]="myprk_restore" name="myprkrestore" type="text" spellcheck="false"
-          autocapitalize="off" maxLength=64 minlength="{{myprk_restore_min}}" pattern='[a-f0-9]*$'
-          placeholder="Inserire chiave privata per recupero Wallet" (ionChange)="mywallet_restore_change()">
+            autocapitalize="off" maxLength=64 minlength="{{myprk_restore_min}}" pattern='[a-f0-9]*$'
+            placeholder="Chiave privata per recupero Wallet" (ionChange)="mywallet_restore_change()">
         </ion-input>
         <ion-button (click)="scanCode_myprk()">Scan Code</ion-button>
       </ion-item>
 
-      <ion-row>
+        <ion-row>
         <ion-col>
           <ion-button (click)="newwallet(walletForm)" type="submit" [disabled]="!walletForm.valid" expand="block">
             {{mywallet_restore_button}}</ion-button>
         </ion-col>
       </ion-row>
     </form>
-
   </ng-template>
 
+  <!-- Show open Wallet -->
+  <div *ngIf="irohautil.mywalletIsopen; then mywalletok"></div>
   <ng-template #mywalletok>
     <div class="ion-padding-top ion-text-center">
       <ion-label>Wallet</ion-label>
@@ -69,11 +102,6 @@
     <div class="ion-padding-top ion-text-center">
       <ion-text color="dark">{{irohautil.wallet.mywallet}}</ion-text>
     </div>
-    <!--
-    <div class="ion-padding-top ion-text-center">
-      <ion-text color="medium">{{irohautil.wallet.mypuk}}</ion-text>
-    </div>
-    -->
     <ion-card>
       <div class="ion-padding-top ion-text-center">
         <ion-grid>
@@ -127,11 +155,6 @@
         </ion-card-content>
       </ion-card>
     </div>
-
-    <!--
-    <br />
-    <ion-button (click)="login()" expand="block">Verifica connessione Server</ion-button>
-    -->
-
   </ng-template>
+
 </ion-content>

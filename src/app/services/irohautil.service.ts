@@ -4,8 +4,12 @@ const crypto = new iroha.ModelCrypto() // npm i iroha-lib
 import { NativeStorage } from '@ionic-native/native-storage/ngx';
 import { Injectable } from '@angular/core';
 import irohaUtil from '../../util/iroha/'
+import { AES256 } from '@ionic-native/aes-256/ngx';
+import { Platform } from '@ionic/angular';
+import SimpleCrypto from "simple-crypto-js";
 
 export interface WalletData {
+  mypw: boolean;
   mywallet: string;
   mypuk: string;
   myprk: string;
@@ -25,9 +29,11 @@ export interface WalletDataTo {
 })
 
 export class IrohautilService {
+  public walcc_version = 'v1.0.1'
 
   public domainId = 'mini'
   public wallet: WalletData = {
+    mypw: false,
     mywallet: '',
     mypuk: null,
     myprk: null,
@@ -35,8 +41,6 @@ export class IrohautilService {
     cur_assetId: '',
     cur_assetId_decimal: null
   }
-
-  public walcc_version = 'v1.0.0'
 
   //public nodeIp_default = 'http://192.168.0.2:8081'
   public nodeIp_force = 'http://maccarese.asuscomm.com:8081'
@@ -48,9 +52,21 @@ export class IrohautilService {
   public na = 'na@' + this.domainId
   public qrcode_size = 200
 
-  public mywallet_show_html = false
-  
-  constructor(private nativeStorage: NativeStorage) {
+  public mywalletIsopen = false
+
+  private secureKey: string;
+  private secureIV: string;
+  private force_simplecrypto = true  // do not use native Android & IOS AES256
+
+  constructor(private nativeStorage: NativeStorage,
+    private aes256: AES256,
+    public plt: Platform
+  ) {
+    this.secureKey = ''
+    this.secureIV = ''
+
+    console.log(this.plt.platforms())
+
   }
 
   login_na() {
@@ -78,8 +94,6 @@ export class IrohautilService {
         return Promise.reject(err)
       })
   }
-
-
 
   login(username, privateKey) {
 
@@ -207,6 +221,54 @@ export class IrohautilService {
     const privateKey = keypair.privateKey().hex()
 
     return { publicKey, privateKey }
+  }
+
+  async generateSecureKeyAndIV(mypw) {
+
+    this.secureKey = await this.aes256.generateSecureKey(mypw); // Returns a 32 bytes string
+    this.secureIV = await this.aes256.generateSecureIV(mypw); // Returns a 16 bytes string
+
+  }
+
+  async encrypt_mypw(data, mypw) {
+
+    if (!this.force_simplecrypto && (this.plt.is('android') || this.plt.is('ios'))) {
+
+      if (this.secureKey != '') await this.generateSecureKeyAndIV(mypw)
+
+      this.aes256.encrypt(this.secureKey, this.secureIV, data)
+        .then((res) => {
+          this.wallet.mypw = true;
+          return res
+        })
+        .catch((error: any) => console.error("Error encrypt_mypw: " + error))
+
+    } else {
+
+      var simpleCrypto = new SimpleCrypto(mypw)
+      return simpleCrypto.encrypt(data)
+
+    }
+  }
+
+  async decrypt_mypw(data, mypw) {
+
+    if (!this.force_simplecrypto && (this.plt.is('android') || this.plt.is('ios'))) {
+
+      if (this.secureKey != '') await this.generateSecureKeyAndIV(mypw)
+      this.aes256.decrypt(this.secureKey, this.secureIV, data)
+        .then((res) => {
+          return res
+        })
+        .catch((error: any) => console.error("Error decrypt_mypw: " + error))
+
+    } else {
+
+      var simpleCrypto = new SimpleCrypto(mypw)
+      return simpleCrypto.decrypt(data)
+
+    }
+
   }
 
 
