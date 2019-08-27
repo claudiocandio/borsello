@@ -17,6 +17,10 @@
       <ion-button (click)="wallet_close('Wallet chiuso')" expand="block">Chiudi Wallet</ion-button>
     </ion-card>
 
+    <ion-card *ngIf="irohautil.wallet.mywallet || irohautil.wallet.mypuk || irohautil.wallet.myprk">
+        <ion-button color="primary" (click)="copyToClipboard('Wallet')" expand="block">Copia/Salva Wallet</ion-button>
+    </ion-card>
+  
     <ion-card *ngIf="irohautil.mywalletIsopen">
       <ion-item>
         <ion-label color="dark">Mostra Chiave Pubblica</ion-label>
@@ -109,7 +113,7 @@
       </div>
 
       <div class="ion-padding">
-        <ion-button (click)="nodeIp_save()" [disabled]="!nodeIp_changed" expand="block" type="submit">Salva</ion-button>
+        <ion-button (click)="nodeIp_save()" [disabled]="!nodeIp_changed" expand="block" type="submit">Salva Server</ion-button>
       </div>
     </ion-card>
 

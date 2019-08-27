@@ -384,6 +384,10 @@ export class OptionsPage implements OnInit {
     else if (field == 'myprk')
       this.clipboard.copy(this.irohautil.wallet.myprk)
         .catch((err) => console.log(err))
+    else if (field == 'Wallet')
+      this.clipboard.copy("Wallet: "+this.irohautil.wallet.mywallet+"\nChiave Privata: "+this.irohautil.wallet.myprk)
+        .then(() => alert("Wallet copiato negli appunti"))
+        .catch((err) => console.log(err))
 
   }
 
