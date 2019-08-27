@@ -63,7 +63,7 @@ export class HomePage implements OnInit {
           _ => this.irohautil.nodeIp = this.irohautil.nodeIp_default
         )
 
-        await this.nativeStorage.getItem('mypw').then( // checke wheter wallet is encrypted
+        await this.nativeStorage.getItem('mypw').then( // check wheter wallet is encrypted
           mypw => this.irohautil.wallet.mypw = mypw,
           _ => this.irohautil.wallet.mypw = false
         )
@@ -101,6 +101,7 @@ export class HomePage implements OnInit {
     })
 
   }
+  
 
   // Start: For the select/change assets
   @ViewChild('selectAsset') selectAsset: IonSelect;
@@ -110,7 +111,8 @@ export class HomePage implements OnInit {
     await this.irohautil.run_getAccountAssets(this.irohautil.wallet.mywallet)
       .then(assets => {
         this.irohautil.wallet.assets = assets
-        this.selectAsset.open() // open up the html currency selecttion
+        if(assets.length == 0) alert("Nessun Wallet/Valuta disponibile")
+        else this.selectAsset.open() // open up the html currency selecttion
       })
       .catch((err) => {
         console.log("Error run_getAccountAssets: " + err)
@@ -358,6 +360,7 @@ export class HomePage implements OnInit {
           this.irohautil.wallet.mywallet = wal
           this.irohautil.wallet.mypuk = puk
           this.irohautil.wallet.myprk = prk
+          this.irohautil.wallet.mypw = true
           this.mypw = '' // clear password
           await this.login()
             .then(() => {
@@ -372,5 +375,14 @@ export class HomePage implements OnInit {
 
     } else alert("Password errata")
   }
+
+
+  passwordType: string = 'password';
+  passwordIcon: string = 'eye-off';
+  hideShowPassword() {
+      this.passwordType = this.passwordType === 'text' ? 'password' : 'text';
+      this.passwordIcon = this.passwordIcon === 'eye-off' ? 'eye' : 'eye-off';
+  }
+
 
 }

@@ -13,15 +13,16 @@
 
   <ion-list>
 
-    <ion-card>
-      <ion-button (click)="wallet_close()" [disabled]="!irohautil.mywalletIsopen" expand="block">Chiudi Wallet
-      </ion-button>
+    <ion-card *ngIf="irohautil.mywalletIsopen && irohautil.wallet.mypw">
+      <ion-button (click)="wallet_close('Wallet chiuso')" expand="block">Chiudi Wallet</ion-button>
     </ion-card>
 
-    <ion-card>
-      <ion-label color="dark">Mostra Chiave Pubblica</ion-label>
-      <ion-toggle slot="start" name="mypuk_barcode" checked=false (ionChange)="mypuk_barcode_toggle_change()">
-      </ion-toggle>
+    <ion-card *ngIf="irohautil.mywalletIsopen">
+      <ion-item>
+        <ion-label color="dark">Mostra Chiave Pubblica</ion-label>
+        <ion-toggle slot="start" name="mypuk_barcode" checked=false (ionChange)="mypuk_barcode_toggle_change()">
+        </ion-toggle>
+      </ion-item>
 
       <ion-card-content *ngIf="show_mypuk_barcode">
         <ion-grid>
@@ -30,13 +31,18 @@
           </ion-row>
         </ion-grid>
         <ion-text>{{irohautil.wallet.mypuk}}</ion-text>
+        <ion-item>
+          <ion-button color="primary" (click)="copyToClipboard('mypuk')">Copia</ion-button>
+        </ion-item>
       </ion-card-content>
     </ion-card>
 
-    <ion-card>
-      <ion-label color="dark">Mostra Chiave Privata</ion-label>
-      <ion-toggle slot="start" name="myprk_barcode" checked=false (ionChange)="myprk_barcode_toggle_change()">
-      </ion-toggle>
+    <ion-card *ngIf="irohautil.mywalletIsopen">
+      <ion-item>
+        <ion-label color="dark">Mostra Chiave Privata</ion-label>
+        <ion-toggle slot="start" name="myprk_barcode" checked=false (ionChange)="myprk_barcode_toggle_change()">
+        </ion-toggle>
+      </ion-item>
 
       <ion-card-content *ngIf="show_myprk_barcode">
         <ion-grid>
@@ -45,16 +51,20 @@
           </ion-row>
         </ion-grid>
         <ion-text>{{irohautil.wallet.myprk}}</ion-text>
+        <ion-item>
+            <ion-button color="primary" (click)="copyToClipboard('myprk')">Copia</ion-button>
+        </ion-item>
         <ion-item color="danger">Chiave privata da non condividere con nessuno.</ion-item>
-      </ion-card-content>
+        </ion-card-content>
     </ion-card>
 
-    <ion-card class="even">
+    <ion-card *ngIf="irohautil.mywalletIsopen" class="even">
       <ion-label color="dark">Wallet password</ion-label>
-      <ion-toggle [(ngModel)]="mypw_toggle" slot="start" name="mypw" checked="{{mypw_set}}" (ionChange)="mypw_toggle_change()">
+      <ion-toggle [(ngModel)]="mypw_toggle" slot="start" name="mypw" checked="{{mypw_checked}}"
+        (ionChange)="mypw_toggle_change()">
       </ion-toggle>
 
-      <ion-card-content *ngIf="mypw_set">
+      <ion-card-content *ngIf="mypw_checked">
         <ion-text color="dark" *ngIf="irohautil.wallet.mypw">
           <h2>Cambio password Wallet</h2>
         </ion-text>
@@ -63,27 +73,23 @@
         </ion-text>
 
         <ion-item *ngIf="irohautil.wallet.mypw">
-          <ion-input class="form-control" [(ngModel)]="mypw_old" name="mypw_old" [disabled]="!irohautil.wallet.mypw"
-            type="text" spellcheck="false" autocapitalize="off" maxLength=64 placeholder="Vecchia password Wallet"
-            type="password" (ionChange)="mypws_ionchange()">
+          <ion-input class="form-control" [(ngModel)]="mypw_old" name="mypw_old" spellcheck="false" autocapitalize="off"
+            maxLength=64 placeholder="Vecchia password Wallet" [type]="passwordType" clearOnEdit="false"
+            (ionChange)="mypws_ionchange()">
           </ion-input>
+          <ion-icon item-end [name]="passwordIcon" class="passwordIcon" (click)='hideShowPassword()'></ion-icon>
         </ion-item>
 
         <ion-item>
-          <ion-input class="form-control" [(ngModel)]="mypw_new1" name="mypw_new1" type="text" spellcheck="false"
-            autocapitalize="off" maxLength=64 placeholder="Nuova password Wallet" type="password"
+          <ion-input class="form-control" [(ngModel)]="mypw_new" name="mypw_new" spellcheck="false" autocapitalize="off"
+            maxLength=64 placeholder="Nuova password Wallet" [type]="passwordType_new" clearOnEdit="false"
             (ionChange)="mypws_ionchange()">
           </ion-input>
+          <ion-icon item-end [name]="passwordIcon_new" class="passwordIcon_new" (click)='hideShowPassword_new()'>
+          </ion-icon>
         </ion-item>
 
-        <ion-item>
-          <ion-input class="form-control" [(ngModel)]="mypw_new2" name="mypw_new2" type="text" spellcheck="false"
-            autocapitalize="off" maxLength=64 placeholder="Nuova password conferma" type="password"
-            (ionChange)="mypws_ionchange()">
-          </ion-input>
-        </ion-item>
-
-        <ion-button (click)="password_save(walletForm)" type="submit" [disabled]="!mypws_equal" expand="block">
+        <ion-button (click)="password_save(walletForm)" type="submit" [disabled]="!mypws_ok" expand="block">
           Salva password</ion-button>
 
       </ion-card-content>
@@ -96,22 +102,19 @@
           autocapitalize="off" maxLength=50 (ionChange)="nodeIp_change()" inputmode="url" type="url"
           pattern="^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$">
         </ion-input>
-        <div *ngIf="nodeip.invalid" class="danger"></div>
-        <div *ngIf="nodeip.invalid">
-          <ion-text color="danger">
-            Indirizzo server invalido
-          </ion-text>
-        </div>
       </ion-item>
+      <div *ngIf="nodeip.invalid" class="danger"></div>
+      <div *ngIf="nodeip.invalid">
+        <ion-text color="danger">Indirizzo server invalido</ion-text>
+      </div>
 
       <div class="ion-padding">
         <ion-button (click)="nodeIp_save()" [disabled]="!nodeIp_changed" expand="block" type="submit">Salva</ion-button>
       </div>
     </ion-card>
 
-    <ion-card>
-      <ion-button (click)="rmkeys_confirm()" [disabled]="!irohautil.wallet.mypuk" expand="block">Rimuovi Wallet
-      </ion-button>
+    <ion-card *ngIf="irohautil.wallet.mywallet || irohautil.wallet.mypuk || irohautil.wallet.myprk">
+      <ion-button (click)="rmkeys_confirm()" expand="block">Rimuovi Wallet</ion-button>
     </ion-card>
 
     <ion-card>

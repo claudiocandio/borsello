@@ -15,7 +15,7 @@ import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
 import { QRCodeModule } from 'angularx-qrcode'; // https://www.npmjs.com/package/angularx-qrcode
 import { NativeStorage } from '@ionic-native/native-storage/ngx';
 import { AES256 } from '@ionic-native/aes-256/ngx';
-
+import { Clipboard } from '@ionic-native/clipboard/ngx';
 
 import { IrohautilService } from './services/irohautil.service'
 
@@ -37,7 +37,8 @@ import { IrohautilService } from './services/irohautil.service'
     SplashScreen,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     IrohautilService,
-    AES256
+    AES256,
+    Clipboard
   ],
   bootstrap: [AppComponent]
 })

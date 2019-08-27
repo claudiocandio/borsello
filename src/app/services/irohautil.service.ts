@@ -29,7 +29,7 @@ export interface WalletDataTo {
 })
 
 export class IrohautilService {
-  public walcc_version = 'v1.0.1'
+  public walcc_version = 'v1.0.2'
 
   public domainId = 'mini'
   public wallet: WalletData = {
@@ -42,8 +42,8 @@ export class IrohautilService {
     cur_assetId_decimal: null
   }
 
-  //public nodeIp_default = 'http://192.168.0.2:8081'
-  public nodeIp_force = 'http://maccarese.asuscomm.com:8081'
+  //public nodeIp_force = 'http://maccarese.asuscomm.com:8081'
+  public nodeIp_force = null // null to use the nativeStorage nodeIp or the nodeIp_default
   public nodeIp_default = 'http://maccarese.asuscomm.com:8081'
   public nodeIp = ''
 
@@ -65,7 +65,7 @@ export class IrohautilService {
     this.secureKey = ''
     this.secureIV = ''
 
-    console.log(this.plt.platforms())
+    //console.log(this.plt.platforms())
 
   }
 

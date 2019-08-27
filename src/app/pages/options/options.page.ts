@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NativeStorage } from '@ionic-native/native-storage/ngx';
 import { AlertController, LoadingController } from '@ionic/angular'; // Per alert https://ionicframework.com/docs/api/alert
-import { Router } from '@angular/router';
+import { Clipboard } from '@ionic-native/clipboard/ngx';
 
 import { IrohautilService } from '../../services/irohautil.service'
 
@@ -18,29 +18,33 @@ export class OptionsPage implements OnInit {
   public nodeIp = this.irohautil.nodeIp
   public nodeIp_changed: boolean
 
-  public mypw_set = this.irohautil.wallet.mypw
-  public mypw_toggle = this.irohautil.wallet.mypw
+  public mypw_checked: boolean
+  public mypw_toggle: boolean
   private mypw_old = ''
-  private mypw_new1 = ''
-  private mypw_new2 = ''
-  private mypws_equal = false
+  private mypw_new = ''
+  private mypws_ok: boolean
 
-  constructor(private nativeStorage: NativeStorage,
+  constructor(
+    private nativeStorage: NativeStorage,
     public irohautil: IrohautilService,
     private alertController: AlertController,
     public loadingController: LoadingController,
-    private router: Router
+    private clipboard: Clipboard
   ) {
 
     this.show_mypuk_barcode = false
     this.show_myprk_barcode = false
     this.nodeIp_changed = false
 
+    this.mypw_checked = this.irohautil.wallet.mypw
+    this.mypw_toggle = this.irohautil.wallet.mypw
+    this.mypws_ok = false
+
   }
 
   ngOnInit() {
-  }
 
+  }
 
   mypuk_barcode_toggle_change() {
 
@@ -143,29 +147,30 @@ export class OptionsPage implements OnInit {
         err => alert("Error rm nativeStorage: myprk " + JSON.stringify(err))
       )
 
-      await this.nativeStorage.remove('mypuk').then(_ => {
-        _ => this.irohautil.wallet.mypuk = null
-      }).catch(err => alert("Error rm nativeStorage: mywallet " + JSON.stringify(err)))
+      await this.nativeStorage.remove('mypuk').then(
+        _ => this.irohautil.wallet.mypuk = null,
+      ).catch(err => alert("Error rm nativeStorage: mypuk " + JSON.stringify(err)))
 
-      await this.nativeStorage.remove('mypw').then(_ => {
-        _ => this.irohautil.wallet.mypw = null
-      }).catch(err => alert("Error rm nativeStorage: mypw " + JSON.stringify(err)))
+      await this.nativeStorage.remove('mypw').then(
+        _ => this.irohautil.wallet.mypw = null,
+      ).catch(err => alert("Error rm nativeStorage: mypw " + JSON.stringify(err)))
 
-      await this.nativeStorage.remove('cur_assetId').then(_ => {
-        _ => this.irohautil.wallet.cur_assetId = null
-        //      window.location.reload()
-      }).catch(err => alert("Error rm nativeStorage: cur_assetId " + JSON.stringify(err)))
+      await this.nativeStorage.remove('cur_assetId').then(
+        _ => this.irohautil.wallet.cur_assetId = null,
+      ).catch(err => alert("Error rm nativeStorage: cur_assetId " + JSON.stringify(err)))
 
-      this.irohautil.mywalletIsopen = false
       loading.dismiss()
-      alert("Rimozione Wallet completata")
 
-      this.router.navigateByUrl('/home');
+      this.wallet_close("Rimozione Wallet completata")
+
+      //location.assign('/')  // this does reload the / page correctly to start again
+
     })
 
   }
 
-  wallet_close() {
+  wallet_close(msg) {
+
     this.irohautil.nodeIp = null
     this.irohautil.wallet.mywallet = null
     this.irohautil.wallet.myprk = null
@@ -173,18 +178,21 @@ export class OptionsPage implements OnInit {
     this.irohautil.wallet.mypw = null
     this.irohautil.wallet.cur_assetId = null
     this.irohautil.mywalletIsopen = false
-    alert("Wallet chiuso")
 
-    this.router.navigateByUrl('/home');
+    if (msg.length > 0) alert(msg)
+
+    //window.location.reload() looks ok but not with browser
+    //this.router.navigateByUrl('/') no good as it uses the cache
+    location.assign('/')
   }
 
   async mypw_toggle_change() {
 
-    if (!this.mypw_toggle && this.mypw_set && this.irohautil.wallet.mypw) {
+    if (!this.mypw_toggle && this.mypw_checked && this.irohautil.wallet.mypw) {
 
       const alert = await this.alertController.create({
         header: 'Conferma',
-        message: '<strong>Inserire Password Wallet per confermare la rimozione</strong>',
+        message: '<strong>Inserire password Wallet per confermare la rimozione della password</strong>',
 
         inputs: [
           {
@@ -200,7 +208,7 @@ export class OptionsPage implements OnInit {
             cssClass: 'secondary',
             handler: () => {
               this.mypw_toggle = true
-              this.mypw_set = true
+              this.mypw_checked = true
             }
           }, {
             text: 'OK',
@@ -211,31 +219,47 @@ export class OptionsPage implements OnInit {
         ]
       });
       await alert.present();
-      //this.mypw_set = false
+
     } else {
-      this.mypw_set = true
+      this.mypw_checked = true
     }
 
   }
 
   mypws_ionchange() {
-
+    /* ok for check old_password, newpass1, newpass2_confirm
+        if (
+          this.irohautil.wallet.mypw && // if wallet exists and it is encrypted
+          this.mypw_old.length > 0 &&
+          this.mypw_new1.length > 0 &&
+          this.mypw_new1 == this.mypw_new2
+        )
+          this.mypws_ok = true
+        else if (
+          !this.irohautil.wallet.mypw &&  //if wallet exists and it is not encrypted
+          this.irohautil.wallet.mypuk &&  // if wallet exists and not encrypted
+          this.mypw_new1.length > 0 &&
+          this.mypw_new1 == this.mypw_new2
+        )
+          this.mypws_ok = true
+        else
+          this.mypws_ok = false
+    */
     if (
       this.irohautil.wallet.mypw && // if wallet exists and it is encrypted
       this.mypw_old.length > 0 &&
-      this.mypw_new1.length > 0 &&
-      this.mypw_new1 == this.mypw_new2
+      this.mypw_new.length > 0 &&
+      this.mypw_old != this.mypw_new
     )
-      this.mypws_equal = true
+      this.mypws_ok = true
     else if (
       !this.irohautil.wallet.mypw &&  //if wallet exists and it is not encrypted
       this.irohautil.wallet.mypuk &&  // if wallet exists and not encrypted
-      this.mypw_new1.length > 0 &&
-      this.mypw_new1 == this.mypw_new2
+      this.mypw_new.length > 0
     )
-      this.mypws_equal = true
+      this.mypws_ok = true
     else
-      this.mypws_equal = false
+      this.mypws_ok = false
 
   }
 
@@ -257,8 +281,7 @@ export class OptionsPage implements OnInit {
         await this.save_newpassword(true)
 
         this.mypw_old = ''
-        this.mypw_new1 = ''
-        this.mypw_new2 = ''
+        this.mypw_new = ''
 
         alert("Password Wallet cambiata")
 
@@ -270,8 +293,7 @@ export class OptionsPage implements OnInit {
       await this.save_newpassword(true)
 
       this.mypw_old = ''
-      this.mypw_new1 = ''
-      this.mypw_new2 = ''
+      this.mypw_new = ''
 
       alert("Password Wallet aggiunta")
 
@@ -283,9 +305,9 @@ export class OptionsPage implements OnInit {
     let wal; let prk; let puk
 
     if (doencrypt) {
-      wal = await this.irohautil.encrypt_mypw(this.irohautil.wallet.mywallet, this.mypw_new1)
-      puk = await this.irohautil.encrypt_mypw(this.irohautil.wallet.mypuk, this.mypw_new1)
-      prk = await this.irohautil.encrypt_mypw(this.irohautil.wallet.myprk, this.mypw_new1)
+      wal = await this.irohautil.encrypt_mypw(this.irohautil.wallet.mywallet, this.mypw_new)
+      puk = await this.irohautil.encrypt_mypw(this.irohautil.wallet.mypuk, this.mypw_new)
+      prk = await this.irohautil.encrypt_mypw(this.irohautil.wallet.myprk, this.mypw_new)
     } else {
       wal = this.irohautil.wallet.mywallet
       puk = this.irohautil.wallet.mypuk
@@ -324,19 +346,44 @@ export class OptionsPage implements OnInit {
       await this.save_newpassword(false)
 
       this.mypw_old = ''
-      this.mypw_new1 = ''
-      this.mypw_new2 = ''
+      this.mypw_new = ''
 
-      this.mypw_set = false
+      this.mypw_checked = false
+      this.mypw_toggle = false
       alert("Password Wallet rimossa")
 
     } else {
 
-      this.mypw_set = true
+      this.mypw_checked = true
       this.mypw_toggle = true
       alert("Vecchia password Wallet errata")
 
     }
+
+  }
+
+  passwordType: string = 'password';
+  passwordIcon: string = 'eye-off';
+  hideShowPassword() {
+    this.passwordType = this.passwordType === 'text' ? 'password' : 'text';
+    this.passwordIcon = this.passwordIcon === 'eye-off' ? 'eye' : 'eye-off';
+  }
+
+  passwordType_new: string = 'password';
+  passwordIcon_new: string = 'eye-off';
+  hideShowPassword_new() {
+    this.passwordType_new = this.passwordType_new === 'text' ? 'password' : 'text';
+    this.passwordIcon_new = this.passwordIcon_new === 'eye-off' ? 'eye' : 'eye-off';
+  }
+
+  copyToClipboard(field) {
+
+    if (field == 'mypuk')
+      this.clipboard.copy(this.irohautil.wallet.mypuk)
+        .catch((err) => console.log(err))
+    else if (field == 'myprk')
+      this.clipboard.copy(this.irohautil.wallet.myprk)
+        .catch((err) => console.log(err))
 
   }
 

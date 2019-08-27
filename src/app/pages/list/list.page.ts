@@ -30,10 +30,6 @@ export class ListPage implements OnInit {
 
   ngOnInit() {
   }
-  // add back when alpha.4 is out
-  // navigate(item) {
-  //   this.router.navigate(['/list', JSON.stringify(item)]);
-  // }
 
   // Start: For the select/change assets
   @ViewChild('selectAsset') selectAsset: IonSelect;
@@ -43,7 +39,8 @@ export class ListPage implements OnInit {
     await this.irohautil.run_getAccountAssets(this.irohautil.wallet.mywallet)
       .then(assets => {
         this.irohautil.wallet.assets = assets
-        this.selectAsset.open() // open up the html currency selecttion
+        if(assets.length == 0) alert("Nessun Wallet/Valuta disponibile")
+        else this.selectAsset.open() // open up the html currency selecttion
       })
       .catch((err) => {
         console.log("Error run_getAccountAssets: " + err)

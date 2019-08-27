@@ -20,9 +20,10 @@
 
       <ion-card>
       <ion-item>
-        <ion-input class="form-control" [(ngModel)]="mypw" name="mypw" type="text" spellcheck="false"
-          autocapitalize="off" maxLength=64 placeholder="Password Wallet" type="password">
+        <ion-input class="form-control" [(ngModel)]="mypw" name="mypw" [type]="passwordType" clearOnEdit="false" spellcheck="false"
+          autocapitalize="off" maxLength=64 placeholder="Password Wallet">
         </ion-input>
+        <ion-icon item-end [name]="passwordIcon" class="passwordIcon" (click)='hideShowPassword()'></ion-icon>
       </ion-item>
 
       <ion-row>
@@ -71,11 +72,13 @@
       </div>
 
       <ion-item>
-        <ion-input class="form-control" [(ngModel)]="mypw" name="mypw" type="text" spellcheck="false"
-          autocapitalize="off" maxLength=64 placeholder="Password Wallet (Opzionale)" type="password">
+        <ion-input class="form-control" [(ngModel)]="mypw" name="mypw" [type]="passwordType" clearOnEdit="false" spellcheck="false"
+          autocapitalize="off" maxLength=64 placeholder="Password Wallet (Opzionale)">
         </ion-input>
+        <ion-icon item-end [name]="passwordIcon" class="passwordIcon" (click)='hideShowPassword()'></ion-icon>
+        <ion-button (click)="scanCode_mywallet()">Scan Code</ion-button>
       </ion-item>
-
+        
       <ion-item>
         <ion-input class="form-control" [(ngModel)]="myprk_restore" name="myprkrestore" type="text" spellcheck="false"
             autocapitalize="off" maxLength=64 minlength="{{myprk_restore_min}}" pattern='[a-f0-9]*$'

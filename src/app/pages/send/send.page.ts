@@ -48,7 +48,8 @@ export class SendPage implements OnInit {
     await this.irohautil.run_getAccountAssets(this.irohautil.wallet.mywallet)
       .then(assets => {
         this.irohautil.wallet.assets = assets
-        this.selectAsset.open() // open up the html currency selecttion
+        if(assets.length == 0) alert("Nessun Wallet/Valuta disponibile")
+        else this.selectAsset.open() // open up the html currency selecttion
       })
       .catch((err) => {
         console.log("Error run_getAccountAssets: " + err)
