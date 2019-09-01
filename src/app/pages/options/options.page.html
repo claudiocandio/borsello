@@ -14,7 +14,7 @@
   <ion-list>
 
     <ion-card *ngIf="irohautil.mywalletIsopen && irohautil.wallet.mypw">
-      <ion-button (click)="wallet_close('Wallet chiuso')" expand="block">Chiudi Wallet</ion-button>
+      <ion-button (click)="irohautil.wallet_close('Wallet chiuso')" expand="block">Chiudi Wallet</ion-button>
     </ion-card>
 
     <ion-card *ngIf="irohautil.wallet.mywallet || irohautil.wallet.mypuk || irohautil.wallet.myprk">

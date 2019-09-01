@@ -76,7 +76,7 @@ export class IrohautilService {
         return Promise.resolve()
       })
       .catch(err => {
-        console.log("Error login_na: " + JSON.stringify(err))
+        console.log("irohautil.service.login_na - " + err)
         alert("Problemi di connessione al Server")
         return Promise.reject(err)
       })
@@ -89,8 +89,25 @@ export class IrohautilService {
         return Promise.resolve()
       })
       .catch(err => {
-        console.log("Error login_na: " + JSON.stringify(err))
-        alert("Problemi di connessione al Server")
+        console.log("irohautil.service.login_restore - " + err)
+
+        if (err.message.includes('errorCode":3')) {
+
+          console.log("Login error: wrong wallet/key")
+          alert("Errore accesso: wallet/key errati")
+          return Promise.reject(err)
+
+        }
+        else if (
+          err.message.includes('Response closed without headers') ||
+          err.message.includes('TransientFailure')) {
+
+          console.log("Connection issues with the Server")
+          alert("Problemi di connessione al Server")
+          return Promise.reject(err)
+
+        }
+
         return Promise.reject(err)
       })
   }
@@ -122,9 +139,23 @@ export class IrohautilService {
         return Promise.resolve(account)
       })
       .catch(err => {
-        //console.log("Error login: "+err)
-        console.log("Error login: " + err)
-        alert("Problemi di connessione al Server")
+        console.log("irohautil.servicelogin - " + err)
+        if (err.message.includes('errorCode":3')) {
+
+          console.log("Login error: wrong wallet/key")
+          alert("Errore accesso: wallet/key errati")
+          return Promise.reject(err)
+
+        }
+        else if (
+          err.message.includes('Response closed without headers') ||
+          err.message.includes('TransientFailure')) {
+
+          console.log("Connection issues with the Server")
+          alert("Problemi di connessione al Server")
+          return Promise.reject(err)
+
+        }
         return Promise.reject(err)
       })
 
@@ -268,6 +299,55 @@ export class IrohautilService {
       return simpleCrypto.decrypt(data)
 
     }
+
+  }
+
+  async rmkeys() {
+    await this.nativeStorage.remove('nodeIp').then(
+      _ => this.nodeIp = null,
+      err => alert("Error rm nativeStorage: nodeIp " + JSON.stringify(err))
+    )
+
+    await this.nativeStorage.remove('mywallet').then(
+      _ => this.wallet.mywallet = null,
+      err => alert("Error rm nativeStorage: mywallet " + JSON.stringify(err))
+    )
+
+    await this.nativeStorage.remove('myprk').then(
+      _ => this.wallet.myprk = null,
+      err => alert("Error rm nativeStorage: myprk " + JSON.stringify(err))
+    )
+
+    await this.nativeStorage.remove('mypuk').then(
+      _ => this.wallet.mypuk = null,
+    ).catch(err => alert("Error rm nativeStorage: mypuk " + JSON.stringify(err)))
+
+    await this.nativeStorage.remove('mypw').then(
+      _ => this.wallet.mypw = null,
+    ).catch(err => alert("Error rm nativeStorage: mypw " + JSON.stringify(err)))
+
+    await this.nativeStorage.remove('cur_assetId').then(
+      _ => this.wallet.cur_assetId = null,
+    ).catch(err => alert("Error rm nativeStorage: cur_assetId " + JSON.stringify(err)))
+
+
+  }
+
+  wallet_close(msg) {
+
+    this.nodeIp = null
+    this.wallet.mywallet = null
+    this.wallet.myprk = null
+    this.wallet.mypuk = null
+    this.wallet.mypw = null
+    this.wallet.cur_assetId = null
+    this.mywalletIsopen = false
+
+    //window.location.reload() looks ok but not with browser
+    //this.router.navigateByUrl('/') no good as it uses the cache
+    if (msg.length > 0) alert(msg)
+
+    location.assign('/')
 
   }
 

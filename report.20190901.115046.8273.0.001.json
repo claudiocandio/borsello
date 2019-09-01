@@ -1,0 +1,480 @@
+
+{
+  "header": {
+    "reportVersion": 1,
+    "event": "Allocation failed - JavaScript heap out of memory",
+    "trigger": "FatalError",
+    "filename": "report.20190901.115046.8273.0.001.json",
+    "dumpEventTime": "2019-09-01T11:50:46Z",
+    "dumpEventTimeStamp": "1567331446286",
+    "processId": 8273,
+    "cwd": "/datanuc/joker/prog_linux/ionic/Walcc",
+    "commandLine": [
+      "/datanuc/joker/prog_linux/local/node-v12.9.0-linux-x64/bin/node",
+      "/datanuc/joker/prog_linux/ionic/Walcc/node_modules/worker-farm/lib/child/index.js",
+      "/datanuc/joker/prog_linux/local/node-v12.9.0-linux-x64/bin/node",
+      "/datanuc/joker/prog_linux/ionic/Walcc/node_modules/.bin/ng",
+      "run",
+      "app:ionic-cordova-serve:production",
+      "--host=0.0.0.0",
+      "--port=8100",
+      "--cordova-mock",
+      "--consolelogs",
+      "--consolelogs-port=53703"
+    ],
+    "nodejsVersion": "v12.9.0",
+    "glibcVersionRuntime": "2.27",
+    "glibcVersionCompiler": "2.17",
+    "wordSize": 64,
+    "arch": "x64",
+    "platform": "linux",
+    "componentVersions": {
+      "node": "12.9.0",
+      "v8": "7.6.303.29-node.15",
+      "uv": "1.31.0",
+      "zlib": "1.2.11",
+      "brotli": "1.0.7",
+      "ares": "1.15.0",
+      "modules": "72",
+      "nghttp2": "1.39.2",
+      "napi": "4",
+      "llhttp": "1.1.4",
+      "http_parser": "2.8.0",
+      "openssl": "1.1.1c",
+      "cldr": "35.1",
+      "icu": "64.2",
+      "tz": "2019a",
+      "unicode": "12.1"
+    },
+    "release": {
+      "name": "node",
+      "headersUrl": "https://nodejs.org/download/release/v12.9.0/node-v12.9.0-headers.tar.gz",
+      "sourceUrl": "https://nodejs.org/download/release/v12.9.0/node-v12.9.0.tar.gz"
+    },
+    "osName": "Linux",
+    "osRelease": "4.15.0-58-generic",
+    "osVersion": "#64-Ubuntu SMP Tue Aug 6 11:12:41 UTC 2019",
+    "osMachine": "x86_64",
+    "cpus": [
+      {
+        "model": "Intel(R) Core(TM) i5-7260U CPU @ 2.20GHz",
+        "speed": 3400,
+        "user": 1397405600,
+        "nice": 28327900,
+        "sys": 508073600,
+        "idle": 7870153100,
+        "irq": 0
+      },
+      {
+        "model": "Intel(R) Core(TM) i5-7260U CPU @ 2.20GHz",
+        "speed": 3400,
+        "user": 1434968800,
+        "nice": 32050100,
+        "sys": 479620900,
+        "idle": 7817807000,
+        "irq": 0
+      },
+      {
+        "model": "Intel(R) Core(TM) i5-7260U CPU @ 2.20GHz",
+        "speed": 3400,
+        "user": 1387580700,
+        "nice": 39926800,
+        "sys": 487340700,
+        "idle": 7799020600,
+        "irq": 0
+      },
+      {
+        "model": "Intel(R) Core(TM) i5-7260U CPU @ 2.20GHz",
+        "speed": 3400,
+        "user": 1374939200,
+        "nice": 31674200,
+        "sys": 478536700,
+        "idle": 7899305400,
+        "irq": 0
+      }
+    ],
+    "networkInterfaces": [
+      {
+        "name": "lo",
+        "internal": true,
+        "mac": "00:00:00:00:00:00",
+        "address": "127.0.0.1",
+        "netmask": "255.0.0.0",
+        "family": "IPv4"
+      },
+      {
+        "name": "eno1",
+        "internal": false,
+        "mac": "94:c6:91:a1:65:19",
+        "address": "192.168.0.2",
+        "netmask": "255.255.255.0",
+        "family": "IPv4"
+      },
+      {
+        "name": "br-b390b5f6f65d",
+        "internal": false,
+        "mac": "02:42:7f:07:17:95",
+        "address": "172.22.0.1",
+        "netmask": "255.255.0.0",
+        "family": "IPv4"
+      },
+      {
+        "name": "tun0",
+        "internal": false,
+        "mac": "00:00:00:00:00:00",
+        "address": "192.168.3.1",
+        "netmask": "255.255.255.255",
+        "family": "IPv4"
+      },
+      {
+        "name": "tun1",
+        "internal": false,
+        "mac": "00:00:00:00:00:00",
+        "address": "192.168.3.1",
+        "netmask": "255.255.255.255",
+        "family": "IPv4"
+      },
+      {
+        "name": "lo",
+        "internal": true,
+        "mac": "00:00:00:00:00:00",
+        "address": "::1",
+        "netmask": "ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff",
+        "family": "IPv6",
+        "scopeid": 0
+      },
+      {
+        "name": "eno1",
+        "internal": false,
+        "mac": "94:c6:91:a1:65:19",
+        "address": "fe80::96c6:91ff:fea1:6519",
+        "netmask": "ffff:ffff:ffff:ffff::",
+        "family": "IPv6",
+        "scopeid": 2
+      },
+      {
+        "name": "br-b390b5f6f65d",
+        "internal": false,
+        "mac": "02:42:7f:07:17:95",
+        "address": "fe80::42:7fff:fe07:1795",
+        "netmask": "ffff:ffff:ffff:ffff::",
+        "family": "IPv6",
+        "scopeid": 157
+      },
+      {
+        "name": "tun0",
+        "internal": false,
+        "mac": "00:00:00:00:00:00",
+        "address": "fe80::927e:edcd:4bac:171f",
+        "netmask": "ffff:ffff:ffff:ffff::",
+        "family": "IPv6",
+        "scopeid": 173
+      },
+      {
+        "name": "tun1",
+        "internal": false,
+        "mac": "00:00:00:00:00:00",
+        "address": "fe80::c60d:b75b:80a7:d6c4",
+        "netmask": "ffff:ffff:ffff:ffff::",
+        "family": "IPv6",
+        "scopeid": 174
+      },
+      {
+        "name": "vethba57564",
+        "internal": false,
+        "mac": "2a:72:f2:a7:3a:34",
+        "address": "fe80::2872:f2ff:fea7:3a34",
+        "netmask": "ffff:ffff:ffff:ffff::",
+        "family": "IPv6",
+        "scopeid": 176
+      },
+      {
+        "name": "veth60b8fc3",
+        "internal": false,
+        "mac": "1a:04:ed:3b:68:3b",
+        "address": "fe80::1804:edff:fe3b:683b",
+        "netmask": "ffff:ffff:ffff:ffff::",
+        "family": "IPv6",
+        "scopeid": 178
+      },
+      {
+        "name": "veth09856e6",
+        "internal": false,
+        "mac": "72:6c:0e:0a:53:69",
+        "address": "fe80::706c:eff:fe0a:5369",
+        "netmask": "ffff:ffff:ffff:ffff::",
+        "family": "IPv6",
+        "scopeid": 180
+      }
+    ],
+    "host": "beta"
+  },
+  "javascriptStack": {
+    "message": "No stack.",
+    "stack": [
+      "Unavailable."
+    ]
+  },
+  "nativeStack": [
+    {
+      "pc": "0x0000000000ae38f5",
+      "symbol": "report::TriggerNodeReport(v8::Isolate*, node::Environment*, char const*, char const*, std::string const&, v8::Local<v8::String>) [/datanuc/joker/prog_linux/local/node-v12.9.0-linux-x64/bin/node]"
+    },
+    {
+      "pc": "0x00000000009bdcc3",
+      "symbol": "node::OnFatalError(char const*, char const*) [/datanuc/joker/prog_linux/local/node-v12.9.0-linux-x64/bin/node]"
+    },
+    {
+      "pc": "0x0000000000b18ede",
+      "symbol": "v8::Utils::ReportOOMFailure(v8::internal::Isolate*, char const*, bool) [/datanuc/joker/prog_linux/local/node-v12.9.0-linux-x64/bin/node]"
+    },
+    {
+      "pc": "0x0000000000b19259",
+      "symbol": "v8::internal::V8::FatalProcessOutOfMemory(v8::internal::Isolate*, char const*, bool) [/datanuc/joker/prog_linux/local/node-v12.9.0-linux-x64/bin/node]"
+    },
+    {
+      "pc": "0x0000000000ccab35",
+      "symbol": " [/datanuc/joker/prog_linux/local/node-v12.9.0-linux-x64/bin/node]"
+    },
+    {
+      "pc": "0x0000000000ccb1a6",
+      "symbol": "v8::internal::Heap::RecomputeLimits(v8::internal::GarbageCollector) [/datanuc/joker/prog_linux/local/node-v12.9.0-linux-x64/bin/node]"
+    },
+    {
+      "pc": "0x0000000000cd69da",
+      "symbol": "v8::internal::Heap::PerformGarbageCollection(v8::internal::GarbageCollector, v8::GCCallbackFlags) [/datanuc/joker/prog_linux/local/node-v12.9.0-linux-x64/bin/node]"
+    },
+    {
+      "pc": "0x0000000000cd78e5",
+      "symbol": "v8::internal::Heap::CollectGarbage(v8::internal::AllocationSpace, v8::internal::GarbageCollectionReason, v8::GCCallbackFlags) [/datanuc/joker/prog_linux/local/node-v12.9.0-linux-x64/bin/node]"
+    },
+    {
+      "pc": "0x0000000000cda3a8",
+      "symbol": "v8::internal::Heap::AllocateRawWithRetryOrFail(int, v8::internal::AllocationType, v8::internal::AllocationAlignment) [/datanuc/joker/prog_linux/local/node-v12.9.0-linux-x64/bin/node]"
+    },
+    {
+      "pc": "0x0000000000ca1ed7",
+      "symbol": "v8::internal::Factory::NewFillerObject(int, bool, v8::internal::AllocationType) [/datanuc/joker/prog_linux/local/node-v12.9.0-linux-x64/bin/node]"
+    },
+    {
+      "pc": "0x0000000000fc9f28",
+      "symbol": "v8::internal::Runtime_AllocateInYoungGeneration(int, unsigned long*, v8::internal::Isolate*) [/datanuc/joker/prog_linux/local/node-v12.9.0-linux-x64/bin/node]"
+    },
+    {
+      "pc": "0x000000000134f099",
+      "symbol": " [/datanuc/joker/prog_linux/local/node-v12.9.0-linux-x64/bin/node]"
+    }
+  ],
+  "javascriptHeap": {
+    "totalMemory": 2177650688,
+    "totalCommittedMemory": 2174205352,
+    "usedMemory": 2074012896,
+    "availableMemory": 54013616,
+    "memoryLimit": 2197815296,
+    "heapSpaces": {
+      "read_only_space": {
+        "memorySize": 262144,
+        "committedMemory": 31744,
+        "capacity": 261832,
+        "used": 31432,
+        "available": 230400
+      },
+      "new_space": {
+        "memorySize": 33554432,
+        "committedMemory": 30934816,
+        "capacity": 16757248,
+        "used": 1421672,
+        "available": 15335576
+      },
+      "old_space": {
+        "memorySize": 1927131136,
+        "committedMemory": 1926749512,
+        "capacity": 1868250928,
+        "used": 1866725144,
+        "available": 1525784
+      },
+      "code_space": {
+        "memorySize": 1212416,
+        "committedMemory": 1001696,
+        "capacity": 897920,
+        "used": 897920,
+        "available": 0
+      },
+      "map_space": {
+        "memorySize": 10752000,
+        "committedMemory": 10749024,
+        "capacity": 383120,
+        "used": 383120,
+        "available": 0
+      },
+      "large_object_space": {
+        "memorySize": 204689408,
+        "committedMemory": 204689408,
+        "capacity": 204550152,
+        "used": 204550152,
+        "available": 0
+      },
+      "code_large_object_space": {
+        "memorySize": 49152,
+        "committedMemory": 49152,
+        "capacity": 3456,
+        "used": 3456,
+        "available": 0
+      },
+      "new_large_object_space": {
+        "memorySize": 0,
+        "committedMemory": 0,
+        "capacity": 16757248,
+        "used": 0,
+        "available": 16757248
+      }
+    }
+  },
+  "resourceUsage": {
+    "userCpuSeconds": 209.091,
+    "kernelCpuSeconds": 2.37517,
+    "cpuConsumptionPercent": 82.6041,
+    "maxRss": 2296066048,
+    "pageFaults": {
+      "IORequired": 0,
+      "IONotRequired": 819260
+    },
+    "fsActivity": {
+      "reads": 0,
+      "writes": 184
+    }
+  },
+  "uvthreadResourceUsage": {
+    "userCpuSeconds": 123.703,
+    "kernelCpuSeconds": 1.08754,
+    "cpuConsumptionPercent": 48.7461,
+    "fsActivity": {
+      "reads": 0,
+      "writes": 184
+    }
+  },
+  "libuv": [
+  ],
+  "environmentVariables": {
+    "GS_LIB": "/home/joker/.fonts",
+    "KDE_FULL_SESSION": "true",
+    "LS_COLORS": "rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.Z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36::di=0;35:",
+    "LC_MEASUREMENT": "en_US.UTF-8",
+    "LESSCLOSE": "/bin/lesspipe %s %s",
+    "LC_PAPER": "en_US.UTF-8",
+    "LC_MONETARY": "en_US.UTF-8",
+    "LANG": "en_US.UTF-8",
+    "PROFILEHOME": "",
+    "DISPLAY": ":10.0",
+    "OLDPWD": "/home/joker/prog_linux/ionic/Walcc/.ionic",
+    "SHELL_SESSION_ID": "6f4cf2e66fd14c56ae5d4e345c331c9e",
+    "EDITOR": "vi",
+    "COLORTERM": "truecolor",
+    "ANDROID_SDK_ROOT": "/home/joker/prog_linux/local/Android/Sdk",
+    "JAVA_HOME": "/home/joker/prog_linux/local/java",
+    "SSH_AUTH_SOCK": "/tmp/ssh-2wrF4NQxlYeG/agent.8110",
+    "S_COLORS": "auto",
+    "LC_NAME": "en_US.UTF-8",
+    "XDG_SESSION_ID": "c1",
+    "XRDP_SOCKET_PATH": "/var/run/xrdp/sockdir",
+    "USER": "joker",
+    "GOPATH": "/home/joker/prog_linux/local/go",
+    "GTK2_RC_FILES": "/etc/gtk-2.0/gtkrc:/home/joker/.gtkrc-2.0:/home/joker/.config/gtkrc-2.0",
+    "PULSE_SCRIPT": "/etc/xrdp/pulse/default.pa",
+    "PWD": "/home/joker/prog_linux/ionic/Walcc",
+    "HOME": "/home/joker",
+    "UID": "1000",
+    "SSH_AGENT_PID": "8174",
+    "QT_ACCESSIBILITY": "1",
+    "LIBVIRT_DEFAULT_URI": "qemu:///system",
+    "XDG_DATA_DIRS": "/usr/share:/usr/share:/usr/local/share",
+    "KONSOLE_DBUS_SESSION": "/Sessions/7",
+    "JDK_HOME": "/home/joker/prog_linux/local/java",
+    "LC_ADDRESS": "en_US.UTF-8",
+    "LC_NUMERIC": "en_US.UTF-8",
+    "KONSOLE_DBUS_WINDOW": "/Windows/1",
+    "TERM": "st",
+    "SHELL": "/bin/bash",
+    "KONSOLE_DBUS_SERVICE": ":1.28",
+    "XCURSOR_THEME": "breeze_cursors",
+    "XDG_CURRENT_DESKTOP": "KDE",
+    "GPG_AGENT_INFO": "/run/user/1000/gnupg/S.gpg-agent:0:1",
+    "KONSOLE_PROFILE_NAME": "Default",
+    "SHLVL": "1",
+    "COLORFGBG": "15;0",
+    "LANGUAGE": "en_US",
+    "GTK_RC_FILES": "/etc/gtk/gtkrc:/home/joker/.gtkrc:/home/joker/.config/gtkrc",
+    "WINDOWID": "54525958",
+    "LC_TELEPHONE": "en_US.UTF-8",
+    "LOGNAME": "joker",
+    "DBUS_SESSION_BUS_ADDRESS": "unix:abstract=/tmp/dbus-ACCsojieOA,guid=327b84ec5afe855acd7220bc5d5c4849",
+    "XDG_RUNTIME_DIR": "/run/user/1000",
+    "QT_AUTO_SCREEN_SCALE_FACTOR": "0",
+    "PATH": "/datanuc/joker/prog_linux/ionic/Walcc/node_modules/.bin:/home/joker/prog_linux/local/node/bin:/home/joker/prog_linux/local/gradle/bin:/home/joker/prog_linux/local/android-studio/bin:/home/joker/prog_linux/local/java/bin:/sbin:/bin:/usr/bin:/usr/local/bin:/home/joker/video:/home/joker/prog_linux/local/go/bin:/home/joker/prog_linux/blockchain/hyperledger_fabric/fabric-samples/bin:/home/joker/prog_linux/local/Android/Sdk/tools/bin:/home/joker/prog_linux/local/Android/Sdk/platform-tools:/home/joker/prog_linux/local/Android/Sdk/emulator",
+    "LC_IDENTIFICATION": "en_US.UTF-8",
+    "KDE_SESSION_UID": "1000",
+    "KDE_SESSION_VERSION": "5",
+    "SESSION_MANAGER": "local/beta:@/tmp/.ICE-unix/8258,unix/beta:/tmp/.ICE-unix/8258",
+    "XRDP_SESSION": "1",
+    "LESSOPEN": "| /bin/lesspipe %s",
+    "LC_TIME": "en_US.UTF-8",
+    "_": "/home/joker/prog_linux/local/node/bin/ionic",
+    "IONIC_CLI_BIN": "/datanuc/joker/prog_linux/local/node-v12.9.0-linux-x64/lib/node_modules/ionic/bin/ionic",
+    "IONIC_CLI_LIB": "/datanuc/joker/prog_linux/local/node-v12.9.0-linux-x64/lib/node_modules/ionic",
+    "IONIC_CLI_LOCAL_ERROR": "LOCAL_CLI_NOT_FOUND",
+    "FORCE_COLOR": "1"
+  },
+  "userLimits": {
+    "core_file_size_blocks": {
+      "soft": 0,
+      "hard": "unlimited"
+    },
+    "data_seg_size_kbytes": {
+      "soft": "unlimited",
+      "hard": "unlimited"
+    },
+    "file_size_blocks": {
+      "soft": "unlimited",
+      "hard": "unlimited"
+    },
+    "max_locked_memory_bytes": {
+      "soft": 16777216,
+      "hard": 16777216
+    },
+    "max_memory_size_kbytes": {
+      "soft": "unlimited",
+      "hard": "unlimited"
+    },
+    "open_files": {
+      "soft": 4096,
+      "hard": 4096
+    },
+    "stack_size_bytes": {
+      "soft": 8388608,
+      "hard": "unlimited"
+    },
+    "cpu_time_seconds": {
+      "soft": "unlimited",
+      "hard": "unlimited"
+    },
+    "max_user_processes": {
+      "soft": 63290,
+      "hard": 63290
+    },
+    "virtual_memory_kbytes": {
+      "soft": "unlimited",
+      "hard": "unlimited"
+    }
+  },
+  "sharedObjects": [
+    "linux-vdso.so.1",
+    "/lib/x86_64-linux-gnu/libdl.so.2",
+    "/lib/x86_64-linux-gnu/librt.so.1",
+    "/usr/lib/x86_64-linux-gnu/libstdc++.so.6",
+    "/lib/x86_64-linux-gnu/libm.so.6",
+    "/lib/x86_64-linux-gnu/libgcc_s.so.1",
+    "/lib/x86_64-linux-gnu/libpthread.so.0",
+    "/lib/x86_64-linux-gnu/libc.so.6",
+    "/lib64/ld-linux-x86-64.so.2"
+  ]
+}

@@ -2,5 +2,7 @@
 - grpcwebproxy using https http://maccarese.asuscomm.com:8443 and lets encrypt certificates
 - list transactions: transactions.nextTxHash max pageSize = 500 now fixed in run_getAccountAssetTransactions
 - change alert title "Alert" or use AlertController
+- add icon app
+- change console.log() in irohautil.console_log() con check doconsole=true|false
 
 

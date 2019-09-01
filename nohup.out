@@ -1,0 +1,279 @@
+[WARN] browser is not supported by native-run. Using Cordova to run the app.
+> ng run app:ionic-cordova-build:production --platform=browser
+
+Date: 2019-09-01T09:08:09.171Z
+Hash: 9c14029c6a6f48869331
+Time: 33022ms
+chunk {0} common.6b9f7663e8ad9a08a5d4.js (common) 14.8 kB  [rendered]
+chunk {1} 1.fc544c09dd6a6dad879a.js () 43.3 kB  [rendered]
+chunk {2} runtime.806a91a1c32cd3314e1e.js (runtime) 4.69 kB [entry] [rendered]
+chunk {3} 3.2374eb1b830c8e74009f.js () 12.1 kB  [rendered]
+chunk {4} 4.8110a92bb6ff14f5a9d2.js () 617 bytes  [rendered]
+chunk {5} 5.b8b518b070227d4a8d55.js () 850 bytes  [rendered]
+chunk {6} 6.79eb383821fd8add30d2.js () 849 bytes  [rendered]
+chunk {7} 7.d2614e46073dad97b12a.js () 3.76 kB  [rendered]
+chunk {8} 8.b194e367a8f2fd5dae5b.js () 468 bytes  [rendered]
+chunk {9} 9.75c61ae5b2f6fa2032dc.js () 89.5 kB  [rendered]
+chunk {10} 10.f813d7345764d32ac06a.js () 2.04 kB  [rendered]
+chunk {11} es2015-polyfills.ed514e727649a6c87d87.js (es2015-polyfills) 56.6 kB [initial] [rendered]
+chunk {12} main.95b8b386579924ead614.js (main) 5.37 MB [initial] [rendered]
+chunk {13} polyfills.c97785829663b809ed3c.js (polyfills) 63.2 kB [initial] [rendered]
+chunk {14} styles.2b3f41bd9e823d431f90.css (styles) 22.9 kB [initial] [rendered]
+chunk {15} 15.6eb541c000291226a809.js () 420 kB  [rendered]
+chunk {16} 16.45e21210870e62899c64.js () 33.1 kB  [rendered]
+chunk {17} 17.faf6ee44e9b9313030f5.js () 28.8 kB  [rendered]
+chunk {18} 18.56d0ad06bd1fa63ee850.js () 20.7 kB  [rendered]
+chunk {19} 19.b9efa94b9885e1e13360.js () 5.71 kB  [rendered]
+chunk {20} 20.2d07764bfa25d8da0221.js () 7.59 kB  [rendered]
+chunk {21} 21.a483a503e56a035b101e.js () 17.5 kB  [rendered]
+chunk {22} 22.a7af6d53fd9513449ddf.js () 4.17 kB  [rendered]
+chunk {23} 23.ab04e4c5b67b4f44ecf7.js () 12.2 kB  [rendered]
+chunk {24} 24.fcd846053e5c77433d77.js () 9.34 kB  [rendered]
+chunk {25} 25.8c51ab48fd235b866539.js () 19.2 kB  [rendered]
+chunk {26} 26.f352db7e66673f88a0e6.js () 19.2 kB  [rendered]
+chunk {27} 27.5449637fb49bea82de11.js () 26.2 kB  [rendered]
+chunk {28} 28.10d9c48b57496a4ee7fb.js () 26.3 kB  [rendered]
+chunk {29} 29.4a1e5af99028da10f37a.js () 2.62 kB  [rendered]
+chunk {30} 30.46a92cc4ccf24f26bc6f.js () 2.67 kB  [rendered]
+chunk {31} 31.5e0a00c2fd3d8d704f5a.js () 7.45 kB  [rendered]
+chunk {32} 32.4b5f46ec224f442cd485.js () 8 kB  [rendered]
+chunk {33} 33.5c14c51ff7d4341fdfe3.js () 1.53 kB  [rendered]
+chunk {34} 34.e04319ec1f6456bdd66e.js () 1.52 kB  [rendered]
+chunk {35} 35.cf2205bd3386e3f76021.js () 14.5 kB  [rendered]
+chunk {36} 36.74ddc135cc0583c4e5c6.js () 14.7 kB  [rendered]
+chunk {37} 37.3b9a126ac9e87b816a97.js () 7.74 kB  [rendered]
+chunk {38} 38.fae8a96fc6c01f282409.js () 7.29 kB  [rendered]
+chunk {39} 39.f498e6421d8ed7095646.js () 4.91 kB  [rendered]
+chunk {40} 40.cf6240c8a8404949d4ba.js () 5.04 kB  [rendered]
+chunk {41} 41.5cd7fd8b0ff1f28af8a0.js () 4.16 kB  [rendered]
+chunk {42} 42.d14b3a351cd2aa8ca897.js () 4.15 kB  [rendered]
+chunk {43} 43.c1add4b16baf7bbd5a4d.js () 11.4 kB  [rendered]
+chunk {44} 44.3c17fb2165bcd96852d1.js () 30.7 kB  [rendered]
+chunk {45} 45.b05e91f19f9466fd9fdb.js () 30.4 kB  [rendered]
+chunk {46} 46.82e2960a732cd87703be.js () 14.1 kB  [rendered]
+chunk {47} 47.12594a8cab6fedde07ac.js () 13.2 kB  [rendered]
+chunk {48} 48.3d12a7d0f8ddd79efe17.js () 1.7 kB  [rendered]
+chunk {49} 49.424a2bed5151b4059364.js () 5.15 kB  [rendered]
+chunk {50} 50.b7f2d1a9789727efdb9b.js () 5.14 kB  [rendered]
+chunk {51} 51.de4bb40b22d357c6d304.js () 8.9 kB  [rendered]
+chunk {52} 52.f8a75631804cf2190353.js () 8.79 kB  [rendered]
+chunk {53} 53.daa80e50ae176744cb7d.js () 15.5 kB  [rendered]
+chunk {54} 54.0cfd537c6ccb0b05c245.js () 15.3 kB  [rendered]
+chunk {55} 55.73bb41a59160bd15f309.js () 30.4 kB  [rendered]
+chunk {56} 56.216e802d8d74fca66078.js () 34 kB  [rendered]
+chunk {57} 57.c5540c16ed0ba11d6817.js () 5.97 kB  [rendered]
+chunk {58} 58.d313e6c4620f8b810e36.js () 5.65 kB  [rendered]
+chunk {59} 59.a2db6b3ee659ac034d93.js () 22.2 kB  [rendered]
+chunk {60} 60.ee8eae110d333cff1ecc.js () 22.3 kB  [rendered]
+chunk {61} 61.3702c2a554e8849ca7c1.js () 5.79 kB  [rendered]
+chunk {62} 62.3c74a33b755b0d19febd.js () 5.83 kB  [rendered]
+chunk {63} 63.0962fdf5b695c1cc1faa.js () 13.4 kB  [rendered]
+chunk {64} 64.66abce771e279d3f7f32.js () 8.19 kB  [rendered]
+chunk {65} 65.57202956c86acfe30af8.js () 7.54 kB  [rendered]
+chunk {66} 66.184adf55742212775fe5.js () 9.53 kB  [rendered]
+chunk {67} 67.33bd4431b17a7aa3fa02.js () 9.53 kB  [rendered]
+chunk {68} 68.17b224eee5919d716f0f.js () 6.43 kB  [rendered]
+chunk {69} 69.905b20500552678883a7.js () 6.66 kB  [rendered]
+chunk {70} 70.860b161014b3f9b32ed8.js () 12.2 kB  [rendered]
+chunk {71} 71.fc04871e513ed0240628.js () 13.6 kB  [rendered]
+chunk {72} 72.1e165981efb41079a504.js () 7.5 kB  [rendered]
+chunk {73} 73.c706148ddf9414389a0a.js () 7.49 kB  [rendered]
+chunk {74} 74.ab5d0ae801a08bd30e0f.js () 5.91 kB  [rendered]
+chunk {75} 75.91b4191af164be4e09ef.js () 5.91 kB  [rendered]
+chunk {76} 76.9b4d1f1afe59095da540.js () 3.42 kB  [rendered]
+chunk {77} 77.98c7cfb47225cde5eb53.js () 12.1 kB  [rendered]
+chunk {78} 78.690b57d1e3cf8489fef8.js () 16.1 kB  [rendered]
+chunk {79} 79.b6467c6c97f55b73edf3.js () 13.8 kB  [rendered]
+chunk {80} 80.66f438809a199626b6aa.js () 12.3 kB  [rendered]
+chunk {81} 81.f9e2eb7bffb3f257176c.js () 12 kB  [rendered]
+chunk {82} 82.198dc29c1ea939c2d87e.js () 11.7 kB  [rendered]
+chunk {83} 83.da2e19df3adbee282d48.js () 11.6 kB  [rendered]
+chunk {84} 84.66bc79f62e560ca69d48.js () 29.5 kB  [rendered]
+chunk {85} 85.b4736657fde9edc2a363.js () 29.5 kB  [rendered]
+chunk {86} 86.51ec6e15b898840e930b.js () 4.83 kB  [rendered]
+chunk {87} 87.afe5a22c99aeda108671.js () 3.39 kB  [rendered]
+chunk {88} 88.c6ad01a76fb86a48aecb.js () 3.39 kB  [rendered]
+chunk {89} 89.54c7fbaf508a906976e6.js () 11.1 kB  [rendered]
+chunk {90} 90.cfebf7f3293e1cb85097.js () 11.3 kB  [rendered]
+chunk {91} 91.57e077d24946784edafc.js () 5.28 kB  [rendered]
+chunk {92} 92.a7a702078d86be2a24f8.js () 552 bytes  [rendered]
+chunk {93} 93.d5aff0b63cd7db8f3507.js () 7.44 kB  [rendered]
+chunk {94} 94.949fb312443c08042f59.js () 7.47 kB  [rendered]
+chunk {95} 95.a56a4e283afb23017b4b.js () 9.48 kB  [rendered]
+chunk {96} 96.a9ab75c2fbdab21f4a9c.js () 10.1 kB  [rendered]
+chunk {97} 97.7251b924509e10ee7694.js () 7.22 kB  [rendered]
+chunk {98} 98.2d9e72e849f96fdf1856.js () 7.03 kB  [rendered]
+chunk {99} 99.39345c00f4312bd80201.js () 8.63 kB  [rendered]
+chunk {100} 100.cbda3addc2311390850b.js () 3.86 kB  [rendered]
+chunk {101} 101.0a17b36dc1445fa11330.js () 921 bytes  [rendered]
+chunk {102} 102.875260b2c93fef51aa12.js () 4.55 kB  [rendered]
+chunk {103} 103.0a40fd61dcb55775d2b3.js () 76.3 kB  [rendered]
+chunk {104} 104.ec114e4a406d6fa50f60.js () 7.59 kB  [rendered]
+chunk {105} 105.067964676f887d068d16.js () 17.5 kB  [rendered]
+chunk {cordova} cordova.29dc09fa9fc3a7aeb58c.js (cordova) 15.7 kB [entry] [rendered]
+
+WARNING in budgets, maximum exceeded for initial. Budget 4 MB was exceeded by 1.53 MB.
+> cordova run browser --release
+startPage = index.html
+Static file server running @ http://localhost:8000/index.html
+CTRL + C to shut down
+200 /index.html (gzip)
+(node:29350) [DEP0066] DeprecationWarning: OutgoingMessage.prototype._headers is deprecated
+200 /runtime.806a91a1c32cd3314e1e.js (gzip)
+200 /styles.2b3f41bd9e823d431f90.css (gzip)
+200 /cordova.29dc09fa9fc3a7aeb58c.js (gzip)
+200 /polyfills.c97785829663b809ed3c.js (gzip)
+304 /cordova_plugins.js
+304 /plugins/cordova-plugin-device/www/device.js
+304 /plugins/cordova-plugin-device/src/browser/DeviceProxy.js
+304 /plugins/cordova-plugin-file/www/DirectoryEntry.js
+304 /plugins/cordova-plugin-file/www/DirectoryReader.js
+304 /plugins/cordova-plugin-file/www/Entry.js
+304 /plugins/cordova-plugin-file/www/File.js
+304 /plugins/cordova-plugin-file/www/FileEntry.js
+304 /plugins/cordova-plugin-file/www/FileError.js
+304 /plugins/cordova-plugin-file/www/FileReader.js
+304 /plugins/cordova-plugin-file/www/FileSystem.js
+304 /plugins/cordova-plugin-file/www/FileUploadOptions.js
+304 /plugins/cordova-plugin-file/www/FileUploadResult.js
+304 /plugins/cordova-plugin-file/www/FileWriter.js
+304 /plugins/cordova-plugin-file/www/Flags.js
+304 /plugins/cordova-plugin-file/www/LocalFileSystem.js
+304 /plugins/cordova-plugin-file/www/Metadata.js
+304 /plugins/cordova-plugin-file/www/ProgressEvent.js
+304 /plugins/cordova-plugin-file/www/fileSystems.js
+304 /plugins/cordova-plugin-file/www/requestFileSystem.js
+304 /plugins/cordova-plugin-file/www/resolveLocalFileSystemURI.js
+304 /plugins/cordova-plugin-file/www/browser/isChrome.js
+304 /plugins/cordova-plugin-file/www/browser/Preparing.js
+304 /plugins/cordova-plugin-file/src/browser/FileProxy.js
+304 /plugins/cordova-plugin-file/www/fileSystemPaths.js
+304 /plugins/cordova-plugin-file/www/browser/FileSystem.js
+304 /plugins/cordova-plugin-filechooser/www/fileChooser.js
+304 /plugins/cordova-plugin-nativestorage/www/mainHandle.js
+304 /plugins/cordova-plugin-ionic-webview/src/www/util.js
+304 /plugins/cordova-plugin-nativestorage/www/LocalStorageHandle.js
+304 /plugins/cordova-plugin-nativestorage/www/NativeStorageError.js
+304 /plugins/cordova-plugin-splashscreen/www/splashscreen.js
+304 /plugins/cordova-plugin-splashscreen/src/browser/SplashScreenProxy.js
+304 /plugins/cordova-plugin-statusbar/www/statusbar.js
+304 /plugins/cordova-plugin-statusbar/src/browser/StatusBarProxy.js
+304 /plugins/phonegap-plugin-barcodescanner/www/barcodescanner.js
+304 /plugins/phonegap-plugin-barcodescanner/src/browser/BarcodeScannerProxy.js
+304 /plugins/cordova-plugin-aes256-encryption/www/AES256.js
+304 /plugins/cordova-clipboard/www/clipboard.js
+200 /config.xml (gzip)
+200 /main.95b8b386579924ead614.js (gzip)
+404 /screen
+200 /common.6b9f7663e8ad9a08a5d4.js (gzip)
+200 /28.10d9c48b57496a4ee7fb.js (gzip)
+200 /88.c6ad01a76fb86a48aecb.js (gzip)
+200 /60.ee8eae110d333cff1ecc.js (gzip)
+200 /56.216e802d8d74fca66078.js (gzip)
+200 /36.74ddc135cc0583c4e5c6.js (gzip)
+200 /1.fc544c09dd6a6dad879a.js (gzip)
+200 /16.45e21210870e62899c64.js (gzip)
+200 /4.8110a92bb6ff14f5a9d2.js
+200 /34.e04319ec1f6456bdd66e.js (gzip)
+200 /76.9b4d1f1afe59095da540.js (gzip)
+200 /svg/md-home.svg
+200 /svg/md-list.svg
+200 /svg/md-send.svg
+200 /svg/md-options.svg
+200 /18.56d0ad06bd1fa63ee850.js (gzip)
+200 /19.b9efa94b9885e1e13360.js (gzip)
+200 /17.faf6ee44e9b9313030f5.js (gzip)
+200 /svg/md-eye-off.svg
+200 /52.f8a75631804cf2190353.js (gzip)
+200 /15.6eb541c000291226a809.js (gzip)
+200 /svg/md-menu.svg
+200 /43.c1add4b16baf7bbd5a4d.js (gzip)
+200 /58.d313e6c4620f8b810e36.js (gzip)
+200 /86.51ec6e15b898840e930b.js (gzip)
+200 /3.2374eb1b830c8e74009f.js (gzip)
+200 /10.f813d7345764d32ac06a.js (gzip)
+200 /8.b194e367a8f2fd5dae5b.js
+200 /6.79eb383821fd8add30d2.js
+200 /5.b8b518b070227d4a8d55.js
+200 /38.fae8a96fc6c01f282409.js (gzip)
+200 / (gzip)
+304 /styles.2b3f41bd9e823d431f90.css
+304 /runtime.806a91a1c32cd3314e1e.js
+304 /polyfills.c97785829663b809ed3c.js
+304 /cordova.29dc09fa9fc3a7aeb58c.js
+304 /main.95b8b386579924ead614.js
+304 /cordova_plugins.js
+304 /plugins/cordova-plugin-device/www/device.js
+304 /plugins/cordova-plugin-device/src/browser/DeviceProxy.js
+304 /plugins/cordova-plugin-file/www/DirectoryEntry.js
+304 /plugins/cordova-plugin-file/www/DirectoryReader.js
+304 /plugins/cordova-plugin-file/www/Entry.js
+304 /plugins/cordova-plugin-file/www/File.js
+304 /plugins/cordova-plugin-file/www/FileEntry.js
+304 /plugins/cordova-plugin-file/www/FileError.js
+304 /plugins/cordova-plugin-file/www/FileReader.js
+304 /plugins/cordova-plugin-file/www/FileSystem.js
+304 /plugins/cordova-plugin-file/www/FileUploadOptions.js
+304 /plugins/cordova-plugin-file/www/FileUploadResult.js
+304 /plugins/cordova-plugin-file/www/FileWriter.js
+304 /plugins/cordova-plugin-file/www/Flags.js
+304 /plugins/cordova-plugin-file/www/LocalFileSystem.js
+304 /plugins/cordova-plugin-file/www/Metadata.js
+304 /plugins/cordova-plugin-file/www/ProgressEvent.js
+304 /plugins/cordova-plugin-file/www/fileSystems.js
+304 /plugins/cordova-plugin-file/www/requestFileSystem.js
+304 /plugins/cordova-plugin-file/www/resolveLocalFileSystemURI.js
+304 /plugins/cordova-plugin-file/www/browser/isChrome.js
+304 /plugins/cordova-plugin-file/www/browser/Preparing.js
+304 /plugins/cordova-plugin-file/src/browser/FileProxy.js
+304 /plugins/cordova-plugin-file/www/fileSystemPaths.js
+304 /plugins/cordova-plugin-file/www/browser/FileSystem.js
+304 /plugins/cordova-plugin-filechooser/www/fileChooser.js
+304 /plugins/cordova-plugin-ionic-webview/src/www/util.js
+304 /plugins/cordova-plugin-nativestorage/www/mainHandle.js
+304 /plugins/cordova-plugin-nativestorage/www/LocalStorageHandle.js
+304 /plugins/cordova-plugin-nativestorage/www/NativeStorageError.js
+304 /plugins/cordova-plugin-splashscreen/www/splashscreen.js
+304 /plugins/cordova-plugin-splashscreen/src/browser/SplashScreenProxy.js
+304 /plugins/cordova-plugin-statusbar/www/statusbar.js
+304 /plugins/cordova-plugin-statusbar/src/browser/StatusBarProxy.js
+304 /plugins/phonegap-plugin-barcodescanner/www/barcodescanner.js
+304 /plugins/phonegap-plugin-barcodescanner/src/browser/BarcodeScannerProxy.js
+304 /plugins/cordova-plugin-aes256-encryption/www/AES256.js
+304 /plugins/cordova-clipboard/www/clipboard.js
+304 /config.xml
+404 /screen
+304 /common.6b9f7663e8ad9a08a5d4.js
+304 /28.10d9c48b57496a4ee7fb.js
+304 /88.c6ad01a76fb86a48aecb.js
+304 /60.ee8eae110d333cff1ecc.js
+304 /56.216e802d8d74fca66078.js
+304 /36.74ddc135cc0583c4e5c6.js
+304 /1.fc544c09dd6a6dad879a.js
+304 /16.45e21210870e62899c64.js
+304 /15.6eb541c000291226a809.js
+304 /18.56d0ad06bd1fa63ee850.js
+304 /19.b9efa94b9885e1e13360.js
+304 /17.faf6ee44e9b9313030f5.js
+304 /52.f8a75631804cf2190353.js
+304 /43.c1add4b16baf7bbd5a4d.js
+304 /58.d313e6c4620f8b810e36.js
+304 /4.8110a92bb6ff14f5a9d2.js
+304 /76.9b4d1f1afe59095da540.js
+304 /34.e04319ec1f6456bdd66e.js
+304 /svg/md-home.svg
+304 /svg/md-list.svg
+304 /svg/md-send.svg
+304 /svg/md-options.svg
+304 /svg/md-eye-off.svg
+304 /svg/md-menu.svg
+304 /86.51ec6e15b898840e930b.js
+304 /3.2374eb1b830c8e74009f.js
+304 /10.f813d7345764d32ac06a.js
+304 /8.b194e367a8f2fd5dae5b.js
+304 /6.79eb383821fd8add30d2.js
+304 /5.b8b518b070227d4a8d55.js
+304 /38.fae8a96fc6c01f282409.js
+200 /92.a7a702078d86be2a24f8.js
+200 /83.da2e19df3adbee282d48.js (gzip)
+200 /98.2d9e72e849f96fdf1856.js (gzip)

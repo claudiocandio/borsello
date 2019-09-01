@@ -132,58 +132,19 @@ export class OptionsPage implements OnInit {
     })
     loading.present().then(async () => {
 
-      await this.nativeStorage.remove('nodeIp').then(
-        _ => this.irohautil.nodeIp = null,
-        err => alert("Error rm nativeStorage: nodeIp " + JSON.stringify(err))
-      )
-
-      await this.nativeStorage.remove('mywallet').then(
-        _ => this.irohautil.wallet.mywallet = null,
-        err => alert("Error rm nativeStorage: mywallet " + JSON.stringify(err))
-      )
-
-      await this.nativeStorage.remove('myprk').then(
-        _ => this.irohautil.wallet.myprk = null,
-        err => alert("Error rm nativeStorage: myprk " + JSON.stringify(err))
-      )
-
-      await this.nativeStorage.remove('mypuk').then(
-        _ => this.irohautil.wallet.mypuk = null,
-      ).catch(err => alert("Error rm nativeStorage: mypuk " + JSON.stringify(err)))
-
-      await this.nativeStorage.remove('mypw').then(
-        _ => this.irohautil.wallet.mypw = null,
-      ).catch(err => alert("Error rm nativeStorage: mypw " + JSON.stringify(err)))
-
-      await this.nativeStorage.remove('cur_assetId').then(
-        _ => this.irohautil.wallet.cur_assetId = null,
-      ).catch(err => alert("Error rm nativeStorage: cur_assetId " + JSON.stringify(err)))
+      await this.irohautil.rmkeys()
+        .then(_ => {
+          this.irohautil.wallet_close("Rimozione Wallet completata")
+        })
+        .catch((err) => {
+          console.log(err)
+          this.irohautil.wallet_close("Errore rimozione Wallet")
+        })
 
       loading.dismiss()
 
-      this.wallet_close("Rimozione Wallet completata")
-
-      //location.assign('/')  // this does reload the / page correctly to start again
-
     })
 
-  }
-
-  wallet_close(msg) {
-
-    this.irohautil.nodeIp = null
-    this.irohautil.wallet.mywallet = null
-    this.irohautil.wallet.myprk = null
-    this.irohautil.wallet.mypuk = null
-    this.irohautil.wallet.mypw = null
-    this.irohautil.wallet.cur_assetId = null
-    this.irohautil.mywalletIsopen = false
-
-    if (msg.length > 0) alert(msg)
-
-    //window.location.reload() looks ok but not with browser
-    //this.router.navigateByUrl('/') no good as it uses the cache
-    location.assign('/')
   }
 
   async mypw_toggle_change() {
@@ -377,17 +338,18 @@ export class OptionsPage implements OnInit {
   }
 
   copyToClipboard(field) {
-
-    if (field == 'mypuk')
+    if (field == 'mypuk') {
       this.clipboard.copy(this.irohautil.wallet.mypuk)
         .catch((err) => console.log(err))
-    else if (field == 'myprk')
+    } else if (field == 'myprk') {
       this.clipboard.copy(this.irohautil.wallet.myprk)
         .catch((err) => console.log(err))
-    else if (field == 'Wallet')
-      this.clipboard.copy("Wallet: "+this.irohautil.wallet.mywallet+"\nChiave Privata: "+this.irohautil.wallet.myprk)
+    } else if (field == 'Wallet') {
+      //console.log("Wallet: " + this.irohautil.wallet.mywallet + "\nChiave Privata: " + this.irohautil.wallet.myprk)
+      this.clipboard.copy("Wallet: " + this.irohautil.wallet.mywallet + "\nChiave Privata: " + this.irohautil.wallet.myprk)
         .then(() => alert("Wallet copiato negli appunti"))
         .catch((err) => console.log(err))
+    }
 
   }
 

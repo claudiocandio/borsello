@@ -90,7 +90,9 @@ export class HomePage implements OnInit {
             if (!this.irohautil.wallet.mypw) { // if wallet not encrypted then login
               await this.login()
                 .then(() => this.irohautil.mywalletIsopen = true)
-                .catch(err => console.log(err))
+                .catch(err => {
+                  loading.dismiss()
+                }) 
             }
           },
             _ => this.irohautil.wallet.mywallet = null
@@ -340,7 +342,6 @@ export class HomePage implements OnInit {
 
     return this.irohautil.login(this.irohautil.wallet.mywallet, this.irohautil.wallet.myprk)
       .catch((err) => {
-        console.log("Error Home login: " + err)
         return Promise.reject(err)
       })
 
@@ -369,8 +370,7 @@ export class HomePage implements OnInit {
             .catch(err => console.log(err))
         })
         .catch(err => {
-          console.log("Password errata", err);
-          alert("Password errata")
+          console.log("home.page.mypw_submit - "+err)
         })
 
     } else alert("Password errata")
