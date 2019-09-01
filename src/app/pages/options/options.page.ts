@@ -84,7 +84,7 @@ export class OptionsPage implements OnInit {
       .then(() => {
         this.irohautil.nodeIp = this.nodeIp
         this.nodeIp_changed = false
-        alert("Indirizzo Server modificato")
+        this.irohautil.alert("Indirizzo Server modificato")
 
         if (this.irohautil.wallet.mywallet)
           return this.irohautil.login(this.irohautil.wallet.mywallet, this.irohautil.wallet.myprk)
@@ -95,7 +95,7 @@ export class OptionsPage implements OnInit {
       })
       .catch((err) => {
         console.log(JSON.stringify(err))
-        alert("Error storing nodeIp: " + JSON.stringify(err));
+        this.irohautil.alert("Error storing nodeIp: " + JSON.stringify(err));
       })
   }
 
@@ -244,9 +244,9 @@ export class OptionsPage implements OnInit {
         this.mypw_old = ''
         this.mypw_new = ''
 
-        alert("Password Wallet cambiata")
+        this.irohautil.alert("Password Wallet cambiata")
 
-      } else alert("Vecchia password Wallet errata")
+      } else this.irohautil.alert("Vecchia password Wallet errata")
 
     } else { // add password
 
@@ -256,7 +256,7 @@ export class OptionsPage implements OnInit {
       this.mypw_old = ''
       this.mypw_new = ''
 
-      alert("Password Wallet aggiunta")
+      this.irohautil.alert("Password Wallet aggiunta")
 
     }
 
@@ -276,16 +276,16 @@ export class OptionsPage implements OnInit {
 
     }
     this.nativeStorage.setItem('mypw', this.irohautil.wallet.mypw)
-      .catch(err => alert("Error storing mypw: " + JSON.stringify(err)));
+      .catch(err => this.irohautil.alert("Error storing mypw: " + JSON.stringify(err)));
 
     this.nativeStorage.setItem('mywallet', wal)
-      .catch(err => alert("Error storing mywallet: " + JSON.stringify(err)));
+      .catch(err => this.irohautil.alert("Error storing mywallet: " + JSON.stringify(err)));
 
     this.nativeStorage.setItem('mypuk', puk)
-      .catch(err => alert("Error storing mypuk: " + JSON.stringify(err)));
+      .catch(err => this.irohautil.alert("Error storing mypuk: " + JSON.stringify(err)));
 
     this.nativeStorage.setItem('myprk', prk)
-      .catch(err => alert("Error storing myprk: " + JSON.stringify(err)));
+      .catch(err => this.irohautil.alert("Error storing myprk: " + JSON.stringify(err)));
 
   }
 
@@ -311,13 +311,13 @@ export class OptionsPage implements OnInit {
 
       this.mypw_checked = false
       this.mypw_toggle = false
-      alert("Password Wallet rimossa")
+      this.irohautil.alert("Password Wallet rimossa")
 
     } else {
 
       this.mypw_checked = true
       this.mypw_toggle = true
-      alert("Vecchia password Wallet errata")
+      this.irohautil.alert("Vecchia password Wallet errata")
 
     }
 
@@ -347,7 +347,7 @@ export class OptionsPage implements OnInit {
     } else if (field == 'Wallet') {
       //console.log("Wallet: " + this.irohautil.wallet.mywallet + "\nChiave Privata: " + this.irohautil.wallet.myprk)
       this.clipboard.copy("Wallet: " + this.irohautil.wallet.mywallet + "\nChiave Privata: " + this.irohautil.wallet.myprk)
-        .then(() => alert("Wallet copiato negli appunti"))
+        .then(() => this.irohautil.alert("Wallet copiato negli appunti"))
         .catch((err) => console.log(err))
     }
 

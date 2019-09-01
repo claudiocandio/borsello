@@ -48,12 +48,12 @@ export class SendPage implements OnInit {
     await this.irohautil.run_getAccountAssets(this.irohautil.wallet.mywallet)
       .then(assets => {
         this.irohautil.wallet.assets = assets
-        if(assets.length == 0) alert("Nessun Wallet/Valuta disponibile")
+        if (assets.length == 0) this.irohautil.alert("Nessun Wallet/Valuta disponibile")
         else this.selectAsset.open() // open up the html currency selecttion
       })
       .catch((err) => {
         console.log("Error run_getAccountAssets: " + err)
-        if (err.code == 2) alert("Problemi di connessione al Server")
+        if (err.code == 2) this.irohautil.alert("Problemi di connessione al Server")
       })
   }
 
@@ -67,7 +67,7 @@ export class SendPage implements OnInit {
       .catch(err => console.log(err))
 
     this.nativeStorage.setItem('cur_assetId', this.irohautil.wallet.cur_assetId)
-      .catch(err => alert("Error storing cur_assetId: " + JSON.stringify(err)));
+      .catch(err => this.irohautil.alert("Error storing cur_assetId: " + JSON.stringify(err)));
   }
   // End: For the select/change assets
 
@@ -93,9 +93,17 @@ export class SendPage implements OnInit {
     });
     await alert.present();
   }
+
   async walletSendTo(form: NgForm) {
 
-    if (form.valid) {
+
+    if (!this.walletTo.wallet.includes("@")) // if no domainId add it
+      this.walletTo.wallet = this.walletTo.wallet + '@' + this.irohautil.domainId
+
+    if (this.irohautil.wallet.mywallet == this.walletTo.wallet)
+      this.irohautil.alert("Invio sul proprio Wallet non possibile")
+
+    else if (form.valid) {
 
       const loading = await this.loadingController.create({
         message: 'Invio in corso...',
@@ -105,53 +113,48 @@ export class SendPage implements OnInit {
       })
       loading.present().then(async () => {
 
-      await this.irohautil.run_getAccountAssets(this.irohautil.wallet.mywallet) // check if enough balance
-        .then(async assets => {
-          this.irohautil.wallet.assets = assets
-          let cur_balance = this.irohautil.wallet.assets.find(a => a.assetId == this.irohautil.wallet.cur_assetId).balance
+        await this.irohautil.run_getAccountAssets(this.irohautil.wallet.mywallet) // check if enough balance
+          .then(async assets => {
+            this.irohautil.wallet.assets = assets
+            let cur_balance = this.irohautil.wallet.assets.find(a => a.assetId == this.irohautil.wallet.cur_assetId).balance
 
-          if (Number(this.walletTo.amount) > Number(cur_balance)) { // NOT enough balance
-            console.log("this.walletTo.amount: "+this.walletTo.amount)
-            console.log("cur_balance: "+cur_balance)
-            alert("Invio fallito!\nErrore: Valuta totale non sufficente")
-          } else { // ok there is enough balance
+            if (Number(this.walletTo.amount) > Number(cur_balance)) { // NOT enough balance
+              console.log("this.walletTo.amount: " + this.walletTo.amount)
+              console.log("cur_balance: " + cur_balance)
+              this.irohautil.alert("Invio fallito!\nErrore: Valuta totale non sufficente")
+            } else { // ok there is enough balance
 
-            if (!this.walletTo.wallet.includes("@")) // if no domainId add it
-              this.walletTo.wallet = this.walletTo.wallet + '@' + this.irohautil.domainId
+              await this.irohautil.run_transferAsset(this.walletTo.wallet, this.walletTo.amount, this.walletTo.message)
+                .then(() => {
+                  this.irohautil.run_getAccountAssets(this.irohautil.wallet.mywallet)
+                    .then(assets => {
+                      this.irohautil.wallet.assets = assets
+                      //this.selectAsset.open() // open up the html currency selecttion
+                    })
+                    .catch(err => console.log(err))
 
-            await this.irohautil.run_transferAsset(this.walletTo.wallet, this.walletTo.amount, this.walletTo.message)
-              .then(() => {
-                this.irohautil.run_getAccountAssets(this.irohautil.wallet.mywallet)
-                  .then(assets => {
-                    this.irohautil.wallet.assets = assets
-                    //this.selectAsset.open() // open up the html currency selecttion
-                  })
-                  .catch(err => console.log(err))
+                  this.irohautil.alert("Invio completato con successo")
+                })
+                .catch(err => {
+                  console.log('send.page.walletSendTo.run_transferAsset - ' + err)
+                  if (err.includes("expected=COMMITTED, actual=STATEFUL_VALIDATION_FAILED"))
+                  this.irohautil.alert("Invio fallito!\nErrore: Indirizzo Wallet non esistente.")
+                  else this.irohautil.alert("Invio fallito!\nProblemi di connessione al Server")
+                  console.log("Error run_transferAsset: " + JSON.stringify(err))
+                })
 
-                alert("Invio completato con successo")
-              })
-              .catch(err => {
-
-                if (err.includes("expected=COMMITTED, actual=STATEFUL_VALIDATION_FAILED"))
-                  alert("Invio fallito!\nErrore: Indirizzo Wallet non esistente.")
-                else alert("Invio fallito!\nProblemi di connessione al Server")
-                console.log("Error run_transferAsset: " + JSON.stringify(err))
-              })
-
-          }
-        })
-        .catch((err) => { // error geting cur_balance
-          if (err.code == 2) alert("Problemi di connessione al Server")
-          console.log("Error run_getAccountAssets: " + JSON.stringify(err))
-        })
+            }
+          })
+          .catch((err) => { // error geting cur_balance
+            if (err.code == 2) this.irohautil.alert("Problemi di connessione al Server")
+            console.log("Error run_getAccountAssets: " + JSON.stringify(err))
+          })
 
         loading.dismiss();
       })
 
 
     }
-
-
 
   }
 

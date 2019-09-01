@@ -1,6 +1,6 @@
 
 Start server iroha:
-iroha-wallet-js$ docker-compose -f docker/docker-compose-mini.yamlup
+iroha-wallet-js$ docker-compose -f docker/docker-compose-mini.yaml up
 
 Start server for browser:
 $ ionic cordova run browser

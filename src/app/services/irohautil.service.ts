@@ -5,7 +5,7 @@ import { NativeStorage } from '@ionic-native/native-storage/ngx';
 import { Injectable } from '@angular/core';
 import irohaUtil from '../../util/iroha/'
 import { AES256 } from '@ionic-native/aes-256/ngx';
-import { Platform } from '@ionic/angular';
+import { Platform, AlertController } from '@ionic/angular';
 import SimpleCrypto from "simple-crypto-js";
 
 export interface WalletData {
@@ -60,7 +60,8 @@ export class IrohautilService {
 
   constructor(private nativeStorage: NativeStorage,
     private aes256: AES256,
-    public plt: Platform
+    public plt: Platform,
+    private alertController: AlertController
   ) {
     this.secureKey = ''
     this.secureIV = ''
@@ -77,7 +78,7 @@ export class IrohautilService {
       })
       .catch(err => {
         console.log("irohautil.service.login_na - " + err)
-        alert("Problemi di connessione al Server")
+        this.alert("Problemi di connessione al Server")
         return Promise.reject(err)
       })
   }
@@ -94,7 +95,7 @@ export class IrohautilService {
         if (err.message.includes('errorCode":3')) {
 
           console.log("Login error: wrong wallet/key")
-          alert("Errore accesso: wallet/key errati")
+          this.alert("Errore accesso: wallet/key errati")
           return Promise.reject(err)
 
         }
@@ -103,7 +104,7 @@ export class IrohautilService {
           err.message.includes('TransientFailure')) {
 
           console.log("Connection issues with the Server")
-          alert("Problemi di connessione al Server")
+          this.alert("Problemi di connessione al Server")
           return Promise.reject(err)
 
         }
@@ -143,7 +144,7 @@ export class IrohautilService {
         if (err.message.includes('errorCode":3')) {
 
           console.log("Login error: wrong wallet/key")
-          alert("Errore accesso: wallet/key errati")
+          this.alert("Errore accesso: wallet/key errati")
           return Promise.reject(err)
 
         }
@@ -152,7 +153,7 @@ export class IrohautilService {
           err.message.includes('TransientFailure')) {
 
           console.log("Connection issues with the Server")
-          alert("Problemi di connessione al Server")
+          this.alert("Problemi di connessione al Server")
           return Promise.reject(err)
 
         }
@@ -305,30 +306,30 @@ export class IrohautilService {
   async rmkeys() {
     await this.nativeStorage.remove('nodeIp').then(
       _ => this.nodeIp = null,
-      err => alert("Error rm nativeStorage: nodeIp " + JSON.stringify(err))
+      err => this.alert("Error rm nativeStorage: nodeIp " + JSON.stringify(err))
     )
 
     await this.nativeStorage.remove('mywallet').then(
       _ => this.wallet.mywallet = null,
-      err => alert("Error rm nativeStorage: mywallet " + JSON.stringify(err))
+      err => this.alert("Error rm nativeStorage: mywallet " + JSON.stringify(err))
     )
 
     await this.nativeStorage.remove('myprk').then(
       _ => this.wallet.myprk = null,
-      err => alert("Error rm nativeStorage: myprk " + JSON.stringify(err))
+      err => this.alert("Error rm nativeStorage: myprk " + JSON.stringify(err))
     )
 
     await this.nativeStorage.remove('mypuk').then(
       _ => this.wallet.mypuk = null,
-    ).catch(err => alert("Error rm nativeStorage: mypuk " + JSON.stringify(err)))
+    ).catch(err => this.alert("Error rm nativeStorage: mypuk " + JSON.stringify(err)))
 
     await this.nativeStorage.remove('mypw').then(
       _ => this.wallet.mypw = null,
-    ).catch(err => alert("Error rm nativeStorage: mypw " + JSON.stringify(err)))
+    ).catch(err => this.alert("Error rm nativeStorage: mypw " + JSON.stringify(err)))
 
     await this.nativeStorage.remove('cur_assetId').then(
       _ => this.wallet.cur_assetId = null,
-    ).catch(err => alert("Error rm nativeStorage: cur_assetId " + JSON.stringify(err)))
+    ).catch(err => this.alert("Error rm nativeStorage: cur_assetId " + JSON.stringify(err)))
 
 
   }
@@ -345,11 +346,20 @@ export class IrohautilService {
 
     //window.location.reload() looks ok but not with browser
     //this.router.navigateByUrl('/') no good as it uses the cache
-    if (msg.length > 0) alert(msg)
+    if (msg.length > 0) this.alert(msg)
 
     location.assign('/')
 
   }
 
+
+  async alert(msg) {
+    const alert = await this.alertController.create({
+      message: msg,
+      buttons: [ 'OK' ]
+    });
+
+    await alert.present();
+  }
 
 }

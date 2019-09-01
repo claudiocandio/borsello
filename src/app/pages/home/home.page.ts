@@ -55,7 +55,7 @@ export class HomePage implements OnInit {
           await this.nativeStorage.setItem('nodeIp', this.irohautil.nodeIp_force)
             .catch((err) => {
               console.log(JSON.stringify(err))
-              alert("Error storing nodeIp: " + JSON.stringify(err));
+              this.irohautil.alert("Error storing nodeIp: " + JSON.stringify(err));
             })
 
         } else await this.nativeStorage.getItem('nodeIp').then(
@@ -113,12 +113,12 @@ export class HomePage implements OnInit {
     await this.irohautil.run_getAccountAssets(this.irohautil.wallet.mywallet)
       .then(assets => {
         this.irohautil.wallet.assets = assets
-        if(assets.length == 0) alert("Nessun Wallet/Valuta disponibile")
+        if(assets.length == 0) this.irohautil.alert("Nessun Wallet/Valuta disponibile")
         else this.selectAsset.open() // open up the html currency selecttion
       })
       .catch((err) => {
         console.log("Error run_getAccountAssets: " + err)
-        if (err.code == 2) alert("Problemi di connessione al Server")
+        if (err.code == 2) this.irohautil.alert("Problemi di connessione al Server")
       })
 
   }
@@ -133,7 +133,7 @@ export class HomePage implements OnInit {
       .catch(err => console.log(err))
 
     this.nativeStorage.setItem('cur_assetId', this.irohautil.wallet.cur_assetId)
-      .catch(err => alert("Error storing cur_assetId: " + JSON.stringify(err)));
+      .catch(err => this.irohautil.alert("Error storing cur_assetId: " + JSON.stringify(err)));
   }
   // End: For the select/change assets
 
@@ -176,22 +176,22 @@ export class HomePage implements OnInit {
               }
 
               this.nativeStorage.setItem('mypw', this.irohautil.wallet.mypw)
-                .catch(err => alert("Error storing mypw: " + JSON.stringify(err)));
+                .catch(err => this.irohautil.alert("Error storing mypw: " + JSON.stringify(err)));
 
               this.nativeStorage.setItem('mywallet', wal)
-                .catch(err => alert("Error storing mywallet: " + JSON.stringify(err)));
+                .catch(err => this.irohautil.alert("Error storing mywallet: " + JSON.stringify(err)));
 
               this.nativeStorage.setItem('mypuk', puk)
-                .catch(err => alert("Error storing mypuk: " + JSON.stringify(err)));
+                .catch(err => this.irohautil.alert("Error storing mypuk: " + JSON.stringify(err)));
 
               this.nativeStorage.setItem('myprk', prk)
-                .catch(err => alert("Error storing myprk: " + JSON.stringify(err)));
+                .catch(err => this.irohautil.alert("Error storing myprk: " + JSON.stringify(err)));
 
               this.login() // to reload data
                 .catch(err => console.log(err))
 
               this.irohautil.mywalletIsopen = true
-              alert("Restore Wallet completato con successo")
+              this.irohautil.alert("Restore Wallet completato con successo")
 
               // clean for next remove wallet
               this.myprk_restore = ''
@@ -200,7 +200,7 @@ export class HomePage implements OnInit {
             })
             .catch(err => {
               console.log(err)
-              alert("Restore Wallet fallito!")
+              this.irohautil.alert("Restore Wallet fallito!")
             })
 
           loading.dismiss();
@@ -246,40 +246,40 @@ export class HomePage implements OnInit {
                       }
 
                       this.nativeStorage.setItem('mypw', this.irohautil.wallet.mypw)
-                        .catch(err => alert("Error storing mypw: " + JSON.stringify(err)));
+                        .catch(err => this.irohautil.alert("Error storing mypw: " + JSON.stringify(err)));
 
                       this.nativeStorage.setItem('mywallet', wal)
-                        .catch(err => alert("Error storing mywallet: " + JSON.stringify(err)));
+                        .catch(err => this.irohautil.alert("Error storing mywallet: " + JSON.stringify(err)));
 
                       this.nativeStorage.setItem('mypuk', puk)
-                        .catch(err => alert("Error storing mypuk: " + JSON.stringify(err)));
+                        .catch(err => this.irohautil.alert("Error storing mypuk: " + JSON.stringify(err)));
 
                       this.nativeStorage.setItem('myprk', prk)
-                        .catch(err => alert("Error storing myprk: " + JSON.stringify(err)));
+                        .catch(err => this.irohautil.alert("Error storing myprk: " + JSON.stringify(err)));
 
                       await this.login() // to reload data
                         .catch(err => console.log(err))
 
                       this.irohautil.mywalletIsopen = true
 
-                      alert("Wallet creato con successo")
+                      this.irohautil.alert("Wallet creato con successo")
                     })
                     .catch(err => {
                       console.log(JSON.stringify(err))
 
-                      if (err.includes("expected=COMMITTED, actual=STATEFUL_VALIDATION_FAILED")) alert("Nome Wallet già presente!\n")
-                      else alert("Creazione Wallet fallita!")
+                      if (err.includes("expected=COMMITTED, actual=STATEFUL_VALIDATION_FAILED")) this.irohautil.alert("Nome Wallet già presente!\n")
+                      else this.irohautil.alert("Creazione Wallet fallita!")
                     })
                 })
                 .catch(err => {
                   console.log(err)
-                  alert("Creazione Wallet fallita!")
+                  this.irohautil.alert("Creazione Wallet fallita!")
                 })
 
             })
             .catch(err => {
               console.log(err)
-              alert("Creazione Wallet fallita!\nProblemi di connessione al Server.")
+              this.irohautil.alert("Creazione Wallet fallita!\nProblemi di connessione al Server.")
             })
 
           loading.dismiss()
@@ -310,7 +310,7 @@ export class HomePage implements OnInit {
           this.irohautil.wallet.mywallet = barcodeData.text.substring(0, barcodeData.text.indexOf('@' + this.irohautil.domainId))
         else if (barcodeData.text.includes('@')) {
           this.irohautil.wallet.mywallet = ''
-          alert("Code invalido")
+          this.irohautil.alert("Code invalido")
         } else this.irohautil.wallet.mywallet = barcodeData.text
 
       })
@@ -329,7 +329,7 @@ export class HomePage implements OnInit {
           this.myprk_restore = barcodeData.text
         else {
           this.myprk_restore = ''
-          alert("Code invalido")
+          this.irohautil.alert("Code invalido")
         }
 
       })
@@ -373,8 +373,8 @@ export class HomePage implements OnInit {
           console.log("home.page.mypw_submit - "+err)
         })
 
-    } else alert("Password errata")
-  }
+    } else this.irohautil.alert("Password errata")
+}
 
 
   passwordType: string = 'password';

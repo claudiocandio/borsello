@@ -39,12 +39,12 @@ export class ListPage implements OnInit {
     await this.irohautil.run_getAccountAssets(this.irohautil.wallet.mywallet)
       .then(assets => {
         this.irohautil.wallet.assets = assets
-        if(assets.length == 0) alert("Nessun Wallet/Valuta disponibile")
+        if(assets.length == 0) this.irohautil.alert("Nessun Wallet/Valuta disponibile")
         else this.selectAsset.open() // open up the html currency selecttion
       })
       .catch((err) => {
         console.log("Error run_getAccountAssets: " + err)
-        if (err.code == 2) alert("Problemi di connessione al Server")
+        if (err.code == 2) this.irohautil.alert("Problemi di connessione al Server")
       })
 
   }
@@ -59,7 +59,7 @@ export class ListPage implements OnInit {
       .catch(err => console.log(err))
 
     this.nativeStorage.setItem('cur_assetId', this.irohautil.wallet.cur_assetId)
-      .catch(err => alert("Error storing cur_assetId: " + JSON.stringify(err)));
+      .catch(err => this.irohautil.alert("Error storing cur_assetId: " + JSON.stringify(err)));
   }
   // End: For the select/change assets
 
@@ -118,7 +118,7 @@ export class ListPage implements OnInit {
               this.txs = _.orderBy(this.txs, [object => new moment(object.date)], ['desc']);
             })
             .catch(err => {
-              if (err.code == 2) alert("Problemi di connessione al Server")
+              if (err.code == 2) this.irohautil.alert("Problemi di connessione al Server")
               console.log(JSON.stringify(err))
             })
         })
