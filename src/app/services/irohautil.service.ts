@@ -29,7 +29,7 @@ export interface WalletDataTo {
 })
 
 export class IrohautilService {
-  public walcc_version = 'v1.0.2'
+  public walcc_version = 'v1.0.3'
 
   public domainId = 'mini'
   public wallet: WalletData = {
