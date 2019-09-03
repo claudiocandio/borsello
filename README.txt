@@ -15,6 +15,15 @@ $ ionic serve -c --address 192.168.0.2
 -
 Buildings
 
+--
+Per versione app:
+$ vi config.xml
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="io.ionic.starter.walcc" version="1.0.2" <--------
+in irohautil.service.ts:
+public walcc_version = 'v1.0.2'
+--
+
 $ ionic cordova build android --debug
 cp /datanuc/joker/prog_linux/ionic/Walcc/platforms/android/app/build/outputs/apk/debug/app-debug.apk /data/pub/ionic/
 

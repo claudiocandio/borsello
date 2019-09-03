@@ -1,8 +1,8 @@
 
-- grpcwebproxy using https http://maccarese.asuscomm.com:8443 and lets encrypt certificates
+- DONE - grpcwebproxy using https http://maccarese.asuscomm.com:8443 and lets encrypt certificates
 - list transactions: transactions.nextTxHash max pageSize = 500 now fixed in run_getAccountAssetTransactions
-- change alert https://ionicframework.com/docs/api/alert
+- DONE - change alert https://ionicframework.com/docs/api/alert
 - add icon app
-- change console.log() in irohautil.console_log() con check doconsole=true|false
+- DONE - change console.log() in irohautil.console_log() con check doconsole=true|false
 
 

@@ -146,7 +146,7 @@ export class HomePage implements OnInit {
         const loading = await this.loadingController.create({
           message: 'Restore Wallet in corso...',
           translucent: true,
-          spinner: 'lines'   // "bubbles" | "circles" | "crescent" | "dots" | "lines" | "lines-small" | null | undefined
+          spinner: 'lines'
           //duration: 5000   (autodismiss after 5 secs)
         })
         loading.present().then(async () => {
@@ -211,7 +211,7 @@ export class HomePage implements OnInit {
         const loading = await this.loadingController.create({
           message: 'Creazione Wallet in corso...',
           translucent: true,
-          spinner: 'lines'   // "bubbles" | "circles" | "crescent" | "dots" | "lines" | "lines-small" | null | undefined
+          spinner: 'lines'
           //duration: 5000   (autodismiss after 5 secs)
         })
         loading.present().then(async () => {
@@ -349,6 +349,15 @@ export class HomePage implements OnInit {
 
   async mypw_submit() {
 
+    const loading = await this.loadingController.create({
+      message: 'Accesso Wallet in corso...',
+      translucent: true,
+      spinner: 'lines'
+      //duration: 5000   (autodismiss after 5 secs)
+    })
+    loading.present().then(async () => {
+
+
     let wal; let prk; let puk
 
     wal = await this.irohautil.decrypt_mypw(this.irohautil.wallet.mywallet, this.mypw)
@@ -374,6 +383,10 @@ export class HomePage implements OnInit {
         })
 
     } else this.irohautil.alert("Password errata")
+
+    loading.dismiss()
+  })
+  
 }
 
 
