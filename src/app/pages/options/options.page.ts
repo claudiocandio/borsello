@@ -94,8 +94,8 @@ export class OptionsPage implements OnInit {
 
       })
       .catch((err) => {
-        console.log(JSON.stringify(err))
-        this.irohautil.alert("Error storing nodeIp: " + JSON.stringify(err));
+        console.log("options.page.nodeIp_change - "+err)
+        this.irohautil.alert("Errore salva Server");
       })
   }
 
@@ -124,11 +124,15 @@ export class OptionsPage implements OnInit {
 
   async rmkeys() {
 
+    let loading_done = false
     const loading = await this.loadingController.create({
       message: 'Rimozione Wallet in corso...',
       translucent: true,
-      spinner: 'lines'   // "bubbles" | "circles" | "crescent" | "dots" | "lines" | "lines-small" | null | undefined
-      //duration: 5000   (autodismiss after 5 secs)
+      spinner: 'lines',
+      duration: this.irohautil.loadingController_timeout
+    })
+    loading.onDidDismiss().then(() => {
+      if(!loading_done) this.irohautil.alert("Timeout nessuna risposta ricevuta")
     })
     loading.present().then(async () => {
 
@@ -141,6 +145,7 @@ export class OptionsPage implements OnInit {
           this.irohautil.wallet_close("Errore rimozione Wallet")
         })
 
+      loading_done = true
       loading.dismiss()
 
     })

@@ -105,11 +105,15 @@ export class SendPage implements OnInit {
 
     else if (form.valid) {
 
+      let loading_done = false
       const loading = await this.loadingController.create({
         message: 'Invio in corso...',
         translucent: true,
-        spinner: 'lines'   // "bubbles" | "circles" | "crescent" | "dots" | "lines" | "lines-small" | null | undefined
-        //duration: 5000   (autodismiss after 5 secs)
+        spinner: 'lines',
+        duration: this.irohautil.loadingController_timeout
+      })
+      loading.onDidDismiss().then(() => {
+        if(!loading_done) this.irohautil.alert("Timeout nessuna risposta ricevuta")
       })
       loading.present().then(async () => {
 
@@ -150,6 +154,7 @@ export class SendPage implements OnInit {
             console.log("Error run_getAccountAssets: " + JSON.stringify(err))
           })
 
+        loading_done = true
         loading.dismiss();
       })
 

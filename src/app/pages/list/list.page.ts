@@ -65,11 +65,15 @@ export class ListPage implements OnInit {
 
   async get_transactions_list() {
 
+    let loading_done = false
     const loading = await this.loadingController.create({
       message: 'Lettura transazioni in corso...',
       translucent: true,
-      spinner: 'lines'   // "bubbles" | "circles" | "crescent" | "dots" | "lines" | "lines-small" | null | undefined
-      //duration: 5000   (autodismiss after 5 secs)
+      spinner: 'lines',
+      duration: this.irohautil.loadingController_timeout
+    })
+    loading.onDidDismiss().then(() => {
+      if(!loading_done) this.irohautil.alert("Timeout nessuna risposta ricevuta")
     })
     loading.present().then(() => {
 
@@ -126,6 +130,7 @@ export class ListPage implements OnInit {
           console.log("Error get_transactions_list login: " + err)
         })
       
+        loading_done = true
         loading.dismiss();
     })
 

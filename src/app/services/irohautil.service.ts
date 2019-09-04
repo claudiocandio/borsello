@@ -44,7 +44,7 @@ export class IrohautilService {
 
   //public nodeIp_force = 'http://maccarese.asuscomm.com:8081'
   public nodeIp_force = null // null to use the nativeStorage nodeIp or the nodeIp_default
-  public nodeIp_default = 'http://maccarese.asuscomm.com:8081'
+  public nodeIp_default = 'https://maccarese.asuscomm.com:8443' // 'http://maccarese.asuscomm.com:8081'
   public nodeIp = ''
 
   // to run createAccount
@@ -54,9 +54,11 @@ export class IrohautilService {
 
   public mywalletIsopen = false
 
+  public loadingController_timeout = 120000 // autodismiss any loadingController after msecs
+
   private secureKey: string;
   private secureIV: string;
-  private force_simplecrypto = true  // do not use native Android & IOS AES256
+  private force_simplecrypto = true  // if true do not use native Android & IOS AES256
 
   constructor(private nativeStorage: NativeStorage,
     private aes256: AES256,
@@ -98,8 +100,7 @@ export class IrohautilService {
           this.alert("Errore accesso: wallet/key errati")
           return Promise.reject(err)
 
-        }
-        else if (
+        }else if (
           err.message.includes('Response closed without headers') ||
           err.message.includes('TransientFailure')) {
 

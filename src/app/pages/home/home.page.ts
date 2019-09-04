@@ -39,15 +39,19 @@ export class HomePage implements OnInit {
 
   async ngOnInit() {
 
+    let loading_done = false
     const loading = await this.loadingController.create({
       message: 'Caricamento in corso...',
       translucent: true,
-      spinner: 'lines'   // "bubbles" | "circles" | "crescent" | "dots" | "lines" | "lines-small" | null | undefined
-      //duration: 5000   (autodismiss after 5 secs)
+      spinner: 'lines',
+      duration: this.irohautil.loadingController_timeout
+    })
+    loading.onDidDismiss().then(() => {
+      if(!loading_done) this.irohautil.alert("Timeout nessuna risposta ricevuta")
     })
     loading.present().then(async () => {
 
-      if (!this.irohautil.mywalletIsopen) {
+      if (!this.irohautil.mywalletIsopen) {  // if wallet not open
 
         if (this.irohautil.nodeIp_force) {
           this.irohautil.nodeIp = this.irohautil.nodeIp_force
@@ -90,7 +94,7 @@ export class HomePage implements OnInit {
             if (!this.irohautil.wallet.mypw) { // if wallet not encrypted then login
               await this.login()
                 .then(() => this.irohautil.mywalletIsopen = true)
-                .catch(err => {
+                .catch(() => {
                   loading.dismiss()
                 }) 
             }
@@ -99,12 +103,12 @@ export class HomePage implements OnInit {
           )
       }
 
+      loading_done = true
       loading.dismiss()
     })
 
   }
   
-
   // Start: For the select/change assets
   @ViewChild('selectAsset') selectAsset: IonSelect;
 
@@ -142,12 +146,16 @@ export class HomePage implements OnInit {
     if (form.valid) {
 
       if (this.myprk_restore.length > 0) {  // restore wallet
-
+        
+        let loading_done = false
         const loading = await this.loadingController.create({
           message: 'Restore Wallet in corso...',
           translucent: true,
-          spinner: 'lines'
-          //duration: 5000   (autodismiss after 5 secs)
+          spinner: 'lines',
+          duration: this.irohautil.loadingController_timeout
+        })
+        loading.onDidDismiss().then(() => {
+          if(!loading_done) this.irohautil.alert("Timeout nessuna risposta ricevuta")
         })
         loading.present().then(async () => {
 
@@ -203,16 +211,21 @@ export class HomePage implements OnInit {
               this.irohautil.alert("Restore Wallet fallito!")
             })
 
+          loading_done = true
           loading.dismiss();
         })
 
       } else { // new wallet
 
+        let loading_done = false
         const loading = await this.loadingController.create({
           message: 'Creazione Wallet in corso...',
           translucent: true,
-          spinner: 'lines'
-          //duration: 5000   (autodismiss after 5 secs)
+          spinner: 'lines',
+          duration: this.irohautil.loadingController_timeout
+        })
+        loading.onDidDismiss().then(() => {
+          if(!loading_done) this.irohautil.alert("Timeout nessuna risposta ricevuta")
         })
         loading.present().then(async () => {
 
@@ -282,6 +295,7 @@ export class HomePage implements OnInit {
               this.irohautil.alert("Creazione Wallet fallita!\nProblemi di connessione al Server.")
             })
 
+          loading_done = true
           loading.dismiss()
         })
       }
@@ -352,11 +366,13 @@ export class HomePage implements OnInit {
     const loading = await this.loadingController.create({
       message: 'Accesso Wallet in corso...',
       translucent: true,
-      spinner: 'lines'
-      //duration: 5000   (autodismiss after 5 secs)
+      spinner: 'lines',
+      duration: this.irohautil.loadingController_timeout  // (autodismiss after n msecs)
+    })
+    loading.onDidDismiss().then(() => {
+      if(!this.irohautil.mywalletIsopen) this.irohautil.alert("Timeout nessuna risposta ricevuta")
     })
     loading.present().then(async () => {
-
 
     let wal; let prk; let puk
 
