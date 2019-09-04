@@ -89,13 +89,13 @@ export class OptionsPage implements OnInit {
         if (this.irohautil.wallet.mywallet)
           return this.irohautil.login(this.irohautil.wallet.mywallet, this.irohautil.wallet.myprk)
             .catch((err) => {
-              console.log(JSON.stringify(err))
+              this.irohautil.console_log(JSON.stringify(err))
             })
 
       })
       .catch((err) => {
-        console.log("options.page.nodeIp_change - "+err)
-        this.irohautil.alert("Errore salva Server");
+        this.irohautil.console_log("options.page.nodeIp_change - " + err)
+        this.irohautil.alert("Errore salva Server")
       })
   }
 
@@ -132,7 +132,7 @@ export class OptionsPage implements OnInit {
       duration: this.irohautil.loadingController_timeout
     })
     loading.onDidDismiss().then(() => {
-      if(!loading_done) this.irohautil.alert("Timeout nessuna risposta ricevuta")
+      if (!loading_done) this.irohautil.alert("Timeout nessuna risposta ricevuta")
     })
     loading.present().then(async () => {
 
@@ -141,7 +141,7 @@ export class OptionsPage implements OnInit {
           this.irohautil.wallet_close("Rimozione Wallet completata")
         })
         .catch((err) => {
-          console.log(err)
+          this.irohautil.console_log(err)
           this.irohautil.wallet_close("Errore rimozione Wallet")
         })
 
@@ -344,16 +344,18 @@ export class OptionsPage implements OnInit {
 
   copyToClipboard(field) {
     if (field == 'mypuk') {
+      this.irohautil.console_log(this.irohautil.wallet.mypuk)
       this.clipboard.copy(this.irohautil.wallet.mypuk)
-        .catch((err) => console.log(err))
+        .catch((err) => this.irohautil.console_log(err))
     } else if (field == 'myprk') {
+      this.irohautil.console_log(this.irohautil.wallet.myprk)
       this.clipboard.copy(this.irohautil.wallet.myprk)
-        .catch((err) => console.log(err))
+        .catch((err) => this.irohautil.console_log(err))
     } else if (field == 'Wallet') {
-      //console.log("Wallet: " + this.irohautil.wallet.mywallet + "\nChiave Privata: " + this.irohautil.wallet.myprk)
+      this.irohautil.console_log("Wallet: " + this.irohautil.wallet.mywallet + "\nChiave Privata: " + this.irohautil.wallet.myprk)
       this.clipboard.copy("Wallet: " + this.irohautil.wallet.mywallet + "\nChiave Privata: " + this.irohautil.wallet.myprk)
         .then(() => this.irohautil.alert("Wallet copiato negli appunti"))
-        .catch((err) => console.log(err))
+        .catch((err) => this.irohautil.console_log(err))
     }
 
   }

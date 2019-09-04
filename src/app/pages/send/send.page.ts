@@ -52,7 +52,7 @@ export class SendPage implements OnInit {
         else this.selectAsset.open() // open up the html currency selecttion
       })
       .catch((err) => {
-        console.log("Error run_getAccountAssets: " + err)
+        this.irohautil.console_log("Error run_getAccountAssets: " + err)
         if (err.code == 2) this.irohautil.alert("Problemi di connessione al Server")
       })
   }
@@ -64,7 +64,7 @@ export class SendPage implements OnInit {
       .then((assetId) => {
         this.irohautil.wallet.cur_assetId_decimal = assetId.precision
       })
-      .catch(err => console.log(err))
+      .catch(err => this.irohautil.console_log(err))
 
     this.nativeStorage.setItem('cur_assetId', this.irohautil.wallet.cur_assetId)
       .catch(err => this.irohautil.alert("Error storing cur_assetId: " + JSON.stringify(err)));
@@ -123,8 +123,8 @@ export class SendPage implements OnInit {
             let cur_balance = this.irohautil.wallet.assets.find(a => a.assetId == this.irohautil.wallet.cur_assetId).balance
 
             if (Number(this.walletTo.amount) > Number(cur_balance)) { // NOT enough balance
-              console.log("this.walletTo.amount: " + this.walletTo.amount)
-              console.log("cur_balance: " + cur_balance)
+              this.irohautil.console_log("this.walletTo.amount: " + this.walletTo.amount)
+              this.irohautil.console_log("cur_balance: " + cur_balance)
               this.irohautil.alert("Invio fallito!\nErrore: Valuta totale non sufficente")
             } else { // ok there is enough balance
 
@@ -135,23 +135,23 @@ export class SendPage implements OnInit {
                       this.irohautil.wallet.assets = assets
                       //this.selectAsset.open() // open up the html currency selecttion
                     })
-                    .catch(err => console.log(err))
+                    .catch(err => this.irohautil.console_log(err))
 
                   this.irohautil.alert("Invio completato con successo")
                 })
                 .catch(err => {
-                  console.log('send.page.walletSendTo.run_transferAsset - ' + err)
+                  this.irohautil.console_log('send.page.walletSendTo.run_transferAsset - ' + err)
                   if (err.includes("expected=COMMITTED, actual=STATEFUL_VALIDATION_FAILED"))
                   this.irohautil.alert("Invio fallito!\nErrore: Indirizzo Wallet non esistente.")
                   else this.irohautil.alert("Invio fallito!\nProblemi di connessione al Server")
-                  console.log("Error run_transferAsset: " + JSON.stringify(err))
+                  this.irohautil.console_log("Error run_transferAsset: " + JSON.stringify(err))
                 })
 
             }
           })
           .catch((err) => { // error geting cur_balance
             if (err.code == 2) this.irohautil.alert("Problemi di connessione al Server")
-            console.log("Error run_getAccountAssets: " + JSON.stringify(err))
+            this.irohautil.console_log("Error run_getAccountAssets: " + JSON.stringify(err))
           })
 
         loading_done = true
@@ -167,12 +167,12 @@ export class SendPage implements OnInit {
     this.barcodeScanner
       .scan()
       .then(barcodeData => {
-        //console.log("Barcode data " + JSON.stringify(barcodeData));
+        //this.irohautil.console_log("Barcode data " + JSON.stringify(barcodeData));
         this.walletTo.wallet = barcodeData.text
 
       })
       .catch(err => {
-        console.log("Error scanCode_mywallet: ", err);
+        this.irohautil.console_log("Error scanCode_mywallet: "+err);
       })
   }
 

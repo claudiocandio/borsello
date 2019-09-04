@@ -47,7 +47,7 @@ export class HomePage implements OnInit {
       duration: this.irohautil.loadingController_timeout
     })
     loading.onDidDismiss().then(() => {
-      if(!loading_done) this.irohautil.alert("Timeout nessuna risposta ricevuta")
+      if (!loading_done) this.irohautil.alert("Timeout nessuna risposta ricevuta")
     })
     loading.present().then(async () => {
 
@@ -58,7 +58,7 @@ export class HomePage implements OnInit {
 
           await this.nativeStorage.setItem('nodeIp', this.irohautil.nodeIp_force)
             .catch((err) => {
-              console.log(JSON.stringify(err))
+              this.irohautil.console_log(JSON.stringify(err))
               this.irohautil.alert("Error storing nodeIp: " + JSON.stringify(err));
             })
 
@@ -96,7 +96,7 @@ export class HomePage implements OnInit {
                 .then(() => this.irohautil.mywalletIsopen = true)
                 .catch(() => {
                   loading.dismiss()
-                }) 
+                })
             }
           },
             _ => this.irohautil.wallet.mywallet = null
@@ -108,7 +108,7 @@ export class HomePage implements OnInit {
     })
 
   }
-  
+
   // Start: For the select/change assets
   @ViewChild('selectAsset') selectAsset: IonSelect;
 
@@ -117,11 +117,11 @@ export class HomePage implements OnInit {
     await this.irohautil.run_getAccountAssets(this.irohautil.wallet.mywallet)
       .then(assets => {
         this.irohautil.wallet.assets = assets
-        if(assets.length == 0) this.irohautil.alert("Nessun Wallet/Valuta disponibile")
+        if (assets.length == 0) this.irohautil.alert("Nessun Wallet/Valuta disponibile")
         else this.selectAsset.open() // open up the html currency selecttion
       })
       .catch((err) => {
-        console.log("Error run_getAccountAssets: " + err)
+        this.irohautil.console_log("Error run_getAccountAssets: " + err)
         if (err.code == 2) this.irohautil.alert("Problemi di connessione al Server")
       })
 
@@ -134,7 +134,7 @@ export class HomePage implements OnInit {
       .then((assetId) => {
         this.irohautil.wallet.cur_assetId_decimal = assetId.precision
       })
-      .catch(err => console.log(err))
+      .catch(err => this.irohautil.console_log(err))
 
     this.nativeStorage.setItem('cur_assetId', this.irohautil.wallet.cur_assetId)
       .catch(err => this.irohautil.alert("Error storing cur_assetId: " + JSON.stringify(err)));
@@ -146,7 +146,7 @@ export class HomePage implements OnInit {
     if (form.valid) {
 
       if (this.myprk_restore.length > 0) {  // restore wallet
-        
+
         let loading_done = false
         const loading = await this.loadingController.create({
           message: 'Restore Wallet in corso...',
@@ -155,7 +155,7 @@ export class HomePage implements OnInit {
           duration: this.irohautil.loadingController_timeout
         })
         loading.onDidDismiss().then(() => {
-          if(!loading_done) this.irohautil.alert("Timeout nessuna risposta ricevuta")
+          if (!loading_done) this.irohautil.alert("Timeout nessuna risposta ricevuta")
         })
         loading.present().then(async () => {
 
@@ -196,7 +196,7 @@ export class HomePage implements OnInit {
                 .catch(err => this.irohautil.alert("Error storing myprk: " + JSON.stringify(err)));
 
               this.login() // to reload data
-                .catch(err => console.log(err))
+                .catch(err => this.irohautil.console_log(err))
 
               this.irohautil.mywalletIsopen = true
               this.irohautil.alert("Restore Wallet completato con successo")
@@ -207,7 +207,7 @@ export class HomePage implements OnInit {
               this.mywallet_restore_button = 'Crea Wallet'
             })
             .catch(err => {
-              console.log(err)
+              this.irohautil.console_log(err)
               this.irohautil.alert("Restore Wallet fallito!")
             })
 
@@ -225,7 +225,7 @@ export class HomePage implements OnInit {
           duration: this.irohautil.loadingController_timeout
         })
         loading.onDidDismiss().then(() => {
-          if(!loading_done) this.irohautil.alert("Timeout nessuna risposta ricevuta")
+          if (!loading_done) this.irohautil.alert("Timeout nessuna risposta ricevuta")
         })
         loading.present().then(async () => {
 
@@ -271,27 +271,27 @@ export class HomePage implements OnInit {
                         .catch(err => this.irohautil.alert("Error storing myprk: " + JSON.stringify(err)));
 
                       await this.login() // to reload data
-                        .catch(err => console.log(err))
+                        .catch(err => this.irohautil.console_log(err))
 
                       this.irohautil.mywalletIsopen = true
 
                       this.irohautil.alert("Wallet creato con successo")
                     })
                     .catch(err => {
-                      console.log(JSON.stringify(err))
+                      this.irohautil.console_log(JSON.stringify(err))
 
                       if (err.includes("expected=COMMITTED, actual=STATEFUL_VALIDATION_FAILED")) this.irohautil.alert("Nome Wallet già presente!\n")
                       else this.irohautil.alert("Creazione Wallet fallita!")
                     })
                 })
                 .catch(err => {
-                  console.log(err)
+                  this.irohautil.console_log(err)
                   this.irohautil.alert("Creazione Wallet fallita!")
                 })
 
             })
             .catch(err => {
-              console.log(err)
+              this.irohautil.console_log(err)
               this.irohautil.alert("Creazione Wallet fallita!\nProblemi di connessione al Server.")
             })
 
@@ -304,7 +304,7 @@ export class HomePage implements OnInit {
   }
 
   mywallet_restore_change() {
-    //console.log(this.myprk_restore)
+    //this.irohautil.console_log(this.myprk_restore)
     if (this.myprk_restore.length > 0) {
       this.myprk_restore_min = this.myprk_restore_min = 64
       this.mywallet_restore_button = 'Restore Wallet'
@@ -318,7 +318,7 @@ export class HomePage implements OnInit {
     this.barcodeScanner
       .scan()
       .then(barcodeData => {
-        //console.log("Barcode data " + JSON.stringify(barcodeData));
+        //this.irohautil.console_log("Barcode data " + JSON.stringify(barcodeData));
 
         if (barcodeData.text.includes('@' + this.irohautil.domainId)) // remove domainId when creating new wallet
           this.irohautil.wallet.mywallet = barcodeData.text.substring(0, barcodeData.text.indexOf('@' + this.irohautil.domainId))
@@ -329,7 +329,7 @@ export class HomePage implements OnInit {
 
       })
       .catch(err => {
-        console.log("Error scanCode_mywallet: ", err)
+        this.irohautil.console_log("Error scanCode_mywallet: " + err)
       });
   }
 
@@ -337,7 +337,7 @@ export class HomePage implements OnInit {
     this.barcodeScanner
       .scan()
       .then(barcodeData => {
-        //console.log("Barcode data " + JSON.stringify(barcodeData));
+        //this.irohautil.console_log("Barcode data " + JSON.stringify(barcodeData));
 
         if (barcodeData.text.length == 64)
           this.myprk_restore = barcodeData.text
@@ -348,7 +348,7 @@ export class HomePage implements OnInit {
 
       })
       .catch(err => {
-        console.log("Error scanCode_mywallet: ", err);
+        this.irohautil.console_log("Error scanCode_mywallet: " + err);
       })
   }
 
@@ -370,47 +370,47 @@ export class HomePage implements OnInit {
       duration: this.irohautil.loadingController_timeout  // (autodismiss after n msecs)
     })
     loading.onDidDismiss().then(() => {
-      if(!this.irohautil.mywalletIsopen) this.irohautil.alert("Timeout nessuna risposta ricevuta")
+      if (!this.irohautil.mywalletIsopen) this.irohautil.alert("Timeout nessuna risposta ricevuta")
     })
     loading.present().then(async () => {
 
-    let wal; let prk; let puk
+      let wal; let prk; let puk
 
-    wal = await this.irohautil.decrypt_mypw(this.irohautil.wallet.mywallet, this.mypw)
-    if (wal.length > 0) { // password is ok
-      puk = await this.irohautil.decrypt_mypw(this.irohautil.wallet.mypuk, this.mypw)
-      prk = await this.irohautil.decrypt_mypw(this.irohautil.wallet.myprk, this.mypw)
+      wal = await this.irohautil.decrypt_mypw(this.irohautil.wallet.mywallet, this.mypw)
+      if (wal.length > 0) { // password is ok
+        puk = await this.irohautil.decrypt_mypw(this.irohautil.wallet.mypuk, this.mypw)
+        prk = await this.irohautil.decrypt_mypw(this.irohautil.wallet.myprk, this.mypw)
 
-      await this.irohautil.login_restore(wal, prk)
-        .then(async () => {
-          this.irohautil.wallet.mywallet = wal
-          this.irohautil.wallet.mypuk = puk
-          this.irohautil.wallet.myprk = prk
-          this.irohautil.wallet.mypw = true
-          this.mypw = '' // clear password
-          await this.login()
-            .then(() => {
-              this.irohautil.mywalletIsopen = true
-            })
-            .catch(err => console.log(err))
-        })
-        .catch(err => {
-          console.log("home.page.mypw_submit - "+err)
-        })
+        await this.irohautil.login_restore(wal, prk)
+          .then(async () => {
+            this.irohautil.wallet.mywallet = wal
+            this.irohautil.wallet.mypuk = puk
+            this.irohautil.wallet.myprk = prk
+            this.irohautil.wallet.mypw = true
+            this.mypw = '' // clear password
+            await this.login()
+              .then(() => {
+                this.irohautil.mywalletIsopen = true
+              })
+              .catch(err => this.irohautil.console_log(err))
+          })
+          .catch(err => {
+            this.irohautil.console_log("home.page.mypw_submit - " + err)
+          })
 
-    } else this.irohautil.alert("Password errata")
+      } else this.irohautil.alert("Password errata")
 
-    loading.dismiss()
-  })
-  
-}
+      loading.dismiss()
+    })
+
+  }
 
 
   passwordType: string = 'password';
   passwordIcon: string = 'eye-off';
   hideShowPassword() {
-      this.passwordType = this.passwordType === 'text' ? 'password' : 'text';
-      this.passwordIcon = this.passwordIcon === 'eye-off' ? 'eye' : 'eye-off';
+    this.passwordType = this.passwordType === 'text' ? 'password' : 'text';
+    this.passwordIcon = this.passwordIcon === 'eye-off' ? 'eye' : 'eye-off';
   }
 
 

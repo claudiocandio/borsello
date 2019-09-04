@@ -43,7 +43,7 @@ export class ListPage implements OnInit {
         else this.selectAsset.open() // open up the html currency selecttion
       })
       .catch((err) => {
-        console.log("Error run_getAccountAssets: " + err)
+        this.irohautil.console_log("Error run_getAccountAssets: " + err)
         if (err.code == 2) this.irohautil.alert("Problemi di connessione al Server")
       })
 
@@ -56,7 +56,7 @@ export class ListPage implements OnInit {
       .then((assetId) => {
         this.irohautil.wallet.cur_assetId_decimal = assetId.precision
       })
-      .catch(err => console.log(err))
+      .catch(err => this.irohautil.console_log(err))
 
     this.nativeStorage.setItem('cur_assetId', this.irohautil.wallet.cur_assetId)
       .catch(err => this.irohautil.alert("Error storing cur_assetId: " + JSON.stringify(err)));
@@ -84,7 +84,7 @@ export class ListPage implements OnInit {
 
           this.irohautil.run_getAccountAssetTransactions(this.irohautil.wallet.mywallet, this.irohautil.wallet.cur_assetId)
             .then(transactions => {
-              //console.log(JSON.stringify(transactions))
+              //this.irohautil.console_log(JSON.stringify(transactions))
               if (transactions.isEmpty) return []
               //transactions.nextTxHash !!!!!!!!!!!!!!!!!!!
 
@@ -123,11 +123,11 @@ export class ListPage implements OnInit {
             })
             .catch(err => {
               if (err.code == 2) this.irohautil.alert("Problemi di connessione al Server")
-              console.log(JSON.stringify(err))
+              this.irohautil.console_log(JSON.stringify(err))
             })
         })
         .catch((err) => {
-          console.log("Error get_transactions_list login: " + err)
+          this.irohautil.console_log("Error get_transactions_list login: " + err)
         })
       
         loading_done = true

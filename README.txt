@@ -10,7 +10,7 @@ $ nohup ionic cordova build android --prod --release &
 $ pkill ionic
 
 Start server for iPhone tests:
-$ ionic serve -c --address 192.168.0.2
+$ ionic serve --devapp
 
 -
 Buildings
@@ -22,8 +22,9 @@ $ vi config.xml
 <widget id="io.ionic.starter.walcc" version="1.0.2" <--------
 in irohautil.service.ts:
 public walcc_version = 'v1.0.2'
+-
+public debug_console_log = false
 --
-
 $ ionic cordova build android --debug
 cp /datanuc/joker/prog_linux/ionic/Walcc/platforms/android/app/build/outputs/apk/debug/app-debug.apk /data/pub/ionic/
 

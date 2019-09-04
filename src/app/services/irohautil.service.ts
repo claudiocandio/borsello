@@ -30,6 +30,7 @@ export interface WalletDataTo {
 
 export class IrohautilService {
   public walcc_version = 'v1.0.3'
+  public debug_console_log = true // whether to use console.log to debug
 
   public domainId = 'mini'
   public wallet: WalletData = {
@@ -68,7 +69,7 @@ export class IrohautilService {
     this.secureKey = ''
     this.secureIV = ''
 
-    //console.log(this.plt.platforms())
+    //this.irohautil.console_log(this.plt.platforms())
 
   }
 
@@ -79,7 +80,7 @@ export class IrohautilService {
         return Promise.resolve()
       })
       .catch(err => {
-        console.log("irohautil.service.login_na - " + err)
+        this.console_log("irohautil.service.login_na - " + err)
         this.alert("Problemi di connessione al Server")
         return Promise.reject(err)
       })
@@ -92,11 +93,11 @@ export class IrohautilService {
         return Promise.resolve()
       })
       .catch(err => {
-        console.log("irohautil.service.login_restore - " + err)
+        this.console_log("irohautil.service.login_restore - " + err)
 
         if (err.message.includes('errorCode":3')) {
 
-          console.log("Login error: wrong wallet/key")
+          this.console_log("Login error: wrong wallet/key")
           this.alert("Errore accesso: wallet/key errati")
           return Promise.reject(err)
 
@@ -104,7 +105,7 @@ export class IrohautilService {
           err.message.includes('Response closed without headers') ||
           err.message.includes('TransientFailure')) {
 
-          console.log("Connection issues with the Server")
+          this.console_log("Connection issues with the Server")
           this.alert("Problemi di connessione al Server")
           return Promise.reject(err)
 
@@ -129,22 +130,22 @@ export class IrohautilService {
                 this.wallet.cur_assetId_decimal = assetId.precision
               })
               .catch(err => {
-                console.log("Error login run_getAssetInfo: " + err)
+                this.console_log("Error login run_getAssetInfo: " + err)
                 //return Promise.reject(err)
               })
           })
           .catch(err => {
-            console.log("Error login run_getAccountAssets: " + err)
+            this.console_log("Error login run_getAccountAssets: " + err)
             //return Promise.reject(err)
           })
 
         return Promise.resolve(account)
       })
       .catch(err => {
-        console.log("irohautil.servicelogin - " + err)
+        this.console_log("irohautil.servicelogin - " + err)
         if (err.message.includes('errorCode":3')) {
 
-          console.log("Login error: wrong wallet/key")
+          this.console_log("Login error: wrong wallet/key")
           this.alert("Errore accesso: wallet/key errati")
           return Promise.reject(err)
 
@@ -153,7 +154,7 @@ export class IrohautilService {
           err.message.includes('Response closed without headers') ||
           err.message.includes('TransientFailure')) {
 
-          console.log("Connection issues with the Server")
+          this.console_log("Connection issues with the Server")
           this.alert("Problemi di connessione al Server")
           return Promise.reject(err)
 
@@ -176,8 +177,8 @@ export class IrohautilService {
         return transactions
       })
       .catch(err => {
-        console.log("Error run_getAccountAssetTransactions: " + err)
-        console.log(JSON.stringify(err))
+        this.console_log("Error run_getAccountAssetTransactions: " + err)
+        this.console_log(JSON.stringify(err))
         return Promise.reject(err)
       })
   }
@@ -192,7 +193,7 @@ export class IrohautilService {
           return transactions
         })
         .catch(err => {
-          console.log("Error getAccountAssets: " + JSON.stringify(err))
+          this.console_log("Error getAccountAssets: " + JSON.stringify(err))
           return Promise.reject(err)
         })
   }
@@ -361,6 +362,10 @@ export class IrohautilService {
     });
 
     await alert.present();
+  }
+
+  console_log(msg) {
+    if(this.debug_console_log) console.log(msg)
   }
 
 }
