@@ -95,6 +95,7 @@ export class HomePage implements OnInit {
               await this.login()
                 .then(() => this.irohautil.mywalletIsopen = true)
                 .catch(() => {
+                  loading_done = true
                   loading.dismiss()
                 })
             }
@@ -212,7 +213,7 @@ export class HomePage implements OnInit {
             })
 
           loading_done = true
-          loading.dismiss();
+          loading.dismiss()
         })
 
       } else { // new wallet
@@ -363,6 +364,7 @@ export class HomePage implements OnInit {
 
   async mypw_submit() {
 
+    let loading_done = false
     const loading = await this.loadingController.create({
       message: 'Accesso Wallet in corso...',
       translucent: true,
@@ -370,7 +372,7 @@ export class HomePage implements OnInit {
       duration: this.irohautil.loadingController_timeout  // (autodismiss after n msecs)
     })
     loading.onDidDismiss().then(() => {
-      if (!this.irohautil.mywalletIsopen) this.irohautil.alert("Timeout nessuna risposta ricevuta")
+      if (!loading_done) this.irohautil.alert("Timeout nessuna risposta ricevuta")
     })
     loading.present().then(async () => {
 
@@ -400,6 +402,7 @@ export class HomePage implements OnInit {
 
       } else this.irohautil.alert("Password errata")
 
+      loading_done = true
       loading.dismiss()
     })
 

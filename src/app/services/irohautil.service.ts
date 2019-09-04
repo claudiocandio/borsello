@@ -30,7 +30,7 @@ export interface WalletDataTo {
 
 export class IrohautilService {
   public walcc_version = 'v1.0.3'
-  public debug_console_log = true // whether to use console.log to debug
+  public debug_console_log = false // whether to use console.log to debug
 
   public domainId = 'mini'
   public wallet: WalletData = {

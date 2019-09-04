@@ -155,7 +155,7 @@ export class SendPage implements OnInit {
           })
 
         loading_done = true
-        loading.dismiss();
+        loading.dismiss()
       })
 
 

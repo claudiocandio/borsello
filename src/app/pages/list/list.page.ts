@@ -131,7 +131,7 @@ export class ListPage implements OnInit {
         })
       
         loading_done = true
-        loading.dismiss();
+        loading.dismiss()
     })
 
   }
