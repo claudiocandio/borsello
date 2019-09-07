@@ -1,0 +1,82 @@
+# by CC
+#
+# to have logging, development, comment logging and driver none below
+#
+version: '3.5'
+
+networks:
+  wallet-js:
+    name: wallet-js
+    attachable: true
+
+volumes:
+  wallet-js-iroha-postgres-vol:
+  wallet-js-iroha-vol:
+
+services:
+  wallet-js-iroha:
+#    image: hyperledger/iroha:latest
+    image: hyperledger/iroha:1.1.0
+    container_name: wallet-js-iroha
+    depends_on:
+      - wallet-js-iroha-postgres
+    tty: true
+    environment:
+      - KEY=keys/node0
+    entrypoint:
+      - /opt/iroha_data/entrypoint.sh
+    networks:
+      - wallet-js
+    volumes:
+      - ./iroha:/opt/iroha_data
+      - type: volume
+        source: wallet-js-iroha-vol
+        target: /tmp/block_store
+    ports:
+      - 50051:50051
+    logging:
+      driver: none
+
+  wallet-js-iroha-postgres:
+    image: postgres:9.5
+    container_name: wallet-js-iroha-postgres
+    environment:
+      - POSTGRES_PASSWORD=mysecretpassword
+    networks:
+      - wallet-js
+    volumes:
+      - type: volume
+        source: wallet-js-iroha-postgres-vol
+        target: /var/lib/postgresql/data
+# ports can be disabled, just to have direct connection to db 
+    ports:
+      - 5432:5432
+    logging:
+      driver: none
+
+  grpcwebproxy:
+    build:
+      context: grpcwebproxy/
+    container_name: wallet-js-grpcwebproxy
+    depends_on:
+      - wallet-js-iroha
+    volumes:
+      - type: bind
+        source: ./grpcwebproxy/tls
+        target: /tls
+    entrypoint:
+      - grpcwebproxy
+      - --backend_addr=wallet-js-iroha:50051
+      - --run_tls_server=true
+#      - --server_tls_cert_file=/tls/localhost.crt
+#      - --server_tls_key_file=/tls/localhost.key
+      - --server_tls_cert_file=/tls/cert4.pem
+      - --server_tls_key_file=/tls/privkey4.pem
+      - --allow_all_origins=true
+    networks:
+      - wallet-js
+    ports:
+      - 8081:8080
+      - 8443:8443
+#    logging:
+#      driver: none
