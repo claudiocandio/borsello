@@ -2,7 +2,9 @@
 - DONE - grpcwebproxy using https http://maccarese.asuscomm.com:8443 and lets encrypt certificates
 - list transactions: transactions.nextTxHash max pageSize = 500 now fixed in run_getAccountAssetTransactions
 - DONE - change alert https://ionicframework.com/docs/api/alert
-- add icon app
+- DONE - change app icon
 - DONE - change console.log() in irohautil.console_log() con check debug_console_log=true|false
+- change nome app to borsello
+- internalization, english & italian lang
 
 
