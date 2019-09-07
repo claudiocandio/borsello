@@ -5,6 +5,6 @@
 - DONE - change app icon
 - DONE - change console.log() in irohautil.console_log() con check debug_console_log=true|false
 - change nome app to borsello
-- internalization, english & italian lang
+- internationalization, english & italian lang
 
 
