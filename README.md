@@ -34,10 +34,9 @@ I used Ubuntu 18.04.3 LTS then you will need quite a few applications: Ionic, co
 [Nodejs & npm download](https://nodejs.org/en/download/)  
 [Nodejs & npm Install](https://github.com/nodejs/help/wiki/Installation)  
 
-Ionic & Cordova
+Ionic
 ```bash
-$ npm -g install ionic
-$ npm -g install cordova
+$ npm -g install ionic cordova native-run
 ```
 
 Some versions  
@@ -141,21 +140,23 @@ No iOS App is available yet as it would require a MacOS and some other things I 
 
 ### Running
 
-Once you install and run the App you will need to create your wallet name, for example: alice, you may also encrypt it using a password.
+Once you have the Borsello App installed you must configure it to use your Iroha server pointing to port 8081 of the grpcwebproxy: start the Borsello App, go to Options and set the "Server address" ex.:  http://192.168.0.2:8081  
 
-You can also run and test the application via web browser, the main functions will work with the browse but not all of them
+You may also run and test the Borsello App with a web browser, the main functions will work with the browse but not all of them
 ```bash
+$ ionic cordova platform add browser
 $ ionic cordova run browser
 ```
+
+Uisng the App you will first need to create your wallet name, for example: alice, you may encrypt your new wallet using a password.
 
 When you have created the new alice wallet you will need to add some bcoin to be able top play with it, let's say we add 150.37 bcoin
 ```bash
 $ node scripts/run.js iroha_util.js account-add-amount alice bcoin 150.37
 ```
+After you added some bcoin to your wallet name, alice, tap/click the "Change Currency" two times to see your bcoin appear and ready to be used in your App.
 
-Do the same for any additional wallets you created and then you can start using the App to send bcoin or any other asset between the wallets created.
-
-To use the Borsello App or the web browser App you must configure the Iroha server address, open the App, go to Options and set the "Server address" with the ip or dns name of your Iroha instance, ex.:  http://192.168.0.2:8081
+Do the same for any additional wallet you created and then you can start sending bcoin or any other asset between the wallets created.
 
 Have fun!
 

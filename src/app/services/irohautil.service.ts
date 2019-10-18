@@ -46,7 +46,7 @@ export class IrohautilService {
   }
 
   public nodeIp_force = null // null to use the nativeStorage nodeIp or the nodeIp_default
-  public nodeIp_default = 'http://192.168.0.2:8081'
+  public nodeIp_default = 'http://127.0.0.1:8081'
   public nodeIp = ''
 
   // default language if browser lang is not it or en
