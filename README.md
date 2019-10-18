@@ -117,10 +117,11 @@ $ docker volume create --name=borsello-iroha-vol
 $ docker-compose -f docker/docker-compose-borsello.yaml up
 ```
 
-Create a new asset coin, for example bcoin with two decimals
+Create a new coin asset, for example bcoin with two decimals
 ```bash
 $ node scripts/run.js iroha_util.js asset-create bcoin 2
 ```
+You can create multiple coin assets
 
 ### Compiling the App
 
@@ -148,9 +149,9 @@ $ ionic cordova platform add browser
 $ ionic cordova run browser
 ```
 
-Uisng the App you will first need to create your wallet name, for example: alice, you may encrypt your new wallet using a password.
+After setting the Iroha server address in the Borsello App you will need to create a new wallet name, for example alice, you may also encrypt your new wallet using a password.
 
-When you have created the new alice wallet you will need to add some bcoin to be able top play with it, let's say we add 150.37 bcoin
+You will then need to add some bcoin to your alice wallet, let's say we add 150.37 bcoin
 ```bash
 $ node scripts/run.js iroha_util.js account-add-amount alice bcoin 150.37
 ```
