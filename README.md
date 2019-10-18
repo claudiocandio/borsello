@@ -78,7 +78,7 @@ $ docker --version
 Docker version 18.09.7, build 2d0083d
 ```
 
-Docker version from Ubuntu is too old, install 1.25.x from here [Docker github](https://github.com/docker/compose/releases)
+docker-compose version from Ubuntu 18.04.3 LTS is too old, install 1.25.x from here [Docker github](https://github.com/docker/compose/releases)
 ```bash
 $ docker-compose --version
 docker-compose version 1.25.0-rc1, build 8552e8e2
