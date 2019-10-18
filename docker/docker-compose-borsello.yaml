@@ -1,0 +1,85 @@
+
+version: '3.5'
+
+networks:
+  borsello-net:
+    name: borsello-net
+    attachable: true
+
+volumes:
+  borsello-iroha-postgres-vol:
+   external: true
+   name: borsello-iroha-postgres-vol
+  borsello-iroha-vol:
+   external: true
+   name: borsello-iroha-vol
+
+services:
+  borsello-iroha:
+    image: hyperledger/iroha:1.1.1
+    container_name: borsello-iroha
+    depends_on:
+      - borsello-iroha-postgres
+    tty: true
+    environment:
+      - KEY=keys/node0
+    entrypoint:
+      - /opt/iroha_data/entrypoint.sh
+    networks:
+      - borsello-net
+    volumes:
+      - ./iroha:/opt/iroha_data
+      - type: volume
+        source: borsello-iroha-vol
+        target: /tmp/block_store
+    ports:
+      - 50051:50051
+    logging:
+      driver: none
+#      driver: json-file
+
+  borsello-iroha-postgres:
+    image: postgres:9.5
+    container_name: borsello-iroha-postgres
+    environment:
+      - POSTGRES_PASSWORD=mysecretpassword
+    networks:
+      - borsello-net
+    volumes:
+      - type: volume
+        source: borsello-iroha-postgres-vol
+        target: /var/lib/postgresql/data
+# ports can be disabled, just to have direct connection to db 
+    ports:
+      - 5432:5432
+    logging:
+      driver: none
+#     driver: json-file
+
+  grpcwebproxy:
+    build:
+      context: grpcwebproxy/
+    container_name: borsello-grpcwebproxy
+    depends_on:
+      - borsello-iroha
+    volumes:
+      - type: bind
+        source: ./grpcwebproxy/tls
+        target: /tls
+    entrypoint:
+      - grpcwebproxy
+      - --backend_addr=borsello-iroha:50051
+      - --run_tls_server=true
+      - --server_tls_cert_file=/tls/localhost.crt
+      - --server_tls_key_file=/tls/localhost.key
+#      - --server_tls_cert_file=/tls/fullchain4.pem
+#      - --server_tls_key_file=/tls/privkey4.pem
+      - --allow_all_origins=true
+    networks:
+      - borsello-net
+    ports:
+      - 8081:8080
+      - 8443:8443
+    logging:
+      driver: none
+      driver: json-file

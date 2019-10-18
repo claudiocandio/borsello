@@ -1,0 +1,158 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>
+        {{'OPTIONS.tab'|translate}}
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-list>
+
+    <ion-card>
+      <ion-list>
+        <ion-radio-group name="radio-group" (ionChange)="select_language($event)">
+          <ion-item *ngFor="let lng of languages">
+
+            <ion-text><img width="24" height="48" [src]="lng.img"></ion-text>
+            <ion-text>&nbsp;{{lng.text}}</ion-text>
+            <ion-radio slot="end" [checked]="lng.value === irohautil.lang_selected" name="{{lng.text}}"
+              value="{{lng.value}}"></ion-radio>
+
+          </ion-item>
+        </ion-radio-group>
+      </ion-list>
+    </ion-card>
+
+    <ion-card *ngIf="irohautil.mywalletIsopen && irohautil.wallet.mywalletIsEncrypted">
+      <ion-button (click)="wallet_close()" expand="block">{{'OPTIONS.close_wallet'|translate}}</ion-button>
+    </ion-card>
+
+    <ion-card *ngIf="irohautil.wallet.mywallet || irohautil.wallet.mypuk || irohautil.wallet.myprk">
+      <ion-button color="primary" (click)="copyToClipboard('wallet')" expand="block">{{'OPTIONS.save_wallet'|translate}}</ion-button>
+    </ion-card>
+
+    <ion-card *ngIf="irohautil.mywalletIsopen">
+      <ion-item>
+        <ion-label color="dark">{{'OPTIONS.show_public_key'|translate}}</ion-label>
+        <ion-toggle slot="start" name="mypuk_barcode" checked=false (ionChange)="mypuk_barcode_toggle_change()">
+        </ion-toggle>
+      </ion-item>
+
+      <ion-card-content *ngIf="show_mypuk_barcode">
+        <ion-grid>
+          <ion-row justify-content-center>
+            <qrcode [qrdata]="irohautil.wallet.mypuk" [size]="irohautil.qrcode_size" [level]="'M'"></qrcode>
+          </ion-row>
+        </ion-grid>
+        <ion-text>{{irohautil.wallet.mypuk}}</ion-text>
+        <ion-item>
+          <ion-button color="primary" (click)="copyToClipboard('mypuk')">{{'OPTIONS.copy'|translate}}</ion-button>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card *ngIf="irohautil.mywalletIsopen">
+      <ion-item>
+        <ion-label color="dark">{{'OPTIONS.show_private_key'|translate}}</ion-label>
+        <ion-toggle slot="start" name="myprk_barcode" checked=false (ionChange)="myprk_barcode_toggle_change()">
+        </ion-toggle>
+      </ion-item>
+
+      <ion-card-content *ngIf="show_myprk_barcode">
+        <ion-grid>
+          <ion-row justify-content-center>
+            <qrcode [qrdata]="irohautil.wallet.myprk" [size]="irohautil.qrcode_size" [level]="'M'"></qrcode>
+          </ion-row>
+        </ion-grid>
+        <ion-text>{{irohautil.wallet.myprk}}</ion-text>
+        <ion-item>
+          <ion-button color="primary" (click)="copyToClipboard('myprk')">{{'OPTIONS.copy'|translate}}</ion-button>
+        </ion-item>
+        <ion-item color="danger">{{'OPTIONS.private_key_do_not_share'|translate}}</ion-item>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card *ngIf="irohautil.mywalletIsopen" class="even">
+      <ion-item>
+        <ion-label color="dark">{{'OPTIONS.password'|translate}}</ion-label>
+        <ion-toggle [(ngModel)]="mywalletpw_toggle" slot="start" name="mywalletpw" checked="{{mywalletpw_checked}}"
+          (ionChange)="mywalletpw_toggle_change()">
+        </ion-toggle>
+      </ion-item>
+
+      <ion-card-content *ngIf="mywalletpw_checked">
+        <ion-text color="dark" *ngIf="irohautil.wallet.mywalletIsEncrypted">
+          <h2>{{'OPTIONS.change_password'|translate}}</h2>
+        </ion-text>
+        <ion-text color="dark" *ngIf="!irohautil.wallet.mywalletIsEncrypted">
+          <h2>{{'OPTIONS.add_password'|translate}}</h2>
+        </ion-text>
+
+        <ion-item *ngIf="irohautil.wallet.mywalletIsEncrypted">
+          <ion-input class="form-control" [(ngModel)]="mywalletpw_old" name="mywalletpw_old" spellcheck="false"
+            autocapitalize="off" maxLength=64 placeholder="{{'OPTIONS.old_password'|translate}}" [type]="passwordType"
+            clearOnEdit="false" (ionChange)="mywalletpws_ionchange()">
+          </ion-input>
+          <ion-icon item-end [name]="passwordIcon" class="passwordIcon" (click)='hideShowPassword()'></ion-icon>
+        </ion-item>
+
+        <ion-item>
+          <ion-input class="form-control" [(ngModel)]="mywalletpw_new" name="mywalletpw_new" spellcheck="false"
+            autocapitalize="off" maxLength=64 placeholder="{{'OPTIONS.new_password'|translate}}" [type]="passwordType_new"
+            clearOnEdit="false" (ionChange)="mywalletpws_ionchange()">
+          </ion-input>
+          <ion-icon item-end [name]="passwordIcon_new" class="passwordIcon_new" (click)='hideShowPassword_new()'>
+          </ion-icon>
+        </ion-item>
+
+        <ion-item>
+          <ion-input class="form-control" [(ngModel)]="mywalletpw_new2" name="mywalletpw_new2" spellcheck="false"
+            autocapitalize="off" maxLength=64 placeholder="{{'OPTIONS.new_password_confirm'|translate}}" [type]="passwordType_new2"
+            clearOnEdit="false" (ionChange)="mywalletpws_ionchange()">
+          </ion-input>
+          <ion-icon item-end [name]="passwordIcon_new2" class="passwordIcon_new2" (click)='hideShowPassword_new2()'>
+          </ion-icon>
+        </ion-item>
+
+        <ion-button (click)="password_save(walletForm)" type="submit" [disabled]="!mywalletpws_ok" expand="block">
+          {{'OPTIONS.password_save'|translate}}</ion-button>
+
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card>
+      <ion-item>
+        <ion-label position="stacked">{{'OPTIONS.server_address'|translate}}</ion-label>
+        <ion-input class="form-control" [(ngModel)]="nodeIp" #nodeip="ngModel" type="text" spellcheck="false"
+          autocapitalize="off" maxLength=50 (ionChange)="nodeIp_change()" inputmode="url" type="url"
+          pattern="^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$">
+        </ion-input>
+      </ion-item>
+      <div *ngIf="nodeip.invalid" class="danger"></div>
+      <div *ngIf="nodeip.invalid">
+        <ion-text color="danger">{{'OPTIONS.server_invalid'|translate}}</ion-text>
+      </div>
+
+      <div class="ion-padding">
+        <ion-button (click)="nodeIp_save()" [disabled]="!nodeIp_changed" expand="block" type="submit">
+            {{'OPTIONS.server_save'|translate}}
+        </ion-button>
+      </div>
+    </ion-card>
+
+    <ion-card *ngIf="irohautil.wallet.mywallet || irohautil.wallet.mypuk || irohautil.wallet.myprk">
+      <ion-button (click)="rmkeys_confirm()" expand="block">{{'OPTIONS.wallet_remove'|translate}}</ion-button>
+    </ion-card>
+
+    <ion-card>
+      <ion-text color="dark">{{'OPTIONS.version'|translate}}: {{irohautil.version}}</ion-text>
+    </ion-card>
+
+  </ion-list>
+
+</ion-content>

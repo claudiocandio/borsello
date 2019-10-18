@@ -1,0 +1,60 @@
+<ion-header>
+    <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>
+      {{'TXS.tab'|translate}}
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <!-- Start select/change asset-->
+  <ion-list>
+    <div *ngFor="let asset of irohautil.wallet.assets">
+      <div *ngIf="irohautil.wallet.cur_assetId == asset.assetId">
+        <ion-item color="secondary">
+          <ion-label><h2>{{'COMMON.currency'|translate}}</h2></ion-label>
+          <ion-label><h2>{{'COMMON.Total'|translate}}</h2></ion-label>
+        </ion-item>
+        <ion-item>
+          <ion-label>{{asset.assetId}}</ion-label>
+          <ion-label>{{asset.balance}}</ion-label>
+        </ion-item>
+      </div>
+    </div>
+  </ion-list>
+
+  <ion-item>
+    <ion-select #selectAsset [hidden]=true (ionChange)="selectAsset_ionChange($event)" interface="action-sheet">
+    <ion-select-option *ngFor="let asset of irohautil.wallet.assets" [value]="asset">
+        {{asset.assetId}} - {{'COMMON.total'|translate}}: {{asset.balance}}</ion-select-option>
+    </ion-select>
+    <ion-label class="select-asset" (click)="display_selectAsset()" color="primary">{{'COMMON.select_currency'|translate}}</ion-label> 
+  </ion-item>
+  <!-- End select/change asset-->
+
+  <div *ngIf="irohautil.wallet.cur_assetId; then assetId"></div>
+  <ng-template #assetId>
+    <ion-list>
+    <ion-item-group *ngFor="let tx of txs" [routerLink]="['/transaction-show/', tx.from, tx.to, tx.amount, tx.date, tx.currency, tx.puk, tx.message]">
+    <ion-item>
+    <ion-grid>
+    <ion-row><ion-col>{{'COMMON.date'|translate}}:</ion-col><ion-col>{{tx.date | date:'yyyy-MM-dd HH:mm.ss'}}</ion-col></ion-row>
+    <ion-row><ion-col>{{'COMMON.from'|translate}}:</ion-col><ion-col>{{tx.from}}</ion-col></ion-row>
+    <ion-row><ion-col>{{'COMMON.to'|translate}}:</ion-col><ion-col>{{tx.to}}</ion-col></ion-row>
+    <ion-row><ion-col>{{'COMMON.amount'|translate}}:</ion-col><ion-col>{{tx.amount}}</ion-col></ion-row>
+<!-- Show this additional info in the transaction-show
+    <ion-row><ion-col>Valuta:</ion-col><ion-col>{{tx.currency}}</ion-col></ion-row>
+    <ion-row><ion-col>Public Key:</ion-col><ion-col>{{tx.puk}}</ion-col></ion-row>
+    <ion-row><ion-col>Messaggio:</ion-col><ion-col>{{tx.message}}</ion-col></ion-row>
+--> 
+    </ion-grid>  
+    </ion-item>
+    </ion-item-group>
+    </ion-list>
+  </ng-template>
+
+</ion-content>

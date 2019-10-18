@@ -1,0 +1,172 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>{{'WALLET.tab'|translate}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <!-- Insert password to open Wallet (if wallet exists and it is encrypyed) -->
+  <div *ngIf="!irohautil.mywalletIsopen && irohautil.wallet.mywalletIsEncrypted; then walletpw"></div>
+  <ng-template #walletpw>
+
+    <div class="ion-padding-top ion-text-center">
+      <ion-label>{{'WALLET.password'|translate}}</ion-label>
+    </div>
+    <form #walletpwForm="ngForm">
+
+      <ion-card>
+        <ion-item>
+          <ion-input class="form-control" [(ngModel)]="mywalletpw_input" name="mywalletpw_input" [type]="passwordType"
+            clearOnEdit="false" spellcheck="false" autocapitalize="off" maxLength=64 placeholder="{{'WALLET.password'|translate}}">
+          </ion-input>
+          <ion-icon item-end [name]="passwordIcon" class="passwordIcon" (click)='hideShowPassword()'></ion-icon>
+        </ion-item>
+
+        <ion-row>
+          <ion-col>
+            <ion-button (click)="mywalletpw_submit(walletpwForm)" type="submit" expand="block">
+              {{'WALLET.open'|translate}}</ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-card>
+    </form>
+  </ng-template>
+
+  <!-- Create or Restore Wallet if wallet is not open and does not exist -->
+  <div *ngIf="!irohautil.mywalletIsopen && !irohautil.wallet.mypuk; then walletcreaterestore"></div>
+  <ng-template #walletcreaterestore>
+    <div class="ion-padding-top ion-text-center">
+      <ion-label>{{'WALLET.new'|translate}}</ion-label>
+    </div>
+
+    <form #walletForm="ngForm">
+      <ion-item>
+        <ion-input class="form-control" [(ngModel)]="irohautil.wallet.mywallet" name="mywallet" type="text"
+          #mywallet="ngModel" spellcheck="false" autocapitalize="off" required minlength=3 maxLength=50
+          placeholder="{{'WALLET.insert_name'|translate}}" pattern='^[a-zA-Z0-9_.-]*$' (ionChange)="mywallet_restore_change()">
+        </ion-input>
+        <ion-button (click)="scanCode_mywallet()">{{'COMMON.scan_code'|translate}}</ion-button>
+      </ion-item>
+
+      <div *ngIf="mywallet.invalid && (mywallet.dirty || mywallet.touched)" class="danger">
+        <div *ngIf="mywallet.errors.required">
+          <ion-text color="danger">
+            {{'WALLET.insert_name'|translate}}
+          </ion-text>
+        </div>
+        <div *ngIf="mywallet.errors.minlength">
+          <ion-text color="danger">
+            {{'COMMON.name_minchars'|translate}}
+          </ion-text>
+        </div>
+        <div *ngIf="mywallet.errors.pattern">
+          <ion-text color="danger">
+            {{'COMMON.name_minchars2'|translate}}
+          </ion-text>
+        </div>
+      </div>
+
+      <ion-item>
+        <ion-input class="form-control" [(ngModel)]="mywalletpw_input" name="mywalletpw_input" [type]="passwordType"
+          clearOnEdit="false" spellcheck="false" autocapitalize="off" maxLength=64
+          placeholder="{{'WALLET.password_opt'|translate}}" (ionChange)="mywalletpws_ionchange()">
+        </ion-input>
+        <ion-icon item-end [name]="passwordIcon" class="passwordIcon" (click)='hideShowPassword()'></ion-icon>
+      </ion-item>
+
+      <ion-item>
+        <ion-input class="form-control" [(ngModel)]="mywalletpw_input2" name="mywalletpw_input2" [type]="passwordType2"
+          clearOnEdit="false" spellcheck="false" autocapitalize="off" maxLength=64
+          placeholder="{{'WALLET.password_opt_confirm'|translate}}" (ionChange)="mywalletpws_ionchange()">
+        </ion-input>
+        <ion-icon item-end [name]="passwordIcon2" class="passwordIcon2" (click)='hideShowPassword2()'></ion-icon>
+      </ion-item>
+
+      <ion-item>
+        <ion-input class="form-control" [(ngModel)]="myprk_restore" name="myprkrestore" type="text" spellcheck="false"
+          autocapitalize="off" maxLength=64 minlength="{{myprk_restore_min}}" pattern='[a-f0-9]*$'
+          placeholder="{{'WALLET.private_key_restore'|translate}}" (ionChange)="mywallet_restore_change()">
+        </ion-input>
+        <ion-button (click)="scanCode_myprk()">{{'COMMON.scan_code'|translate}}</ion-button>
+      </ion-item>
+
+      <ion-row>
+        <ion-col>
+          <ion-button (click)="newwallet(walletForm)" type="submit" [disabled]="!walletForm.valid || !mywalletpws_ok"
+            expand="block">
+            {{mywallet_restore_button}}</ion-button>
+        </ion-col>
+      </ion-row>
+    </form>
+  </ng-template>
+
+  <!-- Show open Wallet -->
+  <div *ngIf="irohautil.mywalletIsopen; then mywalletok"></div>
+  <ng-template #mywalletok>
+    <ion-card>
+      <div class="ion-text-center">
+        <ion-label style="font-weight: bold;" color="dark">{{'WALLET.name'|translate}}:</ion-label>
+      </div>
+      <div class="ion-text-center">
+        <ion-text color="primary"><H1>{{irohautil.wallet.mywallet}}</H1></ion-text>
+      </div>
+    </ion-card>
+
+    <ion-card>
+      <div class="ion-padding-top ion-text-center">
+        <ion-grid>
+          <ion-row justify-content-center>
+            <qrcode [qrdata]="irohautil.wallet.mywallet" [size]="irohautil.qrcode_size" [level]="'M'"></qrcode>
+          </ion-row>
+        </ion-grid>
+      </div>
+    </ion-card>
+
+    <!-- Start select/change asset-->
+    <ion-card>
+      <ion-list>
+        <div *ngFor="let asset of irohautil.wallet.assets">
+          <div *ngIf="irohautil.wallet.cur_assetId == asset.assetId">
+            <ion-item color="secondary">
+              <ion-label><h2>{{'COMMON.currency'|translate}}</h2></ion-label>
+              <ion-label><h2>{{'COMMON.Total'|translate}}</h2></ion-label>
+            </ion-item>
+            <ion-item>
+              <ion-label>{{asset.assetId}}</ion-label>
+              <ion-label>{{asset.balance}}</ion-label>
+            </ion-item>
+          </div>
+        </div>
+      </ion-list>
+
+      <ion-item>
+        <ion-select #selectAsset [hidden]=true (ionChange)="selectAsset_ionChange($event)" interface="action-sheet">
+          <ion-select-option *ngFor="let asset of irohautil.wallet.assets" [value]="asset">
+            {{asset.assetId}} - {{'COMMON.total'|translate}}: {{asset.balance}}</ion-select-option>
+        </ion-select>
+        <ion-label class="select-asset" (click)="display_selectAsset()" color="primary">{{'COMMON.select_currency'|translate}}</ion-label>
+      </ion-item>
+    </ion-card>
+    <!-- End select/change asset-->
+
+    <div>
+      <ion-card *ngIf="irohautil.wallet.mypuk_barcode">
+        <ion-card-content>
+          <p>{{irohautil.wallet.mypuk_barcode}}</p>
+        </ion-card-content>
+      </ion-card>
+    </div>
+    <div>
+      <ion-card *ngIf="irohautil.wallet.myprk_barcode">
+        <ion-card-content>
+          <p>{{irohautil.wallet.myprk_barcode}}</p>
+        </ion-card-content>
+      </ion-card>
+    </div>
+  </ng-template>
+
+</ion-content>

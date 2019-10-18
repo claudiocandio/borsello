@@ -1,0 +1,118 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>
+      {{'SEND.tab'|translate}}
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <!-- Start select/change asset-->
+  <ion-list>
+    <div *ngFor="let asset of irohautil.wallet.assets">
+      <div *ngIf="irohautil.wallet.cur_assetId == asset.assetId">
+        <ion-item color="secondary">
+          <ion-label>
+            <h2>{{'COMMON.currency'|translate}}</h2>
+          </ion-label>
+          <ion-label>
+            <h2>{{'COMMON.Total'|translate}}</h2>
+          </ion-label>
+        </ion-item>
+        <ion-item>
+          <ion-label>{{asset.assetId}}</ion-label>
+          <ion-label>{{asset.balance}}</ion-label>
+        </ion-item>
+      </div>
+    </div>
+  </ion-list>
+
+  <ion-item>
+    <ion-select #selectAsset [hidden]=true (ionChange)="selectAsset_ionChange($event)" interface="action-sheet">
+      <ion-select-option *ngFor="let asset of irohautil.wallet.assets" [value]="asset">{{asset.assetId}} -
+        {{'COMMON.total'|translate}}: {{asset.balance}}</ion-select-option>
+    </ion-select>
+    <ion-label class="select-asset" (click)="display_selectAsset()" color="primary">
+      {{'COMMON.select_currency'|translate}}</ion-label>
+  </ion-item>
+  <!-- End select/change asset-->
+
+  <div *ngIf="irohautil.wallet.cur_assetId; then assetId"></div>
+  <ng-template #assetId>
+
+    <form #walletForm="ngForm">
+      <ion-list lines="full" class="ion-no-margin ion-no-padding">
+        <ion-item>
+          <ion-label position="stacked">{{'SEND.wallet_to'|translate}}</ion-label>
+          <ion-input required class="form-control" [(ngModel)]="walletTo.wallet" name="wallet" type="text"
+            #wallet="ngModel" spellcheck="false" autocapitalize="off" minlength=3 maxLength=50
+            placeholder="{{'SEND.wallet_to_place'|translate}}" pattern='^[a-zA-Z0-9_.-]*$'>
+          </ion-input>
+          <ion-button slot="end" (click)="scanCode_wallet()">{{'COMMON.scan_code'|translate}}</ion-button>
+        </ion-item>
+
+        <div *ngIf="wallet.invalid && (wallet.dirty || wallet.touched)" class="danger">
+          <div *ngIf="wallet.errors.required">
+            <ion-text color="danger">
+              {{'SEND.wallet_to_place'|translate}}
+            </ion-text>
+          </div>
+          <div *ngIf="wallet.errors.minlength">
+            <ion-text color="danger">
+              {{'COMMON.name_minchars'|translate}}
+            </ion-text>
+          </div>
+          <div *ngIf="wallet.errors.pattern">
+            <ion-text color="danger">
+              {{'COMMON.name_minchars2'|translate}}
+            </ion-text>
+          </div>
+        </div>
+
+        <ion-item>
+          <ion-label position="stacked">{{'COMMON.Total'|translate}}</ion-label>
+          <ion-input required class="form-control" [(ngModel)]="walletTo.amount" name="walletAmount" type="number"
+            #walletAmount="ngModel" spellcheck="false" autocapitalize="off" required minlength=1 maxLength=50
+            placeholder="{{'SEND.amount'|translate}}"
+            pattern='[0-9]+(\.[0-9]{1,{{irohautil.wallet.cur_assetId_decimal}}}?)?'>
+          </ion-input>
+          <div *ngIf="walletAmount.invalid && (walletAmount.dirty || walletAmount.touched)" class="danger">
+            <div *ngIf="walletAmount.errors.required">
+              <ion-text color="danger">
+                {{'TXS.send_amount'|translate}}
+              </ion-text>
+            </div>
+            <div *ngIf="walletAmount.errors.minlength">
+              <ion-text color="danger">
+                {{'TXS.amount1char'|translate}}
+              </ion-text>
+            </div>
+            <div *ngIf="walletAmount.errors.pattern">
+              <ion-text color="danger">
+                {{'TXS.amount2char'|translate}}{{irohautil.wallet.cur_assetId_decimal}}{{'TXS.amount3char'|translate}}
+              </ion-text>
+            </div>
+          </div>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="stacked">{{'COMMON.msg'|translate}}</ion-label>
+          <ion-input class="form-control" [(ngModel)]="walletTo.message" name="walletMessage" type="text"
+            placeholder="{{'SEND.msg'|translate}}" spellcheck="false" autocapitalize="off" maxLength=50>
+          </ion-input>
+        </ion-item>
+
+      </ion-list>
+      <div class="ion-padding">
+        <ion-button (click)="walletSendTo_confirm(walletForm)" [disabled]="!walletForm.valid" expand="block"
+          type="submit" class="ion-no-margin">{{'TXS.send'|translate}}</ion-button>
+      </div>
+    </form>
+  </ng-template>
+
+
+</ion-content>

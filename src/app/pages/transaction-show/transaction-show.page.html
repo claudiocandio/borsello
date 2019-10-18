@@ -1,0 +1,20 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{'TXS.tx'|translate}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row><ion-col>{{'COMMON.date'|translate}}:</ion-col><ion-col>{{txDate | date:'yyyy-MM-dd HH:mm.ss'}}</ion-col></ion-row>
+    <ion-row><ion-col>{{'COMMON.from'|translate}}:</ion-col><ion-col>{{txFrom}}</ion-col></ion-row>
+    <ion-row><ion-col>{{'COMMON.to'|translate}}:</ion-col><ion-col>{{txTo}}</ion-col></ion-row>
+    <ion-row><ion-col>{{'COMMON.amount'|translate}}:</ion-col><ion-col>{{txAmount}}</ion-col></ion-row>
+    <ion-row><ion-col>{{'COMMON.currency'|translate}}:</ion-col><ion-col>{{txCurrency}}</ion-col></ion-row>
+    <!-- <ion-row><ion-col>{{'COMMON.public_key'|translate}}:</ion-col><ion-col>{{txPuk}}</ion-col></ion-row> -->
+    <ion-row><ion-col>{{'COMMON.msg'|translate}}:</ion-col><ion-col>{{txMessage}}</ion-col></ion-row>
+  </ion-grid>
+</ion-content>

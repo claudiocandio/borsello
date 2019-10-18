@@ -1,0 +1,141 @@
+{
+  "blockV1": {
+    "payload": {
+      "transactions": [
+        {
+          "payload": {
+            "reducedPayload": {
+              "commands": [
+                {
+                  "addPeer": {
+                    "peer": {
+                      "address": "localhost:10001",
+                      "peerKey": "e497577f391afb3ee3ad15c930c88920f04906f7978611bd2893e0047cc95cc2"
+                    }
+                  }
+                },
+                {
+                  "createRole": {
+                    "roleName": "admin",
+                    "permissions": [
+                      "can_add_asset_qty",
+                      "can_add_domain_asset_qty",
+                      "can_add_peer",
+                      "can_add_signatory",
+                      "can_append_role",
+                      "can_create_account",
+                      "can_create_asset",
+                      "can_create_domain",
+                      "can_create_role",
+                      "can_detach_role",
+                      "can_get_all_acc_ast",
+                      "can_get_all_acc_ast_txs",
+                      "can_get_all_acc_detail",
+                      "can_get_all_accounts",
+                      "can_get_all_acc_txs",
+                      "can_get_all_signatories",
+                      "can_get_all_txs",
+                      "can_get_blocks",
+                      "can_get_domain_acc_ast",
+                      "can_get_domain_acc_ast_txs",
+                      "can_get_domain_acc_detail",
+                      "can_get_domain_accounts",
+                      "can_get_my_acc_ast_txs",
+                      "can_get_my_signatories",
+                      "can_get_my_txs",
+                      "can_get_peers",
+                      "can_get_roles",
+                      "can_grant_can_add_my_signatory",
+                      "can_grant_can_remove_my_signatory",
+                      "can_grant_can_set_my_quorum",
+                      "can_grant_can_transfer_my_assets",
+                      "can_read_assets",
+                      "can_receive",
+                      "can_remove_signatory",
+                      "can_set_detail",
+                      "can_set_quorum",
+                      "can_subtract_asset_qty",
+                      "can_transfer"
+                    ]
+                  }
+                },
+                {
+                  "createRole": {
+                    "roleName": "users",
+                    "permissions": [
+                      "can_transfer",
+                      "can_receive",
+                      "can_get_my_account",
+                      "can_get_my_acc_detail",
+                      "can_get_my_acc_ast",
+                      "can_get_my_acc_ast_txs",
+                      "can_get_my_acc_txs",
+                      "can_get_my_signatories",
+                      "can_get_my_txs",
+                      "can_read_assets"
+                    ]
+                  }
+                },
+                {
+                  "createRole": {
+                    "roleName": "na",
+                    "permissions": [
+                      "can_create_account",
+                      "can_transfer",
+                      "can_receive",
+                      "can_get_my_account",
+                      "can_get_my_acc_detail",
+                      "can_get_my_acc_ast",
+                      "can_get_my_acc_ast_txs",
+                      "can_get_my_acc_txs",
+                      "can_get_my_signatories",
+                      "can_get_my_txs",
+                      "can_read_assets"
+                    ]
+                  }
+                },
+                {
+                  "createDomain": {
+                    "domainId": "mini",
+                    "defaultRole": "users"
+                  }
+                },
+                {
+                  "createAccount": {
+                    "accountName": "admin",
+                    "domainId": "mini",
+                    "publicKey": "2ea164d82694c8b181dc39a1fa5d2a293c4833b5a8c266749d9751602256a243"
+                  }
+                },
+                {
+                  "appendRole": {
+                    "accountId": "admin@mini",
+                    "roleName": "admin"
+                  }
+                },
+                {
+                  "createAccount": {
+                    "accountName": "na",
+                    "domainId": "mini",
+                    "publicKey": "12b4cabf70a879b83b2384f1eb885aa9f8765135321505c7471815e264d024ee"
+                  }
+                },
+                {
+                  "appendRole": {
+                    "accountId": "na@mini",
+                    "roleName": "na"
+                  }
+                }
+              ],
+              "creatorAccountId": "admin@mini",
+              "quorum": 1
+            }
+          }
+        }
+      ],
+      "txNumber": 1,
+      "height": "1",
+      "prevBlockHash": "0000000000000000000000000000000000000000000000000000000000000000"
+    }
+  }
+}
