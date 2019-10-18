@@ -95,18 +95,10 @@ Java HotSpot(TM) 64-Bit Server VM (build 25.212-b10, mixed mode)
 
 ### Borsello installation
 
-Clone the repository
+Clone the repository, change directory to borsello and install the npm packages
 ```bash
 $ git clone https://github.com/claudiocandio/borsello
-```
-
-Change directory to borsello
-```bash
 $ cd borsello
-```
-
-Install the npm packages
-```bash
 $ npm install
 ```
 
