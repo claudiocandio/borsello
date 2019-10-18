@@ -29,9 +29,15 @@ The Borsello wallet App has the following main features:
 
 ### Prerequisites
 
-You will need some applications: Ionic, nodejs, npm, docker and docker-compose, here the versions I'm using:
+You will need quite a few applications: Ionic, cordova, nodejs, npm, docker, docker-compose, Java and Android SDK Tools, here some help and links to prepare the environment, hopefully I haven't forgotten anything and it may take some time and more reasearch to get things ready:
+
+[Nodejs & npm download](https://nodejs.org/en/download/)
+[Nodejs & npm Install](https://github.com/nodejs/help/wiki/Installation)
 
 ```bash
+$ npm -g install ionic
+$ npm -g install cordova
+
 $ ionic info
 
 Ionic:
@@ -67,12 +73,22 @@ $ docker --version
 Docker version 18.09.7, build 2d0083d
 ```
 
+Docker version from Ubuntu is too old, install 1.25x from here: [Docker github](https://github.com/docker/compose/releases)
 ```bash
 $ docker-compose --version
 docker-compose version 1.25.0-rc1, build 8552e8e2
 ```
 
-### Installation
+[SDK Android install](http://developer.android.com/sdk/index.html)
+
+```bash
+$ java -version
+java version "1.8.0_212"
+Java(TM) SE Runtime Environment (build 1.8.0_212-b10)
+Java HotSpot(TM) 64-Bit Server VM (build 25.212-b10, mixed mode)
+```
+
+### Borsello installation
 
 Clone the repository
 ```bash
@@ -91,6 +107,8 @@ $ npm install
 
 Run an Iroha instance using the docker-compose command, more info on how to run Iroha on [Iroha's docs](http://iroha.readthedocs.io/en/latest/getting_started/index.html)
 ```bash
+$ docker volume create --name=borsello-iroha-postgres-vol
+$ docker volume create --name=borsello-iroha-vol
 $ docker-compose -f docker/docker-compose-borsello.yaml up
 ```
 

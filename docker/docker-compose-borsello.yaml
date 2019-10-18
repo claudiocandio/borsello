@@ -82,4 +82,4 @@ services:
       - 8443:8443
     logging:
       driver: none
-      driver: json-file
+#      driver: json-file
