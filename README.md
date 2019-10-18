@@ -83,9 +83,8 @@ $ docker-compose --version
 docker-compose version 1.25.0-rc1, build 8552e8e2
 ```
 
-Only to compile the Android App, Android SDK and Java
+Only to compile the Android App, Android SDK and Java  
 [Android SDK install](http://developer.android.com/sdk/index.html)  
-
 Java
 ```bash
 $ java -version
