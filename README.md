@@ -84,8 +84,9 @@ $ docker-compose --version
 docker-compose version 1.25.0-rc1, build 8552e8e2
 ```
 
-[SDK Android install](http://developer.android.com/sdk/index.html)
+[SDK Android install](http://developer.android.com/sdk/index.html)  
 
+Java
 ```bash
 $ java -version
 java version "1.8.0_212"
