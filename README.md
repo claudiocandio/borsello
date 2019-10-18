@@ -29,15 +29,20 @@ The Borsello wallet App has the following main features:
 
 ### Prerequisites
 
-You will need quite a few applications: Ionic, cordova, nodejs, npm, docker, docker-compose, Java and Android SDK Tools, here some help and links to prepare the environment, hopefully I haven't forgotten anything and it may take some time and more reasearch to get things ready:
+I used Ubuntu 18.04.3 LTS then you will need quite a few applications: Ionic, cordova, nodejs, npm, docker, docker-compose, Java and Android SDK Tools, here some help and links to prepare the environment, hopefully I haven't forgotten anything and it may take some time and more reasearch to get things ready:
 
-[Nodejs & npm download](https://nodejs.org/en/download/)
-[Nodejs & npm Install](https://github.com/nodejs/help/wiki/Installation)
+[Nodejs & npm download](https://nodejs.org/en/download/)  
+[Nodejs & npm Install](https://github.com/nodejs/help/wiki/Installation)  
 
+Ionic & Cordova
 ```bash
 $ npm -g install ionic
 $ npm -g install cordova
+```
 
+Some versions  
+
+```bash
 $ ionic info
 
 Ionic:
@@ -73,7 +78,7 @@ $ docker --version
 Docker version 18.09.7, build 2d0083d
 ```
 
-Docker version from Ubuntu is too old, install 1.25x from here: [Docker github](https://github.com/docker/compose/releases)
+Docker version from Ubuntu is too old, install 1.25.x from here [Docker github](https://github.com/docker/compose/releases)
 ```bash
 $ docker-compose --version
 docker-compose version 1.25.0-rc1, build 8552e8e2
@@ -119,7 +124,7 @@ $ node scripts/run.js iroha_util.js asset-create bcoin 2
 
 ### Compiling the App
 
-Compile the Android mobile App
+Compile the Android mobile App, this may take a while depending on your hardware
 ```bash
 $ ionic cordova build android --prod --release
 ```
