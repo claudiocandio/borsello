@@ -4,7 +4,7 @@
 [![Iroha 1.1.1](https://img.shields.io/badge/Iroha-1.1.1-red.svg)](https://github.com/hyperledger/iroha/releases/tag/1.1.1)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg?style=flat-square)](https://opensource.org/licenses/Apache-2.0)
 
-## Android & iOS wallet App for [Iroha Hyperledger blockchain](http://iroha.readthedocs.io/)
+## Android, iOS and browser wallet App for [Hyperledger Iroha blockchain](http://iroha.readthedocs.io/)
 ## Developped with the [Ionic Framework](https://ionicframework.com/)
 
 ### Borsello is an Iroha wallet App based on https://github.com/soramitsu/iroha-wallet-js
