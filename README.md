@@ -74,6 +74,7 @@ System:
    OS                : Linux 4.15
 ```
 
+Install docker
 ```bash
 # apt install docker.io
 # usermod -G docker -a youruser
