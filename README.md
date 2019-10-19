@@ -17,6 +17,8 @@ The Borsello wallet App has the following main features:
 5. Wallet save/restore keys
 6. Two languages App English/Italian
 
+### Some App screenshots
+
 ![borsello](https://www.claudiocandio.it/local/img/borsello1.png)
 ![borsello](https://www.claudiocandio.it/local/img/borsello2.png)
 ![borsello](https://www.claudiocandio.it/local/img/borsello3.png)
