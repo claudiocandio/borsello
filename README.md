@@ -41,7 +41,7 @@ Ionic
 $ npm -g install ionic cordova native-run
 ```
 
-Some versions  
+Ionic info
 
 ```bash
 $ ionic info
@@ -74,6 +74,10 @@ System:
    OS                : Linux 4.15
 ```
 
+```bash
+# apt install docker.io
+# usermod -G docker -a youruser
+```
 ```bash
 $ docker --version
 Docker version 18.09.7, build 2d0083d
