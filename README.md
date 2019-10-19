@@ -29,7 +29,8 @@ The Borsello wallet App has the following main features:
 
 ### Prerequisites
 
-I used Ubuntu 18.04.3 LTS then you will need quite a few applications: Ionic, cordova, nodejs, npm, docker, docker-compose, Java and Android SDK Tools, here some help and links to prepare the environment, hopefully I haven't forgotten anything and it may take some time and more reasearch to get things ready.
+I used Ubuntu 18.04.3 LTS with the following additional applications: Ionic, cordova, nodejs, npm, docker, docker-compose plus Java and the Android SDK Tools in order to compile the Android App.  
+I will provide some links and help to prepare the environment but it may take some time and more reasearch to get things ready, especially to compile the Android App. Hopefully I haven't forgotten anything.
 
 [Nodejs & npm download](https://nodejs.org/en/download/)  
 [Nodejs & npm Install](https://github.com/nodejs/help/wiki/Installation)  
@@ -83,7 +84,7 @@ $ docker-compose --version
 docker-compose version 1.25.0-rc1, build 8552e8e2
 ```
 
-Only to compile the Android App, Android SDK and Java  
+Only need the following in order to compile the Android App  
 [Android SDK install](http://developer.android.com/sdk/index.html)  
 Java
 ```bash
@@ -122,28 +123,28 @@ Compile the Android mobile App, this may take a while depending on your hardware
 $ ionic cordova build android --prod --release
 ```
 It will create platforms/android/app/build/outputs/apk/release/app-release-unsigned.apk  
-then you will need more work to sign the App and make it ready to be installed, here some documentation:  
+then you need more work to sign the App and make it ready to be installed, here some documentation but you may need to research more to get it done:  
 
 [Ionic build](https://ionicframework.com/docs/cli/commands/cordova-build).  
 [Ionic Android installation](https://ionicframework.com/docs/installation/android).  
 [Ionic iOS installation](https://ionicframework.com/docs/installation/ios).  
 
-I have alreay prepared the Android App ready to be installed in this repository - borsello-v1.0.6.apk - if you trust me ;-)  
+If you just want to play with Iroha I have alreay prepared the Borsello Android App ready to be installed in this repository - [borsello-v1.0.6.apk](https://github.com/claudiocandio/borsello/raw/master/borsello-v1.0.6.apk).  - if you trust me ;-)  
 No iOS App is available yet as it would require a MacOS and some other things I still don't have.
 
 ### Running
 
-Once you have the Borsello App installed you must configure it to use your Iroha server pointing to port 8081 of the grpcwebproxy: start the Borsello App, go to Options and set the "Server address" ex.:  http://192.168.0.2:8081  
+Once you have the Borsello App ready and installed you must configure it to use your Iroha server pointing to port 8081 of the grpcwebproxy: start the Borsello App, go to Options and set the "Server address" ex.:  http://192.168.0.2:8081  
 
-You may also run and test the Borsello App with a web browser, the main functions will work with the browse but not all of them
+You could run and test the Borsello App with a web browser, the main functions will work with the browse but not all of them, this is an easier option than compile the App if you just would like to play with it.
 ```bash
 $ ionic cordova platform add browser
 $ ionic cordova run browser
 ```
 
-After setting the Iroha server address in the Borsello App you will need to create a new wallet name, for example alice, you may also encrypt your new wallet using a password.
+After setting the Iroha server address in the Borsello App you need to create a new wallet name, for example alice, you may encrypt your new wallet using a password.
 
-You will then need to add some bcoin to your alice wallet, let's say we add 150.37 bcoin
+You then need to add some bcoin to your alice wallet, let's say we add 150.37 bcoin
 ```bash
 $ node scripts/run.js iroha_util.js account-add-amount alice bcoin 150.37
 ```
