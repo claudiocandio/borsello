@@ -84,8 +84,7 @@ docker-compose version from Ubuntu 18.04.3 LTS is too old, install 1.25.x from [
 $ docker-compose --version
 docker-compose version 1.25.0-rc1, build 8552e8e2
 ```
-
-Only need the following in order to compile the Android App  
+#### Prerequisites - only need the following in order to compile the Android App  
 [Android SDK install](http://developer.android.com/sdk/index.html)  
 Java
 ```bash
