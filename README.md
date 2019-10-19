@@ -121,9 +121,8 @@ $ node scripts/run.js iroha_util.js asset-create bcoin 2
 ```
 You can create multiple coin assets
 
-### Compiling the App
+### Compiling the Android App
 
-#### Android
 Compile the Android mobile App, this may take a while depending on your hardware
 ```bash
 $ ionic cordova build android --prod --release
@@ -138,7 +137,7 @@ then you need more work to sign the App and make it ready to be installed, here 
 
 If you just want to play with Iroha I have alreay prepared the Borsello Android App ready to be installed in this repository - [borsello-v1.0.6.apk](https://github.com/claudiocandio/borsello/raw/master/borsello-v1.0.6.apk).  - if you trust me ;-)  
 
-#### iOS
+### Compiling the iOS App
 Compile the iOS mobile App, this should get an error unless you are using a MacOS that I still don't have.
 ```bash
 $ ionic cordova build ios --prod --release
