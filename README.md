@@ -33,8 +33,8 @@ The Borsello wallet App has the following main features:
 I used Ubuntu 18.04.3 LTS with the following additional applications: Ionic, cordova, nodejs, npm, docker, docker-compose plus Java and the Android SDK Tools in order to compile the Android App.  
 I will provide some links and help to prepare the environment but it may take some time and more reasearch to get things ready, especially to compile the Android App.
 
-[Nodejs & npm download](https://nodejs.org/en/download/)  
-[Nodejs & npm Install](https://github.com/nodejs/help/wiki/Installation)  
+Install Nodejs & npm - I'm using nodejs v12.9.0
+[Nodejs & npm download](https://nodejs.org/en/download/current/)  
 
 Ionic
 ```bash
