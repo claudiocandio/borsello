@@ -13,8 +13,8 @@ The Borsello wallet App has the following main features:
 1. Create a password encrypted Iroha wallet
 2. See your assets and transactions
 3. Transfer your assets to another Iroha wallet
-4. Configure server address to point to different Iroha instances
-5. Wallet restore using wallet name and private key
+4. Configure the App to point to different Iroha instances
+5. Wallet save/restore keys
 6. Two languages App English/Italian
 
 ![borsello](https://www.claudiocandio.it/local/img/borsello1.png)
@@ -23,7 +23,6 @@ The Borsello wallet App has the following main features:
 ![borsello](https://www.claudiocandio.it/local/img/borsello4.png)
 ![borsello](https://www.claudiocandio.it/local/img/borsello5.png)
 ![borsello](https://www.claudiocandio.it/local/img/borsello6.png)
-
 
 ## Getting Started
 
