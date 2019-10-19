@@ -143,17 +143,18 @@ Compile the iOS mobile App, this should get an error unless you are using a MacO
 $ ionic cordova build ios --prod --release
 ```
 
-### Running
-
-Once you have the Borsello App ready and installed you must configure it to use your Iroha server pointing to port 8081 of the grpcwebproxy: start the Borsello App, go to Options and set the "Server address" ex.:  http://192.168.0.2:8081  
-
-You could run and test the Borsello App with a web browser, the main functions will work with the browse but not all of them, this is an easier option than compile the App if you just would like to play with it.
+### Use the web browser App
+You could run and test the Borsello App with a web browser, the main functions will work with the browse but not all of them, this is an easier option than compile the Android & iOS Apps if you just would like to play with the Iroha wallet.
 ```bash
 $ ionic cordova platform add browser
 $ ionic cordova run browser
 ```
 
-After setting the Iroha server address in the Borsello App you need to create a new wallet name, for example alice, you may encrypt your new wallet using a password.
+### Running
+
+Once you have the Borsello App ready and installed you must configure it to use your Iroha server pointing to port 8081 of the grpcwebproxy: start the Borsello App, go to Options and set the "Server address" ex.:  http://192.168.0.2:8081 this could also be http://127.0.0.1:8081 if you are using the web browser App in the same server where you started Iroha with docker-compose.
+
+Create a new wallet name in the App, ex.: alice, you may encrypt your new wallet using a password.
 
 Add some bcoin to your alice wallet, let's say we add 150.37 bcoin
 ```bash
