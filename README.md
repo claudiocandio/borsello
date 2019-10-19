@@ -123,10 +123,12 @@ You can create multiple coin assets
 
 ### Compiling the App
 
+#### Android
 Compile the Android mobile App, this may take a while depending on your hardware
 ```bash
 $ ionic cordova build android --prod --release
 ```
+
 It will create platforms/android/app/build/outputs/apk/release/app-release-unsigned.apk  
 then you need more work to sign the App and make it ready to be installed, here some documentation but you may need to research more to get it done:  
 
@@ -135,7 +137,12 @@ then you need more work to sign the App and make it ready to be installed, here 
 [Ionic iOS installation](https://ionicframework.com/docs/installation/ios).  
 
 If you just want to play with Iroha I have alreay prepared the Borsello Android App ready to be installed in this repository - [borsello-v1.0.6.apk](https://github.com/claudiocandio/borsello/raw/master/borsello-v1.0.6.apk).  - if you trust me ;-)  
-No iOS App is available yet as it would require a MacOS and some other things I still don't have.
+
+#### iOS
+Compile the iOS mobile App, this should get an error unless you are using a MacOS that I still don't have.
+```bash
+$ ionic cordova build ios --prod --release
+```
 
 ### Running
 
