@@ -109,7 +109,7 @@ $ cd borsello
 $ npm install
 ```
 
-Run an Iroha instance using the docker commands, more info on how to run Iroha on [Iroha's docs](http://iroha.readthedocs.io/en/latest/getting_started/index.html)
+Run the Iroha instance using the docker commands, more info on how to run Iroha on [Iroha's docs](http://iroha.readthedocs.io/en/latest/getting_started/index.html)
 ```bash
 $ docker volume create --name=borsello-iroha-postgres-vol
 $ docker volume create --name=borsello-iroha-vol
