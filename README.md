@@ -89,7 +89,7 @@ docker-compose version from Ubuntu 18.04.3 LTS is too old, install 1.25.x from [
 $ docker-compose --version
 docker-compose version 1.25.0-rc1, build 8552e8e2
 ```
-#### Prerequisites - only need the following in order to compile the Android App  
+#### Prerequisites - only need the following for the Android App  
 [Android SDK install](http://developer.android.com/sdk/index.html)  
 Java
 ```bash
@@ -149,11 +149,11 @@ $ ionic cordova run browser
 
 After setting the Iroha server address in the Borsello App you need to create a new wallet name, for example alice, you may encrypt your new wallet using a password.
 
-You then need to add some bcoin to your alice wallet, let's say we add 150.37 bcoin
+Add some bcoin to your alice wallet, let's say we add 150.37 bcoin
 ```bash
 $ node scripts/run.js iroha_util.js account-add-amount alice bcoin 150.37
 ```
-After you added some bcoin to your wallet name, alice, tap/click the "Change Currency" two times to see your bcoin appear and ready to be used in your App.
+Restart the App or tap/click the "Change Currency" two times to see your bcoin appear.
 
 Do the same for any additional wallet you created and then you can start sending bcoin or any other asset between the wallets created.
 
@@ -161,6 +161,6 @@ Have fun!
 
 ## Disclaimer
 
-All this project was created just for fun to play with the Hyperledger Iroha blockchain and mobile apps, I never used Javascript, Typescript, Ionic and most of the things used here before of this project, so do not expect this to be a coding model and use it at your own risk.  
+This project was created just for fun to play with the Hyperledger Iroha blockchain and mobile apps, I never used Javascript, Typescript, Ionic and most of the things used here before of this project, so do not expect this to be a coding model and use it at your own risk.  
 ;-)
 
