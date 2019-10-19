@@ -4,17 +4,17 @@
 [![Iroha 1.1.1](https://img.shields.io/badge/Iroha-1.1.1-red.svg)](https://github.com/hyperledger/iroha/releases/tag/1.1.1)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg?style=flat-square)](https://opensource.org/licenses/Apache-2.0)
 
-## Android & iOS App for [Iroha Hyperledger blockchain](http://iroha.readthedocs.io/)
+## Android & iOS wallet App for [Iroha Hyperledger blockchain](http://iroha.readthedocs.io/)
 ## Developped with the [Ionic Framework](https://ionicframework.com/)
 
-Borsello is an Iroha wallet App based on https://github.com/soramitsu/iroha-wallet-js
+### Borsello is an Iroha wallet App based on https://github.com/soramitsu/iroha-wallet-js
 
 The Borsello wallet App has the following main features:
 1. Create a password encrypted Iroha wallet
 2. See your assets and transactions
 3. Transfer your assets to another Iroha wallet
 4. Configure the App to point to different Iroha instances
-5. Wallet save/restore keys
+5. Wallet save/restore
 6. Two languages App English/Italian
 
 ### Some App screenshots
