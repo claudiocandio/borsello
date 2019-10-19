@@ -36,7 +36,7 @@ I will provide some links and help to prepare the environment but it may take so
 #### Install Nodejs & npm - I'm using nodejs v12.9.0  
 [Nodejs & npm download](https://nodejs.org/en/download/current/)  
 
-#### Ionic
+#### Install Ionic
 ```bash
 $ npm -g install ionic cordova native-run
 ```
@@ -153,7 +153,7 @@ $ ionic cordova run browser
 
 ### Running
 
-Once you have the Borsello App ready and installed you must configure it to use your Iroha server pointing to port 8081 of the grpcwebproxy: start the Borsello App, go to Options and set the "Server address" ex.:  http://192.168.0.2:8081 this could also be http://127.0.0.1:8081 if you are using the web browser App in the same server where you started Iroha with docker-compose.
+Once you have the Borsello App ready and installed you must configure it to use your Iroha server pointing to port 8081 of the grpcwebproxy: start the Borsello App, go to Options and set the "Server address" ex.:  http://192.168.0.2:8081 or http://127.0.0.1:8081 (default) if you are using the web browser App in the same server where you started Iroha.
 
 Create a new wallet name in the App, ex.: alice, you may encrypt your new wallet using a password.
 
@@ -161,7 +161,7 @@ Add some bcoin to your alice wallet, let's say we add 150.37 bcoin
 ```bash
 $ node scripts/run.js iroha_util.js account-add-amount alice bcoin 150.37
 ```
-Restart the App or tap/click the "Change Currency" two times to see your bcoin appear.
+Restart the App or tap/click the "Change Currency" to see your bcoin appear.
 
 Do the same for any additional wallet you created and then you can start sending bcoin or any other asset between the wallets created.
 
