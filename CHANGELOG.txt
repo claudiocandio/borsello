@@ -6,3 +6,6 @@ First release
 Added configurable pageSize in list transactions
 List transactions now sorts transactions using irohad default, that is listing starting with oldest transaction to newest transaction
 Fixed some minor bugs
+
+- v1.0.8
+Increased message description size to 63 characters in send.page.html for TransferAsset, in iroha documentation max size is currently 64
