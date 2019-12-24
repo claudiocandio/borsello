@@ -50,7 +50,9 @@
         "amount1char": "Almeno 1 cifra",
         "amount2char": "Solo numeri, . per la virgola, ",
         "amount3char": " cifre decimali",
-        "send": "Invia"
+        "send": "Invia",
+        "next_page": "Pagina successiva",
+        "prev_page": "Pagina precedente"        
     },
     "SEND": {
         "tab": "Invia",
@@ -86,8 +88,8 @@
         "server_save": "Salva Server",
         "wallet_remove": "Rimuovi Borsello",
         "version": "Versione",
-        "server_saved": "Indirizzo Server salvato",
-        "server_save_error": "Errore salva Server",
+        "saved": "Salvato",
+        "save_error": "Errore",
         "wallet_close_confirm": "Confermi chiusura Borsello?",
         "wallet_remove_confirm": "Conferma cancellazione!",
         "wallet_remove_confirm2": "Il Borsello verrà cancellato! Sei sicuro?",
@@ -100,7 +102,9 @@
         "public_key_copied": "Chiave pubblica copiata negli appunti",
         "private_key_copied": "Chiave privata copiata negli appunti",
         "private_key": "Chiave Privata",
-        "wallet_copied": "Borsello copiato negli appunti"
-
+        "wallet_copied": "Borsello copiato negli appunti",
+        "pagetxs_txt": "Numero transazioni per pagina",
+        "pagetxs_save": "Salva numero transazioni",
+        "pagetxs_invalid": "Solo numeri, minimo 1 transazione per pagina."
     }
 }

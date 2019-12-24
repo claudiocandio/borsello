@@ -1,0 +1,8 @@
+
+- v1.0.6
+First release
+
+- v1.0.7
+Added configurable pageSize in list transactions
+List transactions now sorts transactions using irohad default, that is listing starting with oldest transaction to newest transaction
+Fixed some minor bugs

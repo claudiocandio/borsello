@@ -50,7 +50,9 @@
         "amount1char": "Almeno 1 cifra",
         "amount2char": "Only numbers, . for decimals, ",
         "amount3char": " decimal digits",
-        "send": "Send"
+        "send": "Send",
+        "next_page": "Next page",
+        "prev_page": "Previous page"
     },
     "SEND": {
         "tab": "Send",
@@ -86,8 +88,8 @@
         "server_save": "Save Server",
         "wallet_remove": "Wallet remove",
         "version": "Version",
-        "server_saved": "Server address saved",
-        "server_save_error": "Error saving Server",
+        "saved": "Saved",
+        "save_error": "Error",
         "wallet_close_confirm": "Confirm close Wallet",
         "wallet_remove_confirm": "Confirm remove!",
         "wallet_remove_confirm2": "This Walett will be removed! Are you sure?",
@@ -100,6 +102,9 @@
         "public_key_copied": "Public Key copied",
         "private_key_copied": "Private Key copied",
         "private_key": "Chiave Privata",
-        "wallet_copied": "Wallet copied"
+        "wallet_copied": "Wallet copied",
+        "pagetxs_txt": "Number of transactions for page",
+        "pagetxs_save": "Save transactions number",
+        "pagetxs_invalid": "Only numbers, minimum 1 transaction for page"
     }
 }

@@ -36,6 +36,14 @@
   </ion-item>
   <!-- End select/change asset-->
 
+  <div *ngIf="prevPage; then prevPage_"></div>
+  <ng-template #prevPage_>
+  <ion-item>
+    <ion-label class="select-asset" (click)="go_prevPage()" color="primary">{{'TXS.prev_page'|translate}}</ion-label>
+  </ion-item>
+  </ng-template>
+  
+
   <div *ngIf="irohautil.wallet.cur_assetId; then assetId"></div>
   <ng-template #assetId>
     <ion-list>
@@ -55,6 +63,13 @@
     </ion-item>
     </ion-item-group>
     </ion-list>
+  </ng-template>
+
+  <div *ngIf="nextPage; then nextPage_"></div>
+  <ng-template #nextPage_>
+  <ion-item>
+    <ion-label class="select-asset" (click)="go_nextPage()" color="primary">{{'TXS.next_page'|translate}}</ion-label> 
+  </ion-item>
   </ng-template>
 
 </ion-content>

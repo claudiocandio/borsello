@@ -128,7 +128,7 @@
     <ion-card>
       <ion-item>
         <ion-label position="stacked">{{'OPTIONS.server_address'|translate}}</ion-label>
-        <ion-input class="form-control" [(ngModel)]="nodeIp" #nodeip="ngModel" type="text" spellcheck="false"
+        <ion-input class="form-control" [(ngModel)]="nodeIp" #nodeip="ngModel" required spellcheck="false"
           autocapitalize="off" maxLength=50 (ionChange)="nodeIp_change()" inputmode="url" type="url"
           pattern="^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$">
         </ion-input>
@@ -145,12 +145,36 @@
       </div>
     </ion-card>
 
+    <ion-card>
+      <ion-item>
+        <ion-label position="stacked">{{'OPTIONS.pagetxs_txt'|translate}}</ion-label>
+        <ion-input class="form-control" [(ngModel)]="pageTxs" #pagetxs="ngModel" type="text"
+        maxlength=50 required pattern='[1-9][0-9]*'
+        (ionChange)="pageTxs_change()">
+        </ion-input>
+      </ion-item>
+      <div *ngIf="pagetxs.invalid" class="danger"></div>
+      <div *ngIf="pagetxs.invalid">
+        <ion-text color="danger">{{'OPTIONS.pagetxs_invalid'|translate}}</ion-text>
+      </div>
+
+      <div class="ion-padding">
+        <ion-button (click)="pageTxs_save()" [disabled]="!pageTxs_changed" expand="block" type="submit">
+            {{'OPTIONS.pagetxs_save'|translate}}
+        </ion-button>
+      </div>
+    </ion-card>
+
     <ion-card *ngIf="irohautil.wallet.mywallet || irohautil.wallet.mypuk || irohautil.wallet.myprk">
       <ion-button (click)="rmkeys_confirm()" expand="block">{{'OPTIONS.wallet_remove'|translate}}</ion-button>
     </ion-card>
 
     <ion-card>
       <ion-text color="dark">{{'OPTIONS.version'|translate}}: {{irohautil.version}}</ion-text>
+    </ion-card>
+
+    <ion-card>
+      <ion-text color="dark">Claudio Candio https://github.com/claudiocandio/borsello</ion-text>
     </ion-card>
 
   </ion-list>

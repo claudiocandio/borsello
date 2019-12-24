@@ -107,6 +107,12 @@ export class HomePage implements OnInit {
           },
             _ => this.irohautil.wallet.mywallet = null
           )
+
+          await this.nativeStorage.getItem('pageTxs').then(
+            pageTxs => this.irohautil.pageTxs = pageTxs,
+            _ => this.irohautil.pageTxs = this.irohautil.pageTxs_default
+            )
+
       }
 
       loading_done = true

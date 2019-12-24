@@ -30,7 +30,7 @@ export interface WalletDataTo {
 })
 
 export class IrohautilService {
-  public version = 'v1.0.6'
+  public version = 'v1.0.7'
   public debug_console_log = false // whether to use console.log to debug
   public password_min_len_gt = 1 // greater than, 1 means at least 2 chars, password length at least 2 chars as 1 char won't work correctly
 
@@ -48,6 +48,10 @@ export class IrohautilService {
   public nodeIp_force = null // null to use the nativeStorage nodeIp or the nodeIp_default
   public nodeIp_default = 'http://127.0.0.1:8081'
   public nodeIp = ''
+
+  // default number of transactions when listing
+  public pageTxs_default: number = 50
+  public pageTxs: number = this.pageTxs_default
 
   // default language if browser lang is not it or en
   private language_default = 'it' // 'it' or 'en'
@@ -115,7 +119,7 @@ export class IrohautilService {
     this.translate.use(lng).subscribe(() => {
       this.console_log('Successfully initialized language: '+lng)
     }, err => {
-      this.console_log('Problem with language initialization: '+lng)
+      this.console_log('Error language initialization: '+lng)
     }, () => {
     });
 
@@ -221,7 +225,7 @@ export class IrohautilService {
 
   }
 
-  run_getAccountAssetTransactions(username, assetId, firstTxHash = undefined, pageSize = 5000) {
+  run_getAccountAssetTransactions(username, assetId, firstTxHash = undefined, pageSize = this.pageTxs) {
     // irohaUtil.getAccountTransactions({ .. no good as it onluìy returns trx done my me, not those from other to me
 
     return irohaUtil.getAccountAssetTransactions({
@@ -397,6 +401,9 @@ export class IrohautilService {
       _ => this.wallet.cur_assetId = null,
     ).catch(err => this.alert("Error rm nativeStorage: cur_assetId " + JSON.stringify(err)))
 
+    await this.nativeStorage.remove('pageTxs').then(
+      _ => this.pageTxs = this.pageTxs_default,
+    ).catch(err => this.alert("Error rm nativeStorage: pageTxs " + JSON.stringify(err)))
 
   }
 

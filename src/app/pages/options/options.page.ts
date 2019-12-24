@@ -18,6 +18,8 @@ export class OptionsPage implements OnInit {
   public show_myprk_barcode: boolean
   public nodeIp = this.irohautil.nodeIp
   public nodeIp_changed: boolean
+  public pageTxs = this.irohautil.pageTxs
+  public pageTxs_changed: boolean
 
   public mywalletpw_checked: boolean
   public mywalletpw_toggle: boolean
@@ -45,6 +47,7 @@ export class OptionsPage implements OnInit {
     this.show_mypuk_barcode = false
     this.show_myprk_barcode = false
     this.nodeIp_changed = false
+    this.pageTxs_changed = false
 
     this.mywalletpw_checked = this.irohautil.wallet.mywalletIsEncrypted
     this.mywalletpw_toggle = this.irohautil.wallet.mywalletIsEncrypted
@@ -94,7 +97,7 @@ export class OptionsPage implements OnInit {
       .then(() => {
         this.irohautil.nodeIp = this.nodeIp
         this.nodeIp_changed = false
-        this.irohautil.alert( this.translate.instant('OPTIONS.server_saved') )
+        this.irohautil.alert( this.translate.instant('OPTIONS.saved') )
 
         if (this.irohautil.wallet.mywallet)
           return this.irohautil.login(this.irohautil.wallet.mywallet, this.irohautil.wallet.myprk)
@@ -105,7 +108,31 @@ export class OptionsPage implements OnInit {
       })
       .catch((err) => {
         this.irohautil.console_log("options.page.nodeIp_change - " + err)
-        this.irohautil.alert( this.translate.instant('OPTIONS.server_save_error') )
+        this.irohautil.alert( this.translate.instant('OPTIONS.save_error') )
+      })
+  }
+
+  pageTxs_change() {
+
+    if (this.pageTxs != this.irohautil.pageTxs && this.pageTxs > 0) {
+      this.pageTxs_changed = true
+    } else {
+      this.pageTxs_changed = false
+    }
+
+  }
+
+  pageTxs_save() {
+
+    this.nativeStorage.setItem('pageTxs', this.pageTxs)
+      .then(() => {
+        this.irohautil.pageTxs = this.pageTxs
+        this.pageTxs_changed = false
+        this.irohautil.alert( this.translate.instant('OPTIONS.saved') )
+      })
+      .catch((err) => {
+        this.irohautil.console_log("options.page.pageTxs_change - " + err)
+        this.irohautil.alert( this.translate.instant('OPTIONS.save_error') )
       })
   }
 
@@ -136,7 +163,7 @@ export class OptionsPage implements OnInit {
   async rmkeys_confirm() {
     const alert = await this.alertController.create({
       header: this.translate.instant('OPTIONS.wallet_remove_confirm'),
-      message: '<strong>'+this.translate.instant('OPTIONS.wallet_remove_confirm2')+'/strong>',
+      message: '<strong>'+this.translate.instant('OPTIONS.wallet_remove_confirm2')+'</strong>',
       buttons: [
         {
           text: this.translate.instant('COMMON.cancel'),

@@ -136,7 +136,7 @@ then you need more work to sign the App and make it ready to be installed, here 
 [Ionic Android installation](https://ionicframework.com/docs/installation/android).  
 [Ionic iOS installation](https://ionicframework.com/docs/installation/ios).  
 
-If you just want to play with Iroha I have alreay prepared the Borsello Android App ready to be installed in this repository - [borsello-v1.0.6.apk](https://github.com/claudiocandio/borsello/raw/master/borsello-v1.0.6.apk).  - if you trust me ;-)  
+If you just want to play with Iroha I have alreay prepared the Borsello Android App ready to be installed in this repository - [borsello.apk](https://github.com/claudiocandio/borsello/raw/master/borsello.apk).  - if you trust me ;-)  
 
 ### Compiling the iOS App
 Compile the iOS mobile App, this should get an error unless you are using a MacOS that I still don't have.

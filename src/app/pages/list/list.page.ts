@@ -19,6 +19,12 @@ export class ListPage implements OnInit {
     from: string; to: string; amount: string; date: string; currency: string; puk: string; message: string;
   }> = [];
 
+  prevPage : Boolean = false
+  nextPage : Boolean = false
+
+  pageHash: Array<string> = [undefined]
+  pageNum: number = 0
+  
   constructor(
     public irohautil: IrohautilService,
     private nativeStorage: NativeStorage,
@@ -35,7 +41,6 @@ export class ListPage implements OnInit {
 
   // Start: For the select/change assets
   @ViewChild('selectAsset') selectAsset: IonSelect;
-
   async display_selectAsset() {
 
     // refresh assets and then open select assets
@@ -55,6 +60,8 @@ export class ListPage implements OnInit {
   async selectAsset_ionChange($event) {
 
     if (this.irohautil.wallet.cur_assetId !== $event.detail.value.assetId) {
+      this.pageNum = 0
+      this.pageHash = [undefined]
 
       this.irohautil.wallet.cur_assetId = $event.detail.value.assetId
       this.get_transactions_list()
@@ -72,6 +79,20 @@ export class ListPage implements OnInit {
 
   }
   // End: For the select/change assets
+
+  async go_nextPage() {
+
+    this.pageNum++
+    if (this.irohautil.wallet.cur_assetId !== null) this.get_transactions_list()
+
+  }  
+
+  async go_prevPage() {
+
+    this.pageNum--
+    if (this.irohautil.wallet.cur_assetId !== null) this.get_transactions_list()
+
+  }  
 
   async get_transactions_list() {
 
@@ -92,11 +113,24 @@ export class ListPage implements OnInit {
 
           this.txs = []  // empty any previous transaction
 
-          this.irohautil.run_getAccountAssetTransactions(this.irohautil.wallet.mywallet, this.irohautil.wallet.cur_assetId)
+          this.irohautil.run_getAccountAssetTransactions( this.irohautil.wallet.mywallet,
+                                                          this.irohautil.wallet.cur_assetId, 
+                                                          this.pageHash[this.pageNum])
             .then(transactions => {
               //this.irohautil.console_log(JSON.stringify(transactions))
+
               if (transactions.isEmpty) return []
-              //transactions.nextTxHash !!!!!!!!!!!!!!!!!!!
+
+              if(transactions.nextTxHash.length > 0 && this.pageNum == this.pageHash.length - 1) { 
+                this.pageHash.push(transactions.nextTxHash)
+              }
+              if (this.pageNum + 1 < this.pageHash.length)
+                    this.nextPage = true
+              else  this.nextPage = false
+
+              if (this.pageNum > 0)
+                    this.prevPage = true
+              else  this.prevPage = false
 
               transactions.transactionsList.forEach(t => {
                 const { commandsList, createdTime } = t.payload.reducedPayload
@@ -129,7 +163,9 @@ export class ListPage implements OnInit {
                 })
 
               });
-              this.txs = _.orderBy(this.txs, [object => new moment(object.date)], ['desc']);
+              // comment orderBy to get txs order from irohad, i.e. oldest tx to latest
+              // remove comment to reverse txs, i.e. latest tx to oldest (better done in irohad imho)
+              //this.txs = _.orderBy(this.txs, [object => new moment(object.date)], ['desc']);
             })
             .catch(err => {
               if (err.code == 2) this.irohautil.alert(this.translate.instant('COMMON.server_issue') )

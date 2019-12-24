@@ -1,2 +1,0 @@
-
-- list transactions: transactions.nextTxHash max pageSize = 5000 now fixed in run_getAccountAssetTransactions
