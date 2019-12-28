@@ -226,7 +226,7 @@ export class IrohautilService {
   }
 
   run_getAccountAssetTransactions(username, assetId, firstTxHash = undefined, pageSize = this.pageTxs) {
-    // irohaUtil.getAccountTransactions({ .. no good as it onluìy returns trx done my me, not those from other to me
+    // irohaUtil.getAccountTransactions({ .. no good as it only returns trx done my me, not those from other to me
 
     return irohaUtil.getAccountAssetTransactions({
       accountId: username + '@' + this.domainId,

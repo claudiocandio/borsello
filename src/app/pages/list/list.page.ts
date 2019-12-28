@@ -88,10 +88,13 @@ export class ListPage implements OnInit {
   }  
 
   async go_prevPage() {
-
+    
+    this.pageHash.pop()
     this.pageNum--
-    if (this.irohautil.wallet.cur_assetId !== null) this.get_transactions_list()
+    if(this.pageNum == 0) this.pageHash.pop() // in case new txs were done while listing txs
 
+    if (this.irohautil.wallet.cur_assetId !== null) this.get_transactions_list()
+    
   }  
 
   async get_transactions_list() {
