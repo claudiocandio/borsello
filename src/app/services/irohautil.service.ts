@@ -30,7 +30,7 @@ export interface WalletDataTo {
 })
 
 export class IrohautilService {
-  public version = 'v1.0.7'
+  public version = 'v1.0.8'
   public debug_console_log = false // whether to use console.log to debug
   public password_min_len_gt = 1 // greater than, 1 means at least 2 chars, password length at least 2 chars as 1 char won't work correctly
 
