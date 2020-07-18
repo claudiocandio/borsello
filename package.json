@@ -52,7 +52,7 @@
     "grpc": "^1.22.2",
     "iroha-helpers": "^0.7.1",
     "iroha-lib": "^0.2.1",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "lodash.camelcase": "^4.3.0",
     "lodash.clone": "^4.5.0",
     "moment": "^2.24.0",
