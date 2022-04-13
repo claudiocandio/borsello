@@ -19,12 +19,12 @@ The Borsello wallet App has the following main features:
 
 ### Some App screenshots
 
-![borsello](https://www.claudiocandio.it/local/img/borsello1.png)
-![borsello](https://www.claudiocandio.it/local/img/borsello2.png)
-![borsello](https://www.claudiocandio.it/local/img/borsello3.png)
-![borsello](https://www.claudiocandio.it/local/img/borsello4.png)
-![borsello](https://www.claudiocandio.it/local/img/borsello5.png)
-![borsello](https://www.claudiocandio.it/local/img/borsello6.png)
+![borsello](https://raw.githubusercontent.com/claudiocandio/claudiocandio.github.io/main/img/borsello/borsello1.png)
+![borsello](https://raw.githubusercontent.com/claudiocandio/claudiocandio.github.io/main/img/borsello/borsello2.png)
+![borsello](https://raw.githubusercontent.com/claudiocandio/claudiocandio.github.io/main/img/borsello/borsello3.png)
+![borsello](https://raw.githubusercontent.com/claudiocandio/claudiocandio.github.io/main/img/borsello/borsello4.png)
+![borsello](https://raw.githubusercontent.com/claudiocandio/claudiocandio.github.io/main/img/borsello/borsello5.png)
+![borsello](https://raw.githubusercontent.com/claudiocandio/claudiocandio.github.io/main/img/borsello/borsello6.png)
 
 ## Getting Started
 
